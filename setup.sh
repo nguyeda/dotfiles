@@ -65,9 +65,6 @@ else
     echo "Volta is already installed."
 fi
 
-# --- AstroNvim Setup ---
-# AstroNvim setup requires running 'nvim' after dotfiles are applied.
-echo "AstroNvim setup requires running 'nvim' after dotfiles are applied."
 
 echo "Tool installation complete."
 
@@ -85,6 +82,24 @@ echo "Stowing dotfiles..."
 cd ~/dotfiles # Make sure you are in the dotfiles directory
 stow bash git nvim starship tmux zsh # Add all your packages
 echo "Stow complete."
+
+# --- AstroNvim Setup ---
+# AstroNvim setup requires running 'nvim' after dotfiles are applied.
+echo "AstroNvim setup requires running 'nvim' after dotfiles are applied."
+
+# --- Configure Zsh as Default Shell ---
+if [ "$SHELL" != "$(which zsh)" ]; then
+    echo "" # Add a newline for readability
+    echo "--------------------------------------------------"
+    echo "ACTION REQUIRED: Change your default shell to Zsh"
+    echo "--------------------------------------------------"
+    echo "To make Zsh your default shell, please run the following command after the script finishes:"
+    echo "chsh -s $(which zsh)"
+    echo "You will be prompted for your password."
+    echo "This change will take effect in your next terminal session."
+    echo "--------------------------------------------------"
+    echo "" # Add a newline
+fi
 
 echo "Dotfiles setup script finished."
 
