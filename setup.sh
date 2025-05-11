@@ -80,7 +80,7 @@ echo "Tool installation complete."
 # Assuming Stow is already installed (now included in packages list)
 echo "Stowing dotfiles..."
 cd ~/dotfiles # Make sure you are in the dotfiles directory
-stow bash git nvim starship tmux zsh # Add all your packages
+stow git nvim starship tmux zsh # Add all your packages
 echo "Stow complete."
 
 # --- AstroNvim Setup ---
