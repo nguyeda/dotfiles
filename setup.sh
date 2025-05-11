@@ -9,7 +9,7 @@ echo "Starting dotfiles setup..."
 # Identify the package manager
 if command -v apt &> /dev/null; then
     PKG_MANAGER="apt"
-elif command -v dnf &> /dev_null; then
+elif command -v dnf &> /dev/null; then
     PKG_MANAGER="dnf"
 elif command -v pacman &> /dev/null; then
     PKG_MANAGER="pacman"
@@ -56,7 +56,7 @@ else
 fi
 
 # --- Install Volta ---
-if ! command -v volta &> /dev_null; then
+if ! command -v volta &> /dev/null; then
     echo "Installing Volta..."
     curl https://get.volta.sh | bash
     echo "Volta installation complete."
