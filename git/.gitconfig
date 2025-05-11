@@ -1,0 +1,15 @@
+[user]
+	name = Jérôme Poskin
+	email = jerome@moinax.com
+[core]
+	autocrlf = input
+[credential "https://github.com"]
+	helper = 
+	helper = !/usr/bin/gh auth git-credential
+[credential "https://gist.github.com"]
+	helper = 
+	helper = !/usr/bin/gh auth git-credential
+[alias]
+	cleanup = !git fetch -p && git for-each-ref --format \"%(refname:short) %(upstream:track)\" refs/heads/ | grep \"\\[gone\\]\" | awk '{print $1}' | xargs -r git branch -D
+[init]
+	defaultBranch = main
