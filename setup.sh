@@ -23,7 +23,7 @@ fi
 echo "Using package manager: $PKG_MANAGER"
 
 # List of packages to install
-PACKAGES="git tmux fzf neovim zsh stow" # Added zsh and stow
+PACKAGES="curl git tmux fzf neovim zsh stow" # Added zsh and stow
 
 echo "Installing necessary packages..."
 if [ "$PKG_MANAGER" == "apt" ]; then
