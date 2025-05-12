@@ -83,6 +83,16 @@ fi
 
 echo "Tool installation complete."
 
+# --- Install Tmux Plugin Manager (TPM) ---
+echo "Installing Tmux Plugin Manager (TPM)..."
+if [ ! -d "$HOME/.tmux/plugins/tpm" ]; then
+    git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+    echo "TPM installation complete."
+else
+    echo "TPM is already installed."
+fi
+echo "You should run tmux and type [CTRL+b I] to install all plugins."
+
 # --- Dotfiles Manager Specific Step (Choose one based on your preference) ---
 
 # If using Chezmoi:
