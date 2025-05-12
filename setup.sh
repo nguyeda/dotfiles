@@ -22,8 +22,7 @@ fi
 
 echo "Using package manager: $PKG_MANAGER"
 
-# List of packages to install
-PACKAGES="curl git tmux fzf zsh stow" # Removed neovim from here for separate installation via PPA
+PACKAGES="curl git tmux fzf zsh stow" # Removed neovim from here for separate installation
 
 echo "Installing necessary packages..."
 if [ "$PKG_MANAGER" == "apt" ]; then
@@ -31,14 +30,15 @@ if [ "$PKG_MANAGER" == "apt" ]; then
     # Install standard packages first
     sudo apt install -y $PACKAGES
 
-    # --- Install Latest Neovim via PPA ---
-    echo "Adding Neovim PPA and installing latest Neovim..."
-    # Add the neovim unstable PPA (usually has the very latest builds)
-    # You could use the stable PPA if you prefer: ppa:neovim-ppa/stable
-    sudo apt-add-repository -y ppa:neovim-ppa/stable
-    sudo apt update
-    sudo apt install -y neovim
-    echo "Latest Neovim installation complete via PPA."
+    # --- Install Latest Neovim via Snap ---
+    echo "Installing latest Neovim via Snap (classic)..."
+    # Ensure snapd is installed
+    if ! command -v snap &> /dev/null; then
+        echo "Installing snapd..."
+        sudo apt install -y snapd
+    fi
+    sudo snap install --classic neovim
+    echo "Latest Neovim installation complete via Snap."
 
 elif [ "$PKG_MANAGER" == "dnf" ]; then
     sudo dnf install -y $PACKAGES neovim # neovim is usually up-to-date in Fedora repos
