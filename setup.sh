@@ -23,26 +23,32 @@ fi
 echo "Using package manager: $PKG_MANAGER"
 
 # List of packages to install
-PACKAGES="curl git tmux fzf neovim zsh stow" # Added zsh and stow
+PACKAGES="curl git tmux fzf zsh stow" # Removed neovim from here for separate installation via PPA
 
 echo "Installing necessary packages..."
 if [ "$PKG_MANAGER" == "apt" ]; then
     sudo apt update
+    # Install standard packages first
     sudo apt install -y $PACKAGES
+
+    # --- Install Latest Neovim via PPA ---
+    echo "Adding Neovim PPA and installing latest Neovim..."
+    # Add the neovim unstable PPA (usually has the very latest builds)
+    # You could use the stable PPA if you prefer: ppa:neovim-ppa/stable
+    sudo apt-add-repository -y ppa:neovim-ppa/unstable
+    sudo apt update
+    sudo apt install -y neovim
+    echo "Latest Neovim installation complete via PPA."
+
 elif [ "$PKG_MANAGER" == "dnf" ]; then
-    sudo dnf install -y $PACKAGES
+    sudo dnf install -y $PACKAGES neovim # neovim is usually up-to-date in Fedora repos
 elif [ "$PKG_MANAGER" == "pacman" ]; then
-    sudo pacman -Syu --noconfirm $PACKAGES
+    sudo pacman -Syu --noconfirm $PACKAGES neovim # neovim is usually up-to-date in Arch repos
 elif [ "$PKG_MANAGER" == "brew" ]; then
-    # For macOS, ensure you have the latest Neovim
-    if [ "$PKG_MANAGER" == "brew" ]; then
-        brew update
-        brew install neovim --HEAD # Use --HEAD for the latest (often required for AstroNvim)
-        brew install git tmux fzf zsh stow # Install other packages including zsh and stow
-    else
-        # For Linux, install other packages including zsh and stow
-        sudo $PKG_MANAGER install -y $PACKAGES
-    fi
+    # For macOS, ensure you have the latest Neovim and other packages
+    brew update
+    brew install neovim --HEAD # Use --HEAD for the latest (often required for AstroNvim)
+    brew install git tmux fzf zsh stow # Install other packages
 fi
 echo "Package installation complete."
 
