@@ -35,7 +35,7 @@ if [ "$PKG_MANAGER" == "apt" ]; then
     echo "Adding Neovim PPA and installing latest Neovim..."
     # Add the neovim unstable PPA (usually has the very latest builds)
     # You could use the stable PPA if you prefer: ppa:neovim-ppa/stable
-    sudo apt-add-repository -y ppa:neovim-ppa/unstable
+    sudo apt-add-repository -y ppa:neovim-ppa/stable
     sudo apt update
     sudo apt install -y neovim
     echo "Latest Neovim installation complete via PPA."
