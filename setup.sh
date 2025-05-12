@@ -71,6 +71,15 @@ else
     echo "Volta is already installed."
 fi
 
+# --- Install Node.js and Package Managers with Volta ---
+# We add a check to ensure volta is available before trying to use it.
+if command -v volta &> /dev/null; then
+    echo "Installing Node.js and package managers with Volta..."
+    volta install node npm yarn@1 pnpm
+    echo "Volta installations complete."
+else
+    echo "Volta not found. Skipping Node.js and package manager installations with Volta."
+fi
 
 echo "Tool installation complete."
 
