@@ -37,7 +37,7 @@ if [ "$PKG_MANAGER" == "apt" ]; then
         echo "Installing snapd..."
         sudo apt install -y snapd
     fi
-    sudo snap install --classic neovim
+    sudo snap install --classic nvim
     echo "Latest Neovim installation complete via Snap."
 
 elif [ "$PKG_MANAGER" == "dnf" ]; then
