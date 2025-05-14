@@ -32,5 +32,5 @@ export PNPM_HOME="$HOME/.local/share/pnpm"
 # Lazy docker
 export PATH="$HOME/.local/bin:$PATH"
 
-# Fzf keybinding and fuzzy completion
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+# Set up fzf key bindings and fuzzy completion
+# source <(fzf --zsh)
