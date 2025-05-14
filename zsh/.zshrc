@@ -33,4 +33,7 @@ export PNPM_HOME="$HOME/.local/share/pnpm"
 export PATH="$HOME/.local/bin:$PATH"
 
 # Set up fzf key bindings and fuzzy completion
-# source <(fzf --zsh)
+source <(fzf --zsh)
+
+# Show neofetch at startup
+neofetch
