@@ -16,4 +16,5 @@ return {
   { import = "astrocommunity.colorscheme.catppuccin" },
   { import = "astrocommunity.color.transparent-nvim" },
   { import = "astrocommunity.docker.lazydocker" },
+  { import = "astrocommunity.motion.nvim-surround" },
 }
