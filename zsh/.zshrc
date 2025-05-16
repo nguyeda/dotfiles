@@ -22,7 +22,12 @@ zstyle :compinstall filename "$HOME/.zshrc"
 autoload -Uz compinit
 compinit
 # End of lines added by compinstall
+
+# Initialiaze starhsip
 eval "$(starship init zsh)"
+
+# Initialize zoxyde
+eval "$(zoxide init zsh)"
 
 # Show neofetch at startup
 neofetch
