@@ -2,12 +2,21 @@
 HISTFILE=~/.histfile
 HISTSIZE=1000
 SAVEHIST=1000
+# Allow to type a directory name without prefixing it with "cd"
 setopt autocd
+# Set the shell to "emacs" mode. You can use -v instead to use the "ui" mode
 bindkey -e
 # End of lines configured by zsh-newuser-install
+
+# Bind Ctrl+Right to move forward a word
+bindkey '^[[1;5C' forward-word
+# Bind Ctrl+Left to move backward a word
+bindkey '^[[1;5D' backward-word
+
 # The following lines were added by compinstall
 
 zstyle ':completion:*' completer _complete _ignored
+zstyle ':completion:*:default' menu select=0
 zstyle :compinstall filename "$HOME/.zshrc"
 
 autoload -Uz compinit
