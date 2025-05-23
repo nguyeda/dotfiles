@@ -28,5 +28,5 @@ Here is the list of packages I'm using on a day to day basis
 * Chrome (official Google Chrome)
   
 ```
-yay -S cursor-bin discord slack-desktop nwg-displays nvidia google-chrome-stabl
+yay -S cursor-bin discord slack-desktop nwg-displays nvidia google-chrome
 ```
