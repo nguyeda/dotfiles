@@ -1,55 +1,127 @@
-# Lines configured by zsh-newuser-install
-HISTFILE=~/.histfile
-HISTSIZE=1000
-SAVEHIST=1000
-# Allow to type a directory name without prefixing it with "cd"
-setopt autocd
-# Set the shell to "emacs" mode. You can use -v instead to use the "ui" mode
-bindkey -e
-# End of lines configured by zsh-newuser-install
+# If you come from bash you might have to change your $PATH.
+# export PATH=$HOME/bin:/usr/local/bin:$PATH
 
-# Bind Ctrl+Right to move forward a word
-bindkey '^[[1;5C' forward-word
-# Bind Ctrl+Left to move backward a word
-bindkey '^[[1;5D' backward-word
+# Path to your oh-my-zsh installation.
+export ZSH="$HOME/.oh-my-zsh"
 
-# The following lines were added by compinstall
+# Set name of the theme to load --- if set to "random", it will
+# load a random theme each time oh-my-zsh is loaded, in which case,
+# to know which specific one was loaded, run: echo $RANDOM_THEME
+# See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
+ZSH_THEME="mytheunraveler"
 
-zstyle ':completion:*' completer _complete _ignored
-zstyle ':completion:*:default' menu select=0
-zstyle :compinstall filename "$HOME/.zshrc"
+# Set list of themes to pick from when loading at random
+# Setting this variable when ZSH_THEME=random will cause zsh to load
+# a theme from this variable instead of looking in $ZSH/themes/
+# If set to an empty array, this variable will have no effect.
+# ZSH_THEME_RANDOM_CANDIDATES=( "robbyrussell" "agnoster" )
 
-autoload -Uz compinit
-compinit
-# End of lines added by compinstall
+# Uncomment the following line to use case-sensitive completion.
+# CASE_SENSITIVE="true"
 
-# Initialiaze starhsip
-eval "$(starship init zsh)"
+# Uncomment the following line to use hyphen-insensitive completion.
+# Case-sensitive completion must be off. _ and - will be interchangeable.
+# HYPHEN_INSENSITIVE="true"
 
-# Initialize zoxyde
-eval "$(zoxide init zsh)"
+# Uncomment the following line to disable bi-weekly auto-update checks.
+# DISABLE_AUTO_UPDATE="true"
 
-# Show neofetch at startup
-neofetch
+# Uncomment the following line to automatically update without prompting.
+# DISABLE_UPDATE_PROMPT="true"
 
-# Volta
+# Uncomment the following line to change how often to auto-update (in days).
+# export UPDATE_ZSH_DAYS=13
+
+# Uncomment the following line if pasting URLs and other text is messed up.
+# DISABLE_MAGIC_FUNCTIONS="true"
+
+# Uncomment the following line to disable colors in ls.
+# DISABLE_LS_COLORS="true"
+
+# Uncomment the following line to disable auto-setting terminal title.
+# DISABLE_AUTO_TITLE="true"
+
+# Uncomment the following line to enable command auto-correction.
+# ENABLE_CORRECTION="true"
+
+# Uncomment the following line to display red dots whilst waiting for completion.
+# Caution: this setting can cause issues with multiline prompts (zsh 5.7.1 and newer seem to work)
+# See https://github.com/ohmyzsh/ohmyzsh/issues/5765
+# COMPLETION_WAITING_DOTS="true"
+
+# Uncomment the following line if you want to disable marking untracked files
+# under VCS as dirty. This makes repository status check for large repositories
+# much, much faster.
+# DISABLE_UNTRACKED_FILES_DIRTY="true"
+
+# Uncomment the following line if you want to change the command execution time
+# stamp shown in the history command output.
+# You can set one of the optional three formats:
+# "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
+# or set a custom format using the strftime function format specifications,
+# see 'man strftime' for details.
+# HIST_STAMPS="mm/dd/yyyy"
+
+# Would you like to use another custom folder than $ZSH/custom?
+# ZSH_CUSTOM=/path/to/new-custom-folder
+
+# Which plugins would you like to load?
+# Standard plugins can be found in $ZSH/plugins/
+# Custom plugins may be added to $ZSH_CUSTOM/plugins/
+# Example format: plugins=(rails git textmate ruby lighthouse)
+# Add wisely, as too many plugins slow down shell startup.
+plugins=(git aws)
+
+source $ZSH/oh-my-zsh.sh
+
+# User configuration
+
+# export MANPATH="/usr/local/man:$MANPATH"
+
+# You may need to manually set your language environment
+export LANG=en_US.UTF-8
+# LC_ALL=en_US.UTF-8
+
+# Preferred editor for local and remote sessions
+# if [[ -n $SSH_CONNECTION ]]; then
+#   export EDITOR='vim'
+# else
+#   export EDITOR='mvim'
+# fi
+
+# Compilation flags
+# export ARCHFLAGS="-arch x86_64"
+
+# Set personal aliases, overriding those provided by oh-my-zsh libs,
+# plugins, and themes. Aliases can be placed here, though oh-my-zsh
+# users are encouraged to define aliases within the ZSH_CUSTOM folder.
+# For a full list of active aliases, run `alias`.
+#
+# Example aliases
+# alias zshconfig="mate ~/.zshrc"
+# alias ohmyzsh="mate ~/.oh-my-zsh"
+alias tf=terraform
+alias tg=terragrunt
+alias python=/opt/homebrew/bin/python3
+
+# enable vim mode
+bindkey -v
+
+source $HOME/.docker/init-zsh.sh || true # Added by Docker Desktop
+
 export VOLTA_HOME="$HOME/.volta"
-export PATH="$VOLTA_HOME/bin:$PATH"
-source ~/completion-for-pnpm.bash
+export PATH="$HOME/.docker/bin:$HOME/.local/bin:$VOLTA_HOME/bin:$/opt/homebrew/bin:$PATH"
 
-# Turso
-export PATH="$HOME/.turso:$PATH"
+# libpq
+export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
+export LDFLAGS="-I/opt/homebrew/opt/openssl@3/include -L/opt/homebrew/opt/openssl@3/lib"
 
-# Pnpm
-export PNPM_HOME="$HOME/.local/share/pnpm"
-   case ":$PATH:" in
-     *":$PNPM_HOME:"*) ;;
-     *) export PATH="$PNPM_HOME:$PATH" ;;
-   esac
+# terragrunt
+export TG_PROVIDER_CACHE=true
+export TG_DEPENDENCY_FETCH_OUTPUT_FROM_STATE=true
+export TG_QUEUE_EXCLUDE_EXTERNAL=true
+export TG_TF_PATH=$(which terraform)
 
-# Lazy docker
-export PATH="$HOME/.local/bin:$PATH"
+# AWS
+export AWS_DEFAULT_REGION=eu-west-1
 
-
-# Set up fzf key bindings and fuzzy completion
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

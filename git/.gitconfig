@@ -1,15 +1,23 @@
-[user]
-	name = Jérôme Poskin
-	email = jerome@moinax.com
 [core]
+	excludesfile = ~/.gitignore_global
 	autocrlf = input
-[credential "https://github.com"]
-	helper = 
-	helper = !/usr/bin/gh auth git-credential
-[credential "https://gist.github.com"]
-	helper = 
-	helper = !/usr/bin/gh auth git-credential
+[color]
+	branch = auto
+	diff = auto
+	interactive = auto
+	status = auto
 [alias]
-	cleanup = !git fetch -p && git for-each-ref --format \"%(refname:short) %(upstream:track)\" refs/heads/ | grep \"\\[gone\\]\" | awk '{print $1}' | xargs -r git branch -D
+	st = status
+	co = checkout
+	sw = switch
+	pr = pull --rebase
+	prom = pull --rebase origin master
+	lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'
+	hist = log --all --graph --pretty
+	rb = "!f() { git rebase -i HEAD~$1; }; f"	
+	fap = fetch --prune
+	fapr = "!f() { git fetch --prune && git pr; }; f"
+	yolo = push -f
+	i = show --pretty=format:'%Cred%h%Creset %C(yellow)%d%Creset%n%s' -s HEAD
 [init]
 	defaultBranch = main

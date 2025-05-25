@@ -1,0 +1,23 @@
+*~
+*.swp
+
+# MacOS Stuff
+.DS_Store
+
+# Intellij files
+.idea
+*.iml
+
+# Node.js files
+npm-debug.log.*
+node_modules
+
+# Own files
+nocommit*
+dng-*
+dng_*
+.dng_*
+.dng-*
+
+# Python
+venv/
