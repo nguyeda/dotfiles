@@ -119,6 +119,7 @@ automatically-unhide-macos-hidden-apps = false
     # See: https://nikitabobko.github.io/AeroSpace/commands#resize
     ctrl-alt-shift-slash = 'resize smart +50'
     ctrl-alt-slash = 'resize smart -50'
+    ctrl-alt-r = 'balance-sizes'
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#workspace
     ctrl-alt-1 = 'workspace 1'
@@ -130,8 +131,8 @@ automatically-unhide-macos-hidden-apps = false
     ctrl-alt-7 = 'workspace 7'
     ctrl-alt-8 = 'workspace 8'
     ctrl-alt-9 = 'workspace 9'
-    ctrl-alt-left = 'workspace --wrap-around prev'
-    ctrl-alt-right = 'workspace --wrap-around next'
+    ctrl-left = 'workspace --wrap-around prev'
+    ctrl-right = 'workspace --wrap-around next'
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#move-node-to-workspace
     ctrl-alt-shift-1 = 'move-node-to-workspace 1'
@@ -177,10 +178,7 @@ automatically-unhide-macos-hidden-apps = false
     # sticky is not yet supported https://github.com/nikitabobko/AeroSpace/issues/2
     #s = ['layout sticky tiling', 'mode main']
 
-#[[on-window-detected]]
-#if.app-name-regex-substring = '^wezterm-gui$'
-#run = 'move-node-to-workspace 1'
+[[on-window-detected]]
+if.app-id = 'com.tinyspeck.slackmacgap'
+run = 'move-node-to-workspace 3'
 
-#[[on-window-detected]]
-#if.app-id = 'company.thebrowser.Browser'
-#run = 'move-node-to-workspace 2'
