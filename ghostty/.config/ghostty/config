@@ -1,0 +1,4 @@
+theme = dark:catppuccin-frappe,light:catppuccin-latte
+
+background-opacity = 0.9
+background-blur = true
