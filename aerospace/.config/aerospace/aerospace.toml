@@ -12,7 +12,7 @@ after-login-command = []
 after-startup-command = []
 
 # Start AeroSpace at login
-start-at-login = true 
+start-at-login = true
 
 # Normalizations. See: https://nikitabobko.github.io/AeroSpace/guide#normalization
 enable-normalization-flatten-containers = true
@@ -73,7 +73,6 @@ automatically-unhide-macos-hidden-apps = false
 # 'main' binding mode must be always presented
 # Fallback value (if you omit the key): mode.main.binding = {}
 [mode.main.binding]
-
     # All possible keys:
     # - Letters.        a, b, c, ..., z
     # - Numbers.        0, 1, 2, ..., 9
@@ -86,18 +85,16 @@ automatically-unhide-macos-hidden-apps = false
     # - Keypad special. keypadClear, keypadDecimalMark, keypadDivide, keypadEnter, keypadEqual,
     #                   keypadMinus, keypadMultiply, keypadPlus
     # - Arrows.         left, down, up, right
-
     # All possible modifiers: cmd, alt, ctrl, shift
-
     # All possible commands: https://nikitabobko.github.io/AeroSpace/commands
-
     # See: https://nikitabobko.github.io/AeroSpace/commands#exec-and-forget
     # You can uncomment the following lines to open up terminal with alt + enter shortcut
     # cmd-alt-enter = 'exec-and-forget open -n /Applications/Ghostty.app'
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#layout
-    ctrl-alt-period = 'layout tiles horizontal vertical'      # period => semicolon in azerty
-    ctrl-alt-comma = 'layout accordion horizontal vertical'   # comma  => semicolon in azerty
+    ctrl-alt-period = 'layout tiles horizontal vertical'      # period => ; in azerty
+    ctrl-alt-comma = 'layout accordion horizontal vertical'   # comma  => : in azerty
+    ctrl-alt-m = 'layout floating tiling'
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#focus
     ctrl-alt-h = 'focus left'
@@ -135,19 +132,21 @@ automatically-unhide-macos-hidden-apps = false
     ctrl-right = 'workspace --wrap-around next'
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#move-node-to-workspace
-    ctrl-alt-shift-1 = 'move-node-to-workspace 1'
-    ctrl-alt-shift-2 = 'move-node-to-workspace 2'
-    ctrl-alt-shift-3 = 'move-node-to-workspace 3'
-    ctrl-alt-shift-4 = 'move-node-to-workspace 4'
-    ctrl-alt-shift-5 = 'move-node-to-workspace 5'
-    ctrl-alt-shift-6 = 'move-node-to-workspace 6'
-    ctrl-alt-shift-7 = 'move-node-to-workspace 7'
-    ctrl-alt-shift-8 = 'move-node-to-workspace 8'
-    ctrl-alt-shift-9 = 'move-node-to-workspace 9'
+    ctrl-alt-shift-1 = 'move-node-to-workspace --focus-follows-window 1'
+    ctrl-alt-shift-2 = 'move-node-to-workspace --focus-follows-window 2'
+    ctrl-alt-shift-3 = 'move-node-to-workspace --focus-follows-window 3'
+    ctrl-alt-shift-4 = 'move-node-to-workspace --focus-follows-window 4'
+    ctrl-alt-shift-5 = 'move-node-to-workspace --focus-follows-window 5'
+    ctrl-alt-shift-6 = 'move-node-to-workspace --focus-follows-window 6'
+    ctrl-alt-shift-7 = 'move-node-to-workspace --focus-follows-window 7'
+    ctrl-alt-shift-8 = 'move-node-to-workspace --focus-follows-window 8'
+    ctrl-alt-shift-9 = 'move-node-to-workspace --focus-follows-window 9'
+    ctrl-alt-shift-left = 'move-node-to-workspace --wrap-around --focus-follows-window prev'
+    ctrl-alt-shift-right = 'move-node-to-workspace --wrap-around --focus-follows-window next'
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#workspace-back-and-forth
     ctrl-alt-equal = 'workspace-back-and-forth'  # equal => minus in azerty
-    
+
     # See: https://nikitabobko.github.io/AeroSpace/commands#move-workspace-to-monitor
     cmd-alt-shift-b = 'move-workspace-to-monitor --wrap-around prev'
     cmd-alt-shift-n = 'move-workspace-to-monitor --wrap-around next'
@@ -164,7 +163,7 @@ automatically-unhide-macos-hidden-apps = false
     ctrl-alt-shift-f = 'macos-native-fullscreen'
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#mode
-    ctrl-alt-shift-comma = 'mode service'  # comma => semicolon in azerty
+    cmd-ctrl-alt-shift-m = 'mode service'  # comma => ; in azerty
 
 # 'service' binding mode declaration.
 # See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
@@ -179,6 +178,13 @@ automatically-unhide-macos-hidden-apps = false
     #s = ['layout sticky tiling', 'mode main']
 
 [[on-window-detected]]
-if.app-id = 'com.tinyspeck.slackmacgap'
-run = 'move-node-to-workspace 3'
+    if.app-id = 'com.tinyspeck.slackmacgap'
+    run = 'move-node-to-workspace 8'
 
+[[on-window-detected]]
+    if.app-id = 'com.toggl.daneel'
+    run = 'move-node-to-workspace 9'
+
+[[on-window-detected]]
+    if.app-id = 'com.apple.iCal'
+    run = 'move-node-to-workspace 9'
