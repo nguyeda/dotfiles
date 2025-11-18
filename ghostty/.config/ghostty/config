@@ -1,4 +1,6 @@
-theme = dark:catppuccin-frappe,light:catppuccin-latte
+theme = dark:Catppuccin Frappe,light:Catppuccin Latte
 
-background-opacity = 0.9
+background-opacity = 1.0
 background-blur = true
+
+keybind = shift+enter=text:\n
