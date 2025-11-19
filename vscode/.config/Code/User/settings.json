@@ -4,5 +4,7 @@
   "terminal.integrated.fontFamily": "FiraCode Nerd Font Mono",
   "files.autoSave": "afterDelay",
   "files.autoSaveDelay": 1000,
-  "git.confirmSync": false
+  "git.confirmSync": false,
+  "gitlens.ai.model": "gitkraken",
+  "gitlens.ai.gitkraken.model": "gemini:gemini-2.0-flash"
 }

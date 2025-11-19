@@ -21,4 +21,4 @@ while IFS= read -r extension || [ -n "$extension" ]; do
     code --install-extension "$extension" --force
 done < "$EXTENSIONS_FILE"
 
-echo "All extensions installed!"
+echo "All vscode extensions installed!"
