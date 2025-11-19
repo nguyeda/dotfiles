@@ -1,0 +1,8 @@
+{
+  "editor.fontFamily": "FiraCode Nerd Font",
+  "editor.fontSize": 14,
+  "terminal.integrated.fontFamily": "FiraCode Nerd Font Mono",
+  "files.autoSave": "afterDelay",
+  "files.autoSaveDelay": 1000,
+  "git.confirmSync": false
+}
