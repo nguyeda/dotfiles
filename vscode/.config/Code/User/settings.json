@@ -7,5 +7,17 @@
   "git.confirmSync": false,
   "gitlens.ai.model": "gitkraken",
   "gitlens.ai.gitkraken.model": "gemini:gemini-2.0-flash",
-  "window.restoreWindows": "none"
+  "window.restoreWindows": "none",
+  "dev.containers.defaultExtensions": [
+    "anthropic.claude-code",
+    "eamodio.gitlens",
+    "github.vscode-github-actions",
+    "github.vscode-pull-request-github",
+    "ms-azuretools.vscode-containers",
+    "ms-azuretools.vscode-docker",
+    "ms-vscode-remote.remote-containers",
+    "ms-vsliveshare.vsliveshare",
+    "seatonjiang.gitmoji-vscode",
+    "vscodevim.vim"
+  ]
 }
