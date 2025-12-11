@@ -17,7 +17,7 @@ alias tg=terragrunt
 export TG_PROVIDER_CACHE=true
 export TG_DEPENDENCY_FETCH_OUTPUT_FROM_STATE=true
 export TG_QUEUE_EXCLUDE_EXTERNAL=true
-export TG_TF_PATH=$(which terraform)
+export TG_TF_PATH=$(which tofu)
 
 ##################################################################
 # history
@@ -48,3 +48,5 @@ fpath=(/Users/david/.docker/completions $fpath)
 autoload -Uz compinit
 compinit
 # End of Docker CLI completions
+
+fpath+=~/.zfunc; autoload -Uz compinit; compinit
