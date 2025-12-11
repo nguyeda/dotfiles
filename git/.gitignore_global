@@ -21,3 +21,6 @@ dng_*
 
 # Python
 venv/
+
+# AI
+.claude/*.local.json
