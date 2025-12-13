@@ -117,7 +117,7 @@ fi
 
 # Install from recipe
 if [ -n "$RECIPE" ]; then
-  RECIPE_UPPER="${RECIPE^^}"
+  RECIPE_UPPER="$(echo "$RECIPE" | tr '[:lower:]' '[:upper:]')"
   recipe_var="RECIPE_${RECIPE_UPPER}[@]"
   if [ -z "${!recipe_var+x}" ]; then
     echo "Unknown recipe: $RECIPE"
