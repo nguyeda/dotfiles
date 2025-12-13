@@ -45,7 +45,7 @@ automatically-unhide-macos-hidden-apps = false
 
 [workspace-to-monitor-force-assignment]
     1 = 'main'                       # Main monitor
-    2 = 'secondary'                  # Non-main monitor in case when there are only two monitors
+    5 = 'secondary'                  # Non-main monitor in case when there are only two monitors
 
 # Possible values: (qwerty|dvorak|colemak)
 # See https://nikitabobko.github.io/AeroSpace/guide#key-mapping
