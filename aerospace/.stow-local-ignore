@@ -1,4 +1,3 @@
-# Local stow ignore patterns
 setup\.sh
 setup\..*\.sh
 setup_post\.sh

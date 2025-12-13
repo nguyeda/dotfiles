@@ -20,5 +20,7 @@
     "seatonjiang.gitmoji-vscode",
     "vscodevim.vim"
   ],
-  "claudeCode.preferredLocation": "panel"
+  "claudeCode.preferredLocation": "panel",
+  "aws.telemetry": false,
+  "aws.cloudformation.telemetry.enabled": false
 }

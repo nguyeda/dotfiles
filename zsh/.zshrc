@@ -12,12 +12,14 @@ alias la="ls -la"
 setopt NO_BEEP
 
 # terragrunt
-alias tf=terraform
-alias tg=terragrunt
-export TG_PROVIDER_CACHE=true
-export TG_DEPENDENCY_FETCH_OUTPUT_FROM_STATE=true
-export TG_QUEUE_EXCLUDE_EXTERNAL=true
-export TG_TF_PATH=$(which tofu)
+if command -v tofu &> /dev/null; then
+  alias tf=tofu
+  alias tg=terragrunt
+  export TG_PROVIDER_CACHE=true
+  export TG_DEPENDENCY_FETCH_OUTPUT_FROM_STATE=true
+  export TG_QUEUE_EXCLUDE_EXTERNAL=true
+  export TG_TF_PATH=$(which tofu)
+fi
 
 ##################################################################
 # history

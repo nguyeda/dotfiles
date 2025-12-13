@@ -8,6 +8,7 @@ DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # ============================================================================
 RECIPE_FEDORA=(fedora ssh stow zsh git gh btop clamav claude cursor docker fonts ghostty gitkraken just lazydocker lazygit nvim opentofu timeshift uv vscode)
 RECIPE_MACOS=(stow ssh aerospace btop git claude fonts just lazydocker lazygit nvim opentofu starship uv)
+RECIPE_CONTAINER=(debian stow git lazygit nvim starship zsh)
 
 # ============================================================================
 # Detect OS and distro
@@ -18,6 +19,8 @@ detect_distro() {
     Linux)
       if [ -f /etc/fedora-release ]; then
         echo "fedora"
+      elif [ -f /etc/os-release ] && grep -q "^ID=debian" /etc/os-release; then
+        echo "debian"
       else
         echo "Unsupported Linux distro." >&2
         exit 1
@@ -59,10 +62,6 @@ install_package() {
     echo "No setup script found for package: $package"
     return 1
   fi
-
-  # Stow config
-  cd "$DOTFILES_DIR"
-  stow --ignore='setup\.sh' --ignore='setup\..*\.sh' --ignore='setup_post\.sh' "$package"
 }
 
 # ============================================================================

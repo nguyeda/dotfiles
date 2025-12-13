@@ -1,1 +1,4 @@
+setup\.sh
+setup\..*\.sh
+setup_post\.sh
 extensions\.txt
