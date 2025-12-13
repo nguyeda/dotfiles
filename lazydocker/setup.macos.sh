@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e
 
-brew install lazydocker
+brew install jesseduffield/lazydocker/lazydocker
 
 echo "lazydocker setup complete!"
