@@ -1,55 +1,142 @@
 #!/bin/bash
 set -e
 
-PACKAGE="$1"
-if [ -z "$PACKAGE" ]; then
-  echo "Usage: ./setup.sh <package>"
-  exit 1
-fi
-
 DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PACKAGE_DIR="$DOTFILES_DIR/$PACKAGE"
 
-if [ ! -d "$PACKAGE_DIR" ]; then
-  echo "Package directory not found: $PACKAGE"
-  exit 1
-fi
+# ============================================================================
+# Recipes - define package lists here (order matters, stow should be early)
+# ============================================================================
+RECIPE_FEDORA=(fedora ssh stow zsh git gh btop clamav claude cursor docker fonts ghostty gitkraken just lazydocker lazygit nvim opentofu timeshift uv vscode)
+RECIPE_MACOS=(stow ssh aerospace btop git claude fonts just lazydocker lazygit nvim opentofu starship uv)
 
+# ============================================================================
 # Detect OS and distro
-OS="$(uname -s)"
-case "$OS" in
-  Linux)
-    if [ -f /etc/fedora-release ]; then
-      DISTRO="fedora"
-    else
-      echo "Unsupported Linux distro."
+# ============================================================================
+detect_distro() {
+  OS="$(uname -s)"
+  case "$OS" in
+    Linux)
+      if [ -f /etc/fedora-release ]; then
+        echo "fedora"
+      else
+        echo "Unsupported Linux distro." >&2
+        exit 1
+      fi
+      ;;
+    Darwin)
+      echo "macos"
+      ;;
+    *)
+      echo "Unsupported OS: $OS" >&2
       exit 1
-    fi
-    ;;
-  Darwin)
-    DISTRO="macos"
-    ;;
-  *)
-    echo "Unsupported OS: $OS"
-    exit 1
-    ;;
-esac
+      ;;
+  esac
+}
 
-# Find and run setup script
-DISTRO_SCRIPT="$PACKAGE_DIR/setup.$DISTRO.sh"
-GENERIC_SCRIPT="$PACKAGE_DIR/setup.sh"
+# ============================================================================
+# Install a single package
+# ============================================================================
+install_package() {
+  local package="$1"
+  local distro="$2"
+  local package_dir="$DOTFILES_DIR/$package"
 
-if [ -f "$DISTRO_SCRIPT" ]; then
-  echo "Running $PACKAGE/setup.$DISTRO.sh..."
-  "$DISTRO_SCRIPT"
-elif [ -f "$GENERIC_SCRIPT" ]; then
-  echo "Running $PACKAGE/setup.sh..."
-  "$GENERIC_SCRIPT"
-else
-  echo "No setup script found for package: $PACKAGE"
-  exit 1
+  if [ ! -d "$package_dir" ]; then
+    echo "Package directory not found: $package"
+    return 1
+  fi
+
+  local distro_script="$package_dir/setup.$distro.sh"
+  local generic_script="$package_dir/setup.sh"
+
+  if [ -f "$distro_script" ]; then
+    echo "Running $package/setup.$distro.sh..."
+    "$distro_script"
+  elif [ -f "$generic_script" ]; then
+    echo "Running $package/setup.sh..."
+    "$generic_script"
+  else
+    echo "No setup script found for package: $package"
+    return 1
+  fi
+
+  # Stow config
+  cd "$DOTFILES_DIR"
+  stow --ignore='setup\.sh' --ignore='setup\..*\.sh' --ignore='setup_post\.sh' "$package"
+}
+
+# ============================================================================
+# Usage
+# ============================================================================
+usage() {
+  echo "Usage: ./setup.sh [options]"
+  echo ""
+  echo "Options:"
+  echo "  -p <package>   Install a single package"
+  echo "  -r <recipe>    Install packages from a recipe (fedora, macos)"
+  echo "  (no args)      Install packages from recipe matching current OS"
+  echo ""
+  echo "Available recipes: fedora, macos"
+}
+
+# ============================================================================
+# Main
+# ============================================================================
+DISTRO="$(detect_distro)"
+PACKAGE=""
+RECIPE=""
+
+while getopts "p:r:h" opt; do
+  case $opt in
+    p)
+      PACKAGE="$OPTARG"
+      ;;
+    r)
+      RECIPE="$OPTARG"
+      ;;
+    h)
+      usage
+      exit 0
+      ;;
+    *)
+      usage
+      exit 1
+      ;;
+  esac
+done
+
+# Install single package
+if [ -n "$PACKAGE" ]; then
+  install_package "$PACKAGE" "$DISTRO"
+  exit 0
 fi
 
-# Stow config
-cd "$DOTFILES_DIR"
-stow "$PACKAGE"
+# If no flags provided, use recipe matching current distro
+if [ -z "$PACKAGE" ] && [ -z "$RECIPE" ]; then
+  RECIPE="$DISTRO"
+fi
+
+# Install from recipe
+if [ -n "$RECIPE" ]; then
+  RECIPE_UPPER="${RECIPE^^}"
+  recipe_var="RECIPE_${RECIPE_UPPER}[@]"
+  if [ -z "${!recipe_var+x}" ]; then
+    echo "Unknown recipe: $RECIPE"
+    echo "Available recipes: fedora, macos"
+    exit 1
+  fi
+
+  packages=("${!recipe_var}")
+  echo "Installing recipe '$RECIPE': ${packages[*]}"
+  echo ""
+
+  for pkg in "${packages[@]}"; do
+    echo "=========================================="
+    echo "Installing package: $pkg"
+    echo "=========================================="
+    install_package "$pkg" "$DISTRO"
+    echo ""
+  done
+
+  echo "Recipe '$RECIPE' complete!"
+fi

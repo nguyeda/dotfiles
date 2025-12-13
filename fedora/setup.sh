@@ -27,7 +27,7 @@ else
   echo "NVIDIA drivers already configured in dracut"
 fi
 
-# Rebuild initramfs to include NVIDIA drivers for early boot
-dracut --force
+echo Rebuilding initramfs to include NVIDIA drivers for early boot
+sudo dracut --force
 
 echo "fedora setup complete!"
