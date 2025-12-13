@@ -1,0 +1,9 @@
+# Cursor extensions
+eamodio.gitlens
+github.vscode-github-actions
+github.vscode-pull-request-github
+ms-azuretools.vscode-containers
+ms-azuretools.vscode-docker
+ms-vscode-remote.remote-containers
+seatonjiang.gitmoji-vscode
+vscodevim.vim

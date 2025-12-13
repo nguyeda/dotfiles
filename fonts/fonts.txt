@@ -1,0 +1,5 @@
+# Nerd Fonts to install (name=url)
+Hack=https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/Hack.zip
+FiraCode=https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/FiraCode.zip
+FiraMono=https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/FiraMono.zip
+JetBrainsMono=https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/JetBrainsMono.zip

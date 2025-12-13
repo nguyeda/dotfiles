@@ -34,18 +34,15 @@ zle -N down-line-or-beginning-search
 bindkey '^[[A' up-line-or-beginning-search
 bindkey '^[[B' down-line-or-beginning-search
 
-# Git completion
-zstyle ':completion:*:*:git:*' script ~/.zsh/git-completion.bash
-fpath=(~/.zsh $fpath)
-
-# Docker completion
-fpath=(~/.docker/completions $fpath)
-
-fpath+=~/.zfunc; 
-
-eval "$(starship init zsh)"
-
 ##################################################################
 # auto-completion
+zstyle ':completion:*:*:git:*' script ~/.zsh/git-completion.bash
+fpath+=~/.zsh                # git
+fpath+=~/.docker/completions # docker
+fpath+=~/.zfunc              # rustup, uv 
+
 autoload -U compinit && compinit
 
+##################################################################
+# starship
+eval "$(starship init zsh)"

@@ -19,5 +19,6 @@
     "ms-vsliveshare.vsliveshare",
     "seatonjiang.gitmoji-vscode",
     "vscodevim.vim"
-  ]
+  ],
+  "claudeCode.preferredLocation": "panel"
 }
