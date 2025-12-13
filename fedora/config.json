@@ -1,0 +1,70 @@
+{
+  "packages": [
+    "btop",
+    "clamav",
+    "clamd",
+    "clamav-update",
+    "dnf-plugins-core",
+    "git",
+    "gh",
+    "just",
+    "neovim",
+    "stow",
+    "terraform",
+    "timeshift",
+    "zsh"
+  ],
+  "copr": [
+    "atim/starship",
+    "dejan/lazygit",
+    "scottames/ghostty"
+  ],
+  "repositories": [
+    "https://rpm.releases.hashicorp.com/fedora/hashicorp.repo",
+    "https://download.docker.com/linux/fedora/docker-ce.repo"
+  ],
+  "rpm": [
+    {
+      "command": "gitkraken",
+      "url": "https://release.gitkraken.com/linux/gitkraken-amd64.rpm"
+    },
+    {
+      "command": "cursor",
+      "url": "https://api2.cursor.sh/updates/download/golden/linux-x64-rpm/cursor/2.0"
+    },
+    {
+      "command": "keybase",
+      "url": "https://prerelease.keybase.io/keybase_amd64.rpm"
+    }
+  ],
+  "scripts": [
+    {
+      "command": "lazydocker",
+      "url": "https://raw.githubusercontent.com/jesseduffield/lazydocker/master/scripts/install_update_linux.sh"
+    },
+    {
+      "command": "uv",
+      "url": "https://astral.sh/uv/install.sh"
+    },
+    {
+      "command": "claude",
+      "url": "https://claude.ai/install.sh"
+    },
+    {
+      "command": "cursor-agent",
+      "url": "https://cursor.com/install"
+    }
+  ],
+  "fonts": {
+    "Hack": "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/Hack.zip",
+    "FiraCode": "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/FiraCode.zip",
+    "FiraMono": "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/FiraMono.zip",
+    "JetbrainsMono": "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/JetBrainsMono.zip"
+  },
+  "stow": [
+    "git",
+    "starship",
+    "zsh",
+    "vscode"
+  ]
+}

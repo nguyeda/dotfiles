@@ -34,19 +34,18 @@ zle -N down-line-or-beginning-search
 bindkey '^[[A' up-line-or-beginning-search
 bindkey '^[[B' down-line-or-beginning-search
 
-##################################################################
-# auto-completion
-autoload -U compinit && compinit
-
 # Git completion
 zstyle ':completion:*:*:git:*' script ~/.zsh/git-completion.bash
 fpath=(~/.zsh $fpath)
 
-eval "$(starship init zsh)"
-# The following lines have been added by Docker Desktop to enable Docker CLI completions.
-fpath=(/Users/david/.docker/completions $fpath)
-autoload -Uz compinit
-compinit
-# End of Docker CLI completions
+# Docker completion
+fpath=(~/.docker/completions $fpath)
 
-fpath+=~/.zfunc; autoload -Uz compinit; compinit
+fpath+=~/.zfunc; 
+
+eval "$(starship init zsh)"
+
+##################################################################
+# auto-completion
+autoload -U compinit && compinit
+
