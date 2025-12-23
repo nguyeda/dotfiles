@@ -1,3 +1,6 @@
+[includeIf "gitdir:~/dev/work/"]
+        path = ~/.gitconfig.local
+
 [core]
 	excludesfile = ~/.gitignore_global
 	autocrlf = input
