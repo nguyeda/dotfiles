@@ -8,6 +8,12 @@ alias vi="nvim"
 alias ll="ls -l"
 alias la="ls -la"
 
+# tmux
+alias t='tmux attach || tmux new'
+if [[ -n "$TMUX" ]]; then
+  alias tmux='echo "Already in tmux session"'
+fi
+
 # never beep
 setopt NO_BEEP
 
