@@ -1,4 +1,4 @@
-theme = dark:Catppuccin Frappe,light:Catppuccin Latte
+theme = dark:catppuccin-frappier.conf,light:Catppuccin Latte
 
 background-opacity = 1.0
 background-blur = true
