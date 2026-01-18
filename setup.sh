@@ -62,6 +62,12 @@ install_package() {
     echo "No setup script found for package: $package"
     return 1
   fi
+
+  # Stow package to create symlinks (if stow is available)
+  if command -v stow &> /dev/null; then
+    echo "Stowing $package..."
+    stow -d "$DOTFILES_DIR" -t "$HOME" "$package"
+  fi
 }
 
 # ============================================================================
