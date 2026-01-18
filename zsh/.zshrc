@@ -1,22 +1,31 @@
-export PATH=~/.local/bin:/opt/homebrew/bin:$PATH
-
+##################################################################
+# environment
+export PATH=~/.local/bin:$PATH
 export LANG=en_US.UTF-8
 export EDITOR="nvim"
+
+# never beep
+setopt NO_BEEP
+
+##################################################################
+# homebrew
+[[ -d /opt/homebrew/bin ]] && export PATH="/opt/homebrew/bin:$PATH"
+
+##################################################################
+# aliases
 alias vim="nvim"
 alias vi="nvim"
-
 alias ll="ls -l"
 alias la="ls -la"
 
+##################################################################
 # tmux
 alias t='tmux attach || tmux new'
 if [[ -n "$TMUX" ]]; then
   alias tmux='echo "Already in tmux session"'
 fi
 
-# never beep
-setopt NO_BEEP
-
+##################################################################
 # terragrunt
 if command -v tofu &> /dev/null; then
   alias tf=tofu
@@ -47,10 +56,19 @@ bindkey '^[[B' down-line-or-beginning-search
 zstyle ':completion:*:*:git:*' script ~/.zsh/git-completion.bash
 fpath+=~/.zsh                # git
 fpath+=~/.docker/completions # docker
-fpath+=~/.zfunc              # rustup, uv 
+fpath+=~/.zfunc              # rustup, uv
 
 autoload -U compinit && compinit
 
 ##################################################################
-# starship
+# volta
+export VOLTA_HOME="$HOME/.volta"
+export PATH="$VOLTA_HOME/bin:$PATH"
+
+##################################################################
+# opencode
+export PATH=/home/david/.opencode/bin:$PATH
+
+##################################################################
+# starship (keep last - initializes prompt)
 eval "$(starship init zsh)"
