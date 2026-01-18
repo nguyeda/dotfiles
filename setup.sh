@@ -6,9 +6,9 @@ DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # ============================================================================
 # Recipes - define package lists here (order matters, stow should be early)
 # ============================================================================
-RECIPE_FEDORA=(fedora ssh stow zsh git gh btop clamav claude cursor docker fonts ghostty gitkraken just lazydocker lazygit nvim opentofu timeshift uv vscode)
-RECIPE_MACOS=(stow ssh aerospace btop git claude fonts just lazydocker lazygit nvim opentofu starship uv)
-RECIPE_CONTAINER=(debian stow git lazygit nvim starship zsh)
+RECIPE_FEDORA=(fedora ssh stow zsh git gh btop clamav claude cursor docker fonts ghostty gitkraken just lazydocker lazygit nvim opentofu timeshift uv vscode graphite)
+RECIPE_MACOS=(homebrew stow ssh aerospace btop git claude fonts just lazydocker lazygit nvim opentofu starship uv graphite)
+RECIPE_CONTAINER=(debian stow git lazygit nvim starship zsh volta graphite)
 
 # ============================================================================
 # Detect OS and distro
