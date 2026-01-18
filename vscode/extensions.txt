@@ -3,7 +3,7 @@ eamodio.gitlens
 github.vscode-github-actions
 github.vscode-pull-request-github
 Graphite.gti-vscode
-ms-azuretool.vscode-containers
+ms-azuretools.vscode-containers
 ms-azuretools.vscode-docker
 ms-vscode-remote.remote-containers
 ms-vsliveshare.vsliveshare

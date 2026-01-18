@@ -22,5 +22,6 @@
   ],
   "claudeCode.preferredLocation": "panel",
   "aws.telemetry": false,
-  "aws.cloudformation.telemetry.enabled": false
+  "aws.cloudformation.telemetry.enabled": false,
+  "git.autofetch": true
 }
