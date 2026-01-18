@@ -2,7 +2,6 @@ anthropic.claude-code
 eamodio.gitlens
 github.vscode-github-actions
 github.vscode-pull-request-github
-Graphite.gti-vscode
 ms-azuretools.vscode-containers
 ms-azuretools.vscode-docker
 ms-vscode-remote.remote-containers
