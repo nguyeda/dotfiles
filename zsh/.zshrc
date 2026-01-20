@@ -20,10 +20,13 @@ alias la="ls -la"
 
 ##################################################################
 # tmux
-alias t='tmux attach || tmux new'
-if [[ -n "$TMUX" ]]; then
-  alias tmux='echo "Already in tmux session"'
-fi
+t() {
+  if [[ -n "$1" ]]; then
+    tmux attach -t "$1" 2>/dev/null || tmux new -s "$1"
+  else
+    tmux attach || tmux new
+  fi
+}
 
 ##################################################################
 # terragrunt

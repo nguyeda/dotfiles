@@ -4,3 +4,4 @@ background-opacity = 1.0
 background-blur = true
 
 keybind = shift+enter=text:\n
+keybind = super+b=esc:b
