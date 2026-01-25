@@ -8,7 +8,7 @@ DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # ============================================================================
 RECIPE_FEDORA=(fedora ssh stow zsh git gh btop clamav claude cursor docker fonts ghostty gitkraken just lazydocker lazygit nvim opentofu timeshift uv vscode graphite)
 RECIPE_MACOS=(homebrew stow ssh aerospace btop git claude fonts just lazydocker lazygit nvim opentofu starship uv graphite)
-RECIPE_CONTAINER=(debian stow git lazygit nvim starship zsh volta graphite)
+RECIPE_CONTAINER=(debian stow git lazygit nvim starship zsh volta graphite claude)
 
 # ============================================================================
 # Detect OS and distro
@@ -67,6 +67,18 @@ install_package() {
   if command -v stow &> /dev/null; then
     echo "Stowing $package..."
     stow -d "$DOTFILES_DIR" -t "$HOME" "$package"
+  fi
+
+  # Run post-setup script if it exists (distro-specific or generic)
+  local distro_post_script="$package_dir/setup_post.$distro.sh"
+  local generic_post_script="$package_dir/setup_post.sh"
+
+  if [ -f "$distro_post_script" ]; then
+    echo "Running $package/setup_post.$distro.sh..."
+    "$distro_post_script"
+  elif [ -f "$generic_post_script" ]; then
+    echo "Running $package/setup_post.sh..."
+    "$generic_post_script"
   fi
 }
 

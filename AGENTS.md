@@ -15,7 +15,8 @@ This is a dotfiles management system using GNU Stow for symlinking configuration
 ├── <package>/            # One directory per tool/application
 │   ├── setup.<distro>.sh # Platform-specific setup scripts
 │   ├── setup.sh          # Generic setup script (fallback)
-│   ├── setup_post.sh     # Optional shared post-install steps
+│   ├── setup_post.<distro>.sh # Platform-specific post-install steps
+│   ├── setup_post.sh     # Generic post-install script (fallback)
 │   ├── .stow-local-ignore# Files to exclude from stow
 │   ├── .config/          # XDG config files (stowed to ~/.config/)
 │   ├── .zshrc            # Home directory dotfiles (stowed to ~/)
@@ -134,6 +135,7 @@ If your package has files that shouldn't be symlinked (setup scripts, support fi
 setup\.sh
 setup\..*\.sh
 setup_post\.sh
+setup_post\..*\.sh
 extensions\.txt
 fonts\.txt
 ```
@@ -235,9 +237,14 @@ Font definitions in `name=url` format:
 JetBrainsMono=https://github.com/.../JetBrainsMono.zip
 ```
 
-### setup_post.sh
+### setup_post.sh / setup_post.<distro>.sh
 
-Shared post-install logic called by platform-specific scripts:
+Post-install scripts run after stow completes. The dispatcher checks in this order:
+
+1. `setup_post.<distro>.sh` - Platform-specific (e.g., `setup_post.macos.sh`)
+2. `setup_post.sh` - Generic fallback
+
+Example shared post-install logic:
 
 ```bash
 #!/bin/bash
@@ -359,6 +366,7 @@ stow -n -v -t "$HOME" <package>
 - [ ] Create package directory
 - [ ] Add config files mirroring home directory structure
 - [ ] Create `setup.<distro>.sh` for each supported platform
+- [ ] Create `setup_post.<distro>.sh` or `setup_post.sh` if post-install steps needed
 - [ ] Create `.stow-local-ignore` if needed
 - [ ] Add `stow` command to setup script if package has config files
 - [ ] Add package to appropriate recipe(s) in `setup.sh`
