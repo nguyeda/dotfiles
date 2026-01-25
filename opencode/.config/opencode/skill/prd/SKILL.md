@@ -149,6 +149,8 @@ Each story needs:
 ### US-001: [Title]
 **Description:** As a [user], I want [feature] so that [benefit].
 
+**Technical Analysis:** _Pending_
+
 **Acceptance Criteria:**
 - [ ] Specific verifiable criterion
 - [ ] Another criterion
@@ -186,6 +188,8 @@ Add priority levels to tasks so users can focus on what matters most. Tasks can 
 ### US-001: Add priority field to database
 **Description:** As a developer, I need to store task priority so it persists across sessions.
 
+**Technical Analysis:** _Pending_
+
 **Acceptance Criteria:**
 - [ ] Add priority column: 'high' | 'medium' | 'low' (default 'medium')
 - [ ] Generate and run migration successfully
@@ -193,6 +197,8 @@ Add priority levels to tasks so users can focus on what matters most. Tasks can 
 
 ### US-002: Display priority indicator on task cards
 **Description:** As a user, I want to see task priority at a glance so I know what needs attention first.
+
+**Technical Analysis:** _Pending_
 
 **Acceptance Criteria:**
 - [ ] Each task card shows colored priority badge (red=high, yellow=medium, gray=low)
@@ -203,6 +209,8 @@ Add priority levels to tasks so users can focus on what matters most. Tasks can 
 ### US-003: Add priority selector to task edit
 **Description:** As a user, I want to change a task's priority when editing it.
 
+**Technical Analysis:** _Pending_
+
 **Acceptance Criteria:**
 - [ ] Priority dropdown in task edit modal
 - [ ] Shows current priority as selected
@@ -212,6 +220,8 @@ Add priority levels to tasks so users can focus on what matters most. Tasks can 
 
 ### US-004: Filter tasks by priority
 **Description:** As a user, I want to filter the task list to see only high-priority items when I'm focused.
+
+**Technical Analysis:** _Pending_
 
 **Acceptance Criteria:**
 - [ ] Filter dropdown with options: All | High | Medium | Low

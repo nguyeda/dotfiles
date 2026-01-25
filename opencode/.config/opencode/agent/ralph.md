@@ -18,10 +18,13 @@ The caller provides:
    - `git branch --list "<plan_name>"`
    - If missing: `gt create <plan_name>`
    - If present: `gt checkout <plan_name>`
-2. Read the PRD and select the first unchecked task (`[ ]`).
-3. Read the progress file; use Learnings as context.
-4. Implement only that task.
-5. Run relevant tests/typecheck.
+2. Read the PRD and select the first unchecked task (`[ ]`). Note its ID (e.g., US-003).
+3. Check for tech analysis at `tech/<story-id>.md`:
+   - If exists: read it and follow the Implementation Steps
+   - If missing: proceed with own analysis
+4. Read the progress file; use Learnings as context.
+5. Implement only that task.
+6. Run relevant tests/typecheck.
 
 ## If Tests Fail
 - Do not mark the task complete.
@@ -29,11 +32,12 @@ The caller provides:
 - Append the failure and learnings to the progress file.
 
 ## If Tests Pass
-1. Commit with the appropriate gitmoji code (e.g. `:sparkles: add user authentication`).
-2. Request a code review of the last commit (`git diff HEAD~1`) to the reviewer agent.
-3. Log reviewer comments in progress under “Review Feedback”.
-4. For each suggestion, decide whether to implement and note why.
-5. If no suggestions to implement, mark the PRD task complete (`[ ]` → `[x]`).
+1. Append iteration notes to the progress file (see Progress Notes Format).
+2. Mark the PRD task complete (`[ ]` → `[x]`).
+3. Stage all changes (code + progress + PRD) and commit together with appropriate gitmoji (e.g. `:sparkles: US-001 add user authentication`).
+4. Request a code review of the last commit (`git diff HEAD~1`) to the reviewer agent.
+5. Log reviewer comments in progress under "Review Feedback".
+6. For each suggestion, decide whether to implement and note why.
 
 Never use `git commit --amend`.
 
