@@ -59,7 +59,21 @@
       "Bash(gt submit:*)",
       "Bash(gt user:*)",
 
-      "Bash(mkdir:*)"
+      "Bash(mkdir:*)",
+
+      "Bash(gh api:*)",
+      "Bash(gh issue list:*)",
+      "Bash(gh issue status:*)",
+      "Bash(gh issue view:*)",
+      "Bash(gh pr checks:*)",
+      "Bash(gh pr diff:*)",
+      "Bash(gh pr list:*)",
+      "Bash(gh pr status:*)",
+      "Bash(gh pr view:*)",
+      "Bash(gh release list:*)",
+      "Bash(gh repo view:*)",
+      "Bash(gh run list:*)",
+      "Bash(gh run view:*)"
     ],
     "deny": [],
     "ask": []
