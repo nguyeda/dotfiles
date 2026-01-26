@@ -8,3 +8,4 @@ ms-vscode-remote.remote-containers
 ms-vsliveshare.vsliveshare
 seatonjiang.gitmoji-vscode
 vscodevim.vim
+bierner.markdown-mermaid
