@@ -1,66 +1,124 @@
-# Window split
-ctrl + alt - s : yabai -m window --toggle split
+# skhd configuration for yabai
+# Keybindings matching AeroSpace where possible
 
-# Layout flip 
-ctrl + shift + alt - x : yabai -m space --mirror x-axis
-ctrl + shift + alt - y : yabai -m space --mirror y-axis
-
-# change focus between external displays
-ctrl + alt - n : yabai -m display --focus next 
-ctrl + alt - b : yabai -m display --focus prev
-
-# toggle window float
-ctrl + shift + alt - t : yabai -m window --toggle float --grid 4:4:1:1:2:2
-
-# maximise window
-ctrl + alt - f : yabai -m window --toggle zoom-fullscreen
-ctrl + alt + shift -f : yabai -m window --toggle native-fullscreen
-
-# Focus window
+# ============================================
+# Focus windows (ctrl+alt + h/j/k/l)
+# ============================================
+ctrl + alt - h : yabai -m window --focus west
 ctrl + alt - j : yabai -m window --focus south
 ctrl + alt - k : yabai -m window --focus north
-ctrl + alt - h : yabai -m window --focus west
 ctrl + alt - l : yabai -m window --focus east
 
-# Move window
-ctrl + alt + shift + - h : yabai -m window --swap west
-ctrl + alt + shift + - j : yabai -m window --swap south
-ctrl + alt + shift + - k : yabai -m window --swap north
-ctrl + alt + shift + - l : yabai -m window --swap east
+# ============================================
+# Move/swap windows (ctrl+alt+shift + h/j/k/l)
+# ============================================
+ctrl + alt + shift - h : yabai -m window --swap west
+ctrl + alt + shift - j : yabai -m window --swap south
+ctrl + alt + shift - k : yabai -m window --swap north
+ctrl + alt + shift - l : yabai -m window --swap east
 
-# Move and split
-ctrl + cmd + shift - h : yabai -m window --warp west
-ctrl + cmd + shift - j : yabai -m window --warp south
-ctrl + cmd + shift - k : yabai -m window --warp north
-ctrl + cmd + shift - l : yabai -m window --warp east
+# ============================================
+# Warp/join windows (cmd+alt+shift + h/j/k/l)
+# ============================================
+cmd + alt + shift - h : yabai -m window --warp west
+cmd + alt + shift - j : yabai -m window --warp south
+cmd + alt + shift - k : yabai -m window --warp north
+cmd + alt + shift - l : yabai -m window --warp east
 
-# resize window
-cmd + alt - r : yabai -m space --balance
+# ============================================
+# Resize windows
+# ============================================
+# Shrink (ctrl+alt+/)
+ctrl + alt - 0x2C : yabai -m window --resize left:20:0 ; yabai -m window --resize right:-20:0
+# Grow (ctrl+alt+shift+/)
+ctrl + alt + shift - 0x2C : yabai -m window --resize left:-20:0 ; yabai -m window --resize right:20:0
+# Balance (ctrl+alt+r)
+ctrl + alt - r : yabai -m space --balance
 
-# shrink window  (⌘ + ⌥)
-cmd + alt - h : yabai -m window --resize left:20:0
-cmd + alt - j : yabai -m window --resize bottom:0:20
-cmd + alt - k : yabai -m window --resize top:0:20
-cmd + alt - l : yabai -m window --resize right:-20:0
+# ============================================
+# Layout modes
+# ============================================
+# BSP layout (ctrl+alt+.)
+ctrl + alt - 0x2F : yabai -m space --layout bsp
+# Stack layout (ctrl+alt+,)
+ctrl + alt - 0x2B : yabai -m space --layout stack
+# Float toggle for current window (ctrl+alt+m)
+ctrl + alt - m : yabai -m window --toggle float ; yabai -m window --grid 4:4:1:1:2:2
 
-# grow window  (⌘ + ⌥ + ⇧)
-cmd + alt + shift - h : yabai -m window --resize left:-20:0
-cmd + alt + shift - j : yabai -m window --resize bottom:0:-20
-cmd + alt + shift - k : yabai -m window --resize top:0:-20
-cmd + alt + shift - l : yabai -m window --resize right:20:0
+# ============================================
+# Fullscreen
+# ============================================
+# Toggle zoom-fullscreen (ctrl+alt+f)
+ctrl + alt - f : yabai -m window --toggle zoom-fullscreen
+# Toggle native fullscreen (ctrl+alt+shift+f)
+ctrl + alt + shift - f : yabai -m window --toggle native-fullscreen
 
-# move window to prev/next space
-#ctrl + shift + alt - n : yabai -m window --space next;
-#ctrl + shift + alt - b : yabai -m window --space prev;
+# ============================================
+# Move window to space (ctrl+alt+shift + number/letter)
+# ============================================
+ctrl + alt + shift - 1 : yabai -m window --space 1
+ctrl + alt + shift - 2 : yabai -m window --space 2
+ctrl + alt + shift - 3 : yabai -m window --space 3
+ctrl + alt + shift - 4 : yabai -m window --space 4
+ctrl + alt + shift - 5 : yabai -m window --space 5
+ctrl + alt + shift - 6 : yabai -m window --space 6
+ctrl + alt + shift - 7 : yabai -m window --space 7
+ctrl + alt + shift - 8 : yabai -m window --space 8
+ctrl + alt + shift - 9 : yabai -m window --space 9
 
-# Switch space
-#ctrl + alt + shift - 1 : yabai -m window --space 1;
-#ctrl + alt + shift - 2 : yabai -m window --space 2;
-#ctrl + alt + shift - 3 : yabai -m window --space 3;
-#ctrl + alt + shift - 4 : yabai -m window --space 4;
-#ctrl + alt + shift - 5 : yabai -m window --space 5;
-#ctrl + alt + shift - 6 : yabai -m window --space 6;
-#ctrl + alt + shift - 7 : yabai -m window --space 7;
-#ctrl + alt + shift - 8 : yabai -m window --space 8;
-#ctrl + alt + shift - 9 : yabai -m window --space 9;
+# Named space shortcuts (matching AeroSpace letters)
+# C = Calendar (space 2)
+ctrl + alt + shift - c : yabai -m window --space 2
+# W = Web (space 3)
+ctrl + alt + shift - w : yabai -m window --space 3
+# I = Issues (space 4)
+ctrl + alt + shift - i : yabai -m window --space 4
+# M = Music (space 5)
+# Note: cmd+m is minimize on macOS, so using ctrl+alt+shift
+ctrl + alt + shift - u : yabai -m window --space 5
+# N = Notion (space 6)
+ctrl + alt + shift - n : yabai -m window --space 6
+# S = Slack (space 7)
+ctrl + alt + shift - s : yabai -m window --space 7
+# T = Terminal (space 8)
+ctrl + alt + shift - t : yabai -m window --space 8
 
+# ============================================
+# Monitor focus and move (ctrl+alt + b/n)
+# ============================================
+# Focus monitor (ctrl+alt + b/n)
+ctrl + alt - b : yabai -m display --focus prev
+ctrl + alt - n : yabai -m display --focus next
+
+# Move window to monitor (ctrl+alt+shift + b/n)
+ctrl + alt + shift - b : yabai -m window --display prev ; yabai -m display --focus prev
+ctrl + alt + shift - n : yabai -m window --display next ; yabai -m display --focus next
+
+# ============================================
+# Stack navigation (when in stack layout)
+# ============================================
+ctrl + alt - 0x21 : yabai -m window --focus stack.prev  # [ key
+ctrl + alt - 0x1E : yabai -m window --focus stack.next  # ] key
+
+# ============================================
+# Service mode (cmd+ctrl+alt+shift+m as prefix)
+# ============================================
+# Reload yabai (cmd+ctrl+alt+shift + c)
+cmd + ctrl + alt + shift - c : yabai --restart-service
+# Balance all windows (cmd+ctrl+alt+shift + r)
+cmd + ctrl + alt + shift - r : yabai -m space --balance
+# Run setup script (cmd+ctrl+alt+shift + s)
+cmd + ctrl + alt + shift - s : ~/.config/yabai/scripts/setup-workspaces.sh
+
+# ============================================
+# Quick actions
+# ============================================
+# Rotate tree clockwise
+ctrl + alt - e : yabai -m space --rotate 90
+# Mirror tree y-axis
+ctrl + alt - y : yabai -m space --mirror y-axis
+# Mirror tree x-axis
+ctrl + alt - x : yabai -m space --mirror x-axis
+
+# Toggle split direction for focused window
+ctrl + alt - s : yabai -m window --toggle split
