@@ -29,7 +29,7 @@ default-root-container-layout = 'tiles'
 # Possible values: horizontal|vertical|auto
 # 'auto' means: wide monitor (anything wider than high) gets horizontal orientation,
 #               tall monitor (anything higher than wide) gets vertical orientation
-default-root-container-orientation = 'auto'
+default-root-container-orientation = 'horizontal'
 
 # Mouse follows focus when focused monitor changes
 # Drop it from your config, if you don't like this behavior
@@ -131,6 +131,15 @@ automatically-unhide-macos-hidden-apps = false
     ctrl-left = 'workspace --wrap-around prev'
     ctrl-right = 'workspace --wrap-around next'
 
+    # Named workspaces
+    ctrl-alt-c = 'workspace C'  # Calendar & Toggl
+    ctrl-alt-z = 'workspace W'  # Web browser (z = w on AZERTY)
+    ctrl-alt-i = 'workspace I'  # Linear (Issues)
+    ctrl-alt-semicolon = 'workspace M'  # Music (semicolon = m on AZERTY)
+    ctrl-alt-o = 'workspace O'  # Notion
+    ctrl-alt-s = 'workspace S'  # Slack
+    ctrl-alt-t = 'workspace T'  # Terminal
+
     # See: https://nikitabobko.github.io/AeroSpace/commands#move-node-to-workspace
     ctrl-alt-shift-1 = 'move-node-to-workspace --focus-follows-window 1'
     ctrl-alt-shift-2 = 'move-node-to-workspace --focus-follows-window 2'
@@ -143,6 +152,15 @@ automatically-unhide-macos-hidden-apps = false
     ctrl-alt-shift-9 = 'move-node-to-workspace --focus-follows-window 9'
     ctrl-alt-shift-left = 'move-node-to-workspace --wrap-around --focus-follows-window prev'
     ctrl-alt-shift-right = 'move-node-to-workspace --wrap-around --focus-follows-window next'
+
+    # Move to named workspaces
+    ctrl-alt-shift-c = 'move-node-to-workspace --focus-follows-window C'
+    ctrl-alt-shift-z = 'move-node-to-workspace --focus-follows-window W'
+    ctrl-alt-shift-i = 'move-node-to-workspace --focus-follows-window I'
+    ctrl-alt-shift-semicolon = 'move-node-to-workspace --focus-follows-window M'
+    ctrl-alt-shift-o = 'move-node-to-workspace --focus-follows-window O'
+    ctrl-alt-shift-s = 'move-node-to-workspace --focus-follows-window S'
+    ctrl-alt-shift-t = 'move-node-to-workspace --focus-follows-window T'
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#workspace-back-and-forth
     ctrl-alt-equal = 'workspace-back-and-forth'  # equal => minus in azerty
@@ -173,18 +191,8 @@ automatically-unhide-macos-hidden-apps = false
     r = ['flatten-workspace-tree', 'mode main'] # reset layout
     f = ['layout floating tiling', 'mode main'] # Toggle between floating and tiling layout
     backspace = ['close-all-windows-but-current', 'mode main']
+    s = ['exec-and-forget ~/.config/aerospace/scripts/setup-workspaces.sh', 'mode main'] # Setup workspaces on secondary
 
     # sticky is not yet supported https://github.com/nikitabobko/AeroSpace/issues/2
     #s = ['layout sticky tiling', 'mode main']
 
-[[on-window-detected]]
-    if.app-id = 'com.tinyspeck.slackmacgap'
-    run = 'move-node-to-workspace 8'
-
-[[on-window-detected]]
-    if.app-id = 'com.toggl.daneel'
-    run = 'move-node-to-workspace 9'
-
-[[on-window-detected]]
-    if.app-id = 'com.apple.iCal'
-    run = 'move-node-to-workspace 9'
