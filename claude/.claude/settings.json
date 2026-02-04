@@ -73,7 +73,10 @@
       "Bash(gh release list:*)",
       "Bash(gh repo view:*)",
       "Bash(gh run list:*)",
-      "Bash(gh run view:*)"
+      "Bash(gh run view:*)",
+
+      "mcp__context7__resolve-library-id",
+      "mcp__context7__query-docs"
     ],
     "deny": [],
     "ask": []
