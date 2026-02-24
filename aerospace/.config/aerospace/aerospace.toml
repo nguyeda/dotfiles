@@ -1,13 +1,10 @@
 # Place a copy of this config to ~/.aerospace.toml
 # After that, you can edit ~/.aerospace.toml to your liking
 
-# You can use it to add commands that run after login to macOS user session.
-# 'start-at-login' needs to be 'true' for 'after-login-command' to work
-# Available commands: https://nikitabobko.github.io/AeroSpace/commands
-after-login-command = []
+# Config version for compatibility and deprecations
+config-version = 2
 
 # You can use it to add commands that run after AeroSpace startup.
-# 'after-startup-command' is run after 'after-login-command'
 # Available commands : https://nikitabobko.github.io/AeroSpace/commands
 after-startup-command = []
 
@@ -42,6 +39,19 @@ default-root-container-orientation = 'horizontal'
 # Useful if you don't use this macOS feature, but accidentally hit cmd-h or cmd-alt-h key
 # Also see: https://nikitabobko.github.io/AeroSpace/goodies#disable-hide-app
 automatically-unhide-macos-hidden-apps = false
+
+# Persistent workspaces stay alive even when they contain no windows.
+# Only available since config-version = 2
+persistent-workspaces = ["1", "2", "3", "4", "5", "6", "7", "8", "9",
+                         "C", "I", "M", "O", "S", "T", "W"]
+
+# A callback that runs every time binding mode changes
+on-mode-changed = []
+
+# Float all new windows by default
+#[[on-window-detected]]
+#    check-further-callbacks = true
+#    run = 'layout floating'
 
 [workspace-to-monitor-force-assignment]
     1 = 'main'                       # Main monitor
@@ -195,4 +205,3 @@ automatically-unhide-macos-hidden-apps = false
 
     # sticky is not yet supported https://github.com/nikitabobko/AeroSpace/issues/2
     #s = ['layout sticky tiling', 'mode main']
-
