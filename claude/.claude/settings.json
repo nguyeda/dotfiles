@@ -1,4 +1,7 @@
 {
+  "env": {
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
+  },
   "permissions": {
     "allow": [
       "Bash(cat:*)",
@@ -8,16 +11,13 @@
       "Bash(stat:*)",
       "Bash(tail:*)",
       "Bash(wc:*)",
-
       "Bash(df:*)",
       "Bash(du:*)",
       "Bash(find:*)",
       "Bash(ls:*)",
       "Bash(pwd:*)",
       "Bash(tree:*)",
-
       "Bash(grep:*)",
-
       "Bash(date:*)",
       "Bash(echo:*)",
       "Bash(env:*)",
@@ -29,7 +29,6 @@
       "Bash(whereis:*)",
       "Bash(which:*)",
       "Bash(whoami:*)",
-
       "Bash(git add:*)",
       "Bash(git branch:*)",
       "Bash(git commit:*)",
@@ -44,7 +43,6 @@
       "Bash(git rev-parse:*)",
       "Bash(git show:*)",
       "Bash(git status:*)",
-
       "Bash(gt branch:*)",
       "Bash(gt changelog:*)",
       "Bash(gt create:*)",
@@ -58,9 +56,7 @@
       "Bash(gt status:*)",
       "Bash(gt submit:*)",
       "Bash(gt user:*)",
-
       "Bash(mkdir:*)",
-
       "Bash(gh api:*)",
       "Bash(gh issue list:*)",
       "Bash(gh issue status:*)",
@@ -74,7 +70,6 @@
       "Bash(gh repo view:*)",
       "Bash(gh run list:*)",
       "Bash(gh run view:*)",
-
       "mcp__context7__resolve-library-id",
       "mcp__context7__query-docs"
     ],
