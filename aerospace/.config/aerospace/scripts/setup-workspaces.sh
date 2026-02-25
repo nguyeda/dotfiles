@@ -8,6 +8,40 @@ set -euo pipefail
 # Add Homebrew to PATH for non-interactive shells (shortcuts, launchd, etc.)
 export PATH="/opt/homebrew/bin:/usr/local/bin:$PATH"
 
+# Launch apps (open -gja = background, don't bring to front, by bundle id)
+LAUNCH_APPS=(
+    com.mitchellh.ghostty
+    com.linear
+    app.zen-browser.zen
+    com.tinyspeck.slackmacgap
+    keybase.Electron
+    com.apple.iCal
+    com.toggl.daneel
+    com.apple.Music
+    com.binarynights.ForkLift
+)
+
+for app in "${LAUNCH_APPS[@]}"; do
+    open -gja "$app" 2>/dev/null || true
+done
+
+echo "Apps launched"
+
+# Hide apps that should stay running but not visible
+HIDE_APPS=(
+    "Wispr Flow"
+    "Docker Desktop"
+)
+
+for app in "${HIDE_APPS[@]}"; do
+    osascript -e "tell application \"System Events\" to set visible of process \"$app\" to false" 2>/dev/null || true
+done
+
+echo "Hidden background apps"
+
+# Wait for windows to appear before dispatching
+sleep 3
+
 # Minimum width (UI resolution) to use tiles layout; below this use accordion
 MIN_WIDTH_FOR_TILES=2000
 
