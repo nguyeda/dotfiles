@@ -70,8 +70,10 @@
       "Bash(gh repo view:*)",
       "Bash(gh run list:*)",
       "Bash(gh run view:*)",
-      "mcp__context7__resolve-library-id",
-      "mcp__context7__query-docs"
+      "WebSearch",
+      "WebFetch",
+      "mcp__context7__*",
+      "mcp__linear-server__*"
     ],
     "deny": [],
     "ask": []
