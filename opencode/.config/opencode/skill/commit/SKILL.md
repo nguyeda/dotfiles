@@ -2,7 +2,7 @@
 name: commit
 description: Commit files changed in the current session. Build the commit message using local CONTRIBUTING.md rules.
 context: fork
-allowed-tools: Bash(git status:*), Bash(git diff:*), Bash(git add:*), Bash(git commit:*), Bash(git log:*), Bash(git -C * status:*), Bash(git -C * diff:*), Bash(git -C * add:*), Bash(git -C * commit:*), Bash(git -C * log:*)
+allowed-tools: Bash(git status:*), Bash(git diff:*), Bash(git add:*), Bash(git commit:*), Bash(git log:*), Bash(git push:*), Bash(git -C * status:*), Bash(git -C * diff:*), Bash(git -C * add:*), Bash(git -C * commit:*), Bash(git -C * log:*), Bash(git -C * push:*), Bash(gh pr create:*), Bash(gh pr view:*), Bash(gh pr edit:*), Bash(gh pr comment:*), Bash(gh pr ready:*), Bash(gh pr checks:*), Bash(gh pr status:*), Bash(gh api:*)
 ---
 
 # Commit
@@ -36,6 +36,13 @@ Before writing the message:
 4. Draft a concise message focused on intent and impact.
 5. Commit with `git commit -m "<message>"`.
 6. Verify with `git status` and report result.
+
+## Pull Requests
+
+- You may use `git push` and `gh` commands to create a pull request and request review.
+- Only perform `git push` and PR creation when explicitly asked by the user.
+- If not explicitly asked, stop after commit and report next steps.
+- Scope for PR interaction is limited to creating the PR and requesting review.
 
 ## Safety
 
