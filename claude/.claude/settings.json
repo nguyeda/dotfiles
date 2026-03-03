@@ -1,6 +1,7 @@
 {
   "env": {
-    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1",
+    "ENABLE_LSP_TOOL": "1"
   },
   "permissions": {
     "allow": [
@@ -57,6 +58,7 @@
       "Bash(gt submit:*)",
       "Bash(gt user:*)",
       "Bash(mkdir:*)",
+      "Bash(test:*)",
       "Bash(gh api:*)",
       "Bash(gh issue list:*)",
       "Bash(gh issue status:*)",
@@ -73,7 +75,8 @@
       "WebSearch",
       "WebFetch",
       "mcp__context7__*",
-      "mcp__linear-server__*"
+      "mcp__linear-server__*",
+      "mcp__ide__getDiagnostics"
     ],
     "deny": [],
     "ask": []
