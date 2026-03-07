@@ -10,6 +10,7 @@ ALREADY_INSTALLED_EXIT=42
 RECIPE_FEDORA=(fedora ssh stow zsh git gh btop clamav claude cursor docker fonts ghostty gitkraken just lazydocker lazygit nvim nvidia-container-toolkit opentofu timeshift uv vscode graphite)
 RECIPE_MACOS=(homebrew stow ssh aerospace btop git claude fonts just lazydocker lazygit libpq nvim opentofu starship uv graphite)
 RECIPE_CONTAINER=(debian stow git lazygit nvim starship zsh volta graphite claude)
+RECIPE_PI=(debian stow git nvim zsh starship volta btop gh just docker lazygit lazydocker)
 
 # ============================================================================
 # Detect OS and distro
