@@ -2,6 +2,7 @@
 set -e
 
 DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+ALREADY_INSTALLED_EXIT=42
 
 # ============================================================================
 # Recipes - define package lists here (order matters, stow should be early)
@@ -82,6 +83,86 @@ install_package() {
   fi
 }
 
+should_install_package() {
+  local package="$1"
+  local distro="$2"
+  local force="$3"
+  local package_dir="$DOTFILES_DIR/$package"
+  local distro_pre_script="$package_dir/setup_pre.$distro.sh"
+  local generic_pre_script="$package_dir/setup_pre.sh"
+  local pre_script=""
+
+  if [ "$force" -eq 1 ]; then
+    return 0
+  fi
+
+  if [ -f "$distro_pre_script" ]; then
+    pre_script="$distro_pre_script"
+  elif [ -f "$generic_pre_script" ]; then
+    pre_script="$generic_pre_script"
+  else
+    return 0
+  fi
+
+  echo "Running $package/$(basename "$pre_script")..."
+  local status=0
+  if "$pre_script"; then
+    status=0
+  else
+    status=$?
+  fi
+
+  if [ "$status" -eq 0 ]; then
+    return 0
+  fi
+
+  if [ "$status" -eq "$ALREADY_INSTALLED_EXIT" ]; then
+    echo "$package already installed, skipping install."
+    return 1
+  fi
+
+  echo "Pre-setup check failed for package: $package" >&2
+  return "$status"
+}
+
+run_package() {
+  local package="$1"
+  local distro="$2"
+  local force="$3"
+  local package_dir="$DOTFILES_DIR/$package"
+
+  if should_install_package "$package" "$distro" "$force"; then
+    install_package "$package" "$distro"
+    return 0
+  fi
+
+  local status=$?
+  if [ "$status" -ne 1 ]; then
+    return "$status"
+  fi
+
+  if [ ! -d "$package_dir" ]; then
+    echo "Package directory not found: $package"
+    return 1
+  fi
+
+  if command -v stow &> /dev/null; then
+    echo "Stowing $package..."
+    stow -d "$DOTFILES_DIR" -t "$HOME" "$package"
+  fi
+
+  local distro_post_script="$package_dir/setup_post.$distro.sh"
+  local generic_post_script="$package_dir/setup_post.sh"
+
+  if [ -f "$distro_post_script" ]; then
+    echo "Running $package/setup_post.$distro.sh..."
+    "$distro_post_script"
+  elif [ -f "$generic_post_script" ]; then
+    echo "Running $package/setup_post.sh..."
+    "$generic_post_script"
+  fi
+}
+
 # ============================================================================
 # Usage
 # ============================================================================
@@ -89,6 +170,7 @@ usage() {
   echo "Usage: ./setup.sh [options]"
   echo ""
   echo "Options:"
+  echo "  -f             Force install even if already installed"
   echo "  -p <package>   Install a single package"
   echo "  -r <recipe>    Install packages from a recipe (fedora, macos)"
   echo "  (no args)      Install packages from recipe matching current OS"
@@ -102,9 +184,13 @@ usage() {
 DISTRO="$(detect_distro)"
 PACKAGE=""
 RECIPE=""
+FORCE=0
 
-while getopts "p:r:h" opt; do
+while getopts "fp:r:h" opt; do
   case $opt in
+    f)
+      FORCE=1
+      ;;
     p)
       PACKAGE="$OPTARG"
       ;;
@@ -124,7 +210,7 @@ done
 
 # Install single package
 if [ -n "$PACKAGE" ]; then
-  install_package "$PACKAGE" "$DISTRO"
+  run_package "$PACKAGE" "$DISTRO" "$FORCE"
   exit 0
 fi
 
@@ -151,7 +237,7 @@ if [ -n "$RECIPE" ]; then
     echo "=========================================="
     echo "Installing package: $pkg"
     echo "=========================================="
-    install_package "$pkg" "$DISTRO"
+    run_package "$pkg" "$DISTRO" "$FORCE"
     echo ""
   done
 

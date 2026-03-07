@@ -1,8 +1,6 @@
 #!/bin/bash
 set -e
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-
 if [ ! -f /etc/yum.repos.d/vscode.repo ]; then
   sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
   sudo tee /etc/yum.repos.d/vscode.repo << 'EOF'
@@ -17,9 +15,5 @@ gpgkey=https://packages.microsoft.com/keys/microsoft.asc
 EOF
 fi
 sudo dnf install -y code
-
-"$SCRIPT_DIR/setup_post.sh"
-
-stow -d "$(dirname "$SCRIPT_DIR")" -t "$HOME" "$(basename "$SCRIPT_DIR")"
 
 echo "VS Code setup complete!"
