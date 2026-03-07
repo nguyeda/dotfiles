@@ -1,7 +1,1 @@
-setup\.sh
-setup\..*\.sh
-setup_post\.sh
-setup_post\..*\.sh
-claude_auth\.sh
 Dockerfile
-docker-compose\.yml
