@@ -43,7 +43,7 @@ automatically-unhide-macos-hidden-apps = false
 # Persistent workspaces stay alive even when they contain no windows.
 # Only available since config-version = 2
 persistent-workspaces = ["1", "2", "3", "4", "5", "6", "7", "8", "9",
-                         "C", "I", "M", "O", "S", "T", "W"]
+                         "C", "E", "I", "M", "O", "S", "T", "W"]
 
 # A callback that runs every time binding mode changes
 on-mode-changed = []
@@ -143,6 +143,7 @@ on-mode-changed = []
 
     # Named workspaces
     ctrl-alt-c = 'workspace C'  # Calendar & Toggl
+    ctrl-alt-e = 'workspace E'  # Email (Mimestream)
     ctrl-alt-z = 'workspace W'  # Web browser (z = w on AZERTY)
     ctrl-alt-i = 'workspace I'  # Linear (Issues)
     ctrl-alt-semicolon = 'workspace M'  # Music (semicolon = m on AZERTY)
@@ -165,6 +166,7 @@ on-mode-changed = []
 
     # Move to named workspaces
     ctrl-alt-shift-c = 'move-node-to-workspace --focus-follows-window C'
+    ctrl-alt-shift-e = 'move-node-to-workspace --focus-follows-window E'
     ctrl-alt-shift-z = 'move-node-to-workspace --focus-follows-window W'
     ctrl-alt-shift-i = 'move-node-to-workspace --focus-follows-window I'
     ctrl-alt-shift-semicolon = 'move-node-to-workspace --focus-follows-window M'
