@@ -77,7 +77,7 @@ get_window_ids_by_bundle() {
     if [ -n "$workspace" ]; then
         aerospace list-windows --workspace "$workspace" --app-bundle-id "$bundle_id" --format '%{window-id}' 2>/dev/null || true
     else
-        aerospace list-windows --all --app-bundle-id "$bundle_id" --format '%{window-id}' 2>/dev/null || true
+        aerospace list-windows --monitor all --app-bundle-id "$bundle_id" --format '%{window-id}' 2>/dev/null || true
     fi
 }
 
