@@ -74,5 +74,11 @@ export PATH="$VOLTA_HOME/bin:$PATH"
 export PATH=/home/david/.opencode/bin:$PATH
 
 ##################################################################
+# pgp
+export GPG_TTY=$(tty)
+export SOPS_GPG_EXEC=$(which gpg)
+
+##################################################################
 # starship (keep last - initializes prompt)
 eval "$(starship init zsh)"
+
