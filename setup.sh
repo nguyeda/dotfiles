@@ -43,11 +43,19 @@ detect_distro() {
 # ============================================================================
 stow_package() {
   local package="$1"
-  if command -v stow &> /dev/null; then
-    echo "Stowing $package..."
-    stow --adopt -d "$DOTFILES_DIR" -t "$HOME" "$package"
-    git -C "$DOTFILES_DIR" checkout -- "$package" 2>/dev/null || true
+  if ! command -v stow &> /dev/null; then
+    return
   fi
+  echo "Stowing $package..."
+  stow -n -v -d "$DOTFILES_DIR" -t "$HOME" "$package" 2>&1 \
+    | grep -E 'existing target is (not owned by stow|neither a (sym)?link nor a directory):' \
+    | sed 's/.*: //' \
+    | while IFS= read -r rel; do
+        [ -n "$rel" ] || continue
+        echo "  removing pre-existing $HOME/$rel"
+        rm -f "$HOME/$rel"
+      done
+  stow -d "$DOTFILES_DIR" -t "$HOME" "$package"
 }
 
 install_package() {
