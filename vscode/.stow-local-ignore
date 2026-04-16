@@ -1,1 +1,7 @@
 extensions\.txt
+setup\.sh
+setup\..*\.sh
+setup_pre\.sh
+setup_pre\..*\.sh
+setup_post\.sh
+setup_post\..*\.sh
