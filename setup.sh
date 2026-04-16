@@ -8,9 +8,9 @@ ALREADY_INSTALLED_EXIT=42
 # Recipes - define package lists here (order matters, stow should be early)
 # ============================================================================
 RECIPE_FEDORA=(fedora ssh stow zsh git gh btop clamav claude cursor docker fonts ghostty gitkraken jujutsu just lazydocker lazygit nvim nvidia-container-toolkit opentofu timeshift uv vscode)
-RECIPE_MACOS=(homebrew stow ssh aerospace btop git claude fonts jujutsu just lazydocker lazygit libpq nvim opentofu starship uv)
-RECIPE_CONTAINER=(debian stow git jujutsu lazygit nvim starship zsh volta claude)
-RECIPE_PI=(debian stow git nvim zsh starship volta btop gh just docker lazygit lazydocker)
+RECIPE_MACOS=(homebrew stow ssh aerospace btop git claude fnm fonts jujutsu just lazydocker lazygit libpq nvim opentofu starship uv)
+RECIPE_CONTAINER=(debian stow git zsh nvim starship lazygit fnm)
+RECIPE_PI=(debian stow git nvim zsh starship fnm btop gh just docker lazygit lazydocker)
 
 # ============================================================================
 # Detect OS and distro
@@ -41,6 +41,15 @@ detect_distro() {
 # ============================================================================
 # Install a single package
 # ============================================================================
+stow_package() {
+  local package="$1"
+  if command -v stow &> /dev/null; then
+    echo "Stowing $package..."
+    stow --adopt -d "$DOTFILES_DIR" -t "$HOME" "$package"
+    git -C "$DOTFILES_DIR" checkout -- "$package" 2>/dev/null || true
+  fi
+}
+
 install_package() {
   local package="$1"
   local distro="$2"
@@ -63,24 +72,6 @@ install_package() {
   else
     echo "No setup script found for package: $package"
     return 1
-  fi
-
-  # Stow package to create symlinks (if stow is available)
-  if command -v stow &> /dev/null; then
-    echo "Stowing $package..."
-    stow -d "$DOTFILES_DIR" -t "$HOME" "$package"
-  fi
-
-  # Run post-setup script if it exists (distro-specific or generic)
-  local distro_post_script="$package_dir/setup_post.$distro.sh"
-  local generic_post_script="$package_dir/setup_post.sh"
-
-  if [ -f "$distro_post_script" ]; then
-    echo "Running $package/setup_post.$distro.sh..."
-    "$distro_post_script"
-  elif [ -f "$generic_post_script" ]; then
-    echo "Running $package/setup_post.sh..."
-    "$generic_post_script"
   fi
 }
 
@@ -131,14 +122,13 @@ run_package() {
   local distro="$2"
   local force="$3"
   local package_dir="$DOTFILES_DIR/$package"
+  local status=0
 
-  if should_install_package "$package" "$distro" "$force"; then
+  should_install_package "$package" "$distro" "$force" || status=$?
+
+  if [ "$status" -eq 0 ]; then
     install_package "$package" "$distro"
-    return 0
-  fi
-
-  local status=$?
-  if [ "$status" -ne 1 ]; then
+  elif [ "$status" -ne 1 ]; then
     return "$status"
   fi
 
@@ -147,10 +137,7 @@ run_package() {
     return 1
   fi
 
-  if command -v stow &> /dev/null; then
-    echo "Stowing $package..."
-    stow -d "$DOTFILES_DIR" -t "$HOME" "$package"
-  fi
+  stow_package "$package"
 
   local distro_post_script="$package_dir/setup_post.$distro.sh"
   local generic_post_script="$package_dir/setup_post.sh"
