@@ -65,9 +65,13 @@ fpath+=~/.zfunc              # rustup, uv
 autoload -U compinit && compinit
 
 ##################################################################
-# volta
-export VOLTA_HOME="$HOME/.volta"
-export PATH="$VOLTA_HOME/bin:$PATH"
+# fnm
+if [ -x "$HOME/.local/share/fnm/fnm" ]; then
+  export PATH="$HOME/.local/share/fnm:$PATH"
+fi
+if command -v fnm &> /dev/null; then
+  eval "$(fnm env --use-on-cd --shell zsh)"
+fi
 
 ##################################################################
 # opencode
