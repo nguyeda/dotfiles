@@ -1,2 +1,4 @@
 # Claude Code credentials
 claude/.claude/.credentials.json
+
+zsh/.zshrc.local
