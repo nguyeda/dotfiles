@@ -24,3 +24,5 @@
 	i = show --pretty=format:'%Cred%h%Creset %C(yellow)%d%Creset%n%s' -s HEAD
 [init]
 	defaultBranch = main
+[safe]
+	directory = /workspace
