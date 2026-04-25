@@ -85,5 +85,15 @@
     "type": "command",
     "command": "python3 ~/.claude/statusline.py"
   },
-  "alwaysThinkingEnabled": true
+  "enabledPlugins": {
+    "pyright-lsp@claude-plugins-official": true
+  },
+  "alwaysThinkingEnabled": true,
+  "effortLevel": "xhigh",
+  "showClearContextOnPlanAccept": true,
+  "tui": "fullscreen",
+  "theme": "light",
+  "editorMode": "vim",
+  "remoteControlAtStartup": true,
+  "agentPushNotifEnabled": true
 }
