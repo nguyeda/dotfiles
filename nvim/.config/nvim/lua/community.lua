@@ -7,7 +7,10 @@ return {
   -- Language packs covering the requested filetypes
   { import = "astrocommunity.pack.typescript" }, -- TS + JS
   { import = "astrocommunity.pack.html-css" },
-  { import = "astrocommunity.pack.python" },
+  -- Python: hand-pick sub-packs to skip black/isort (we use ruff + uv)
+  { import = "astrocommunity.pack.python.base" },
+  { import = "astrocommunity.pack.python.basedpyright" },
+  { import = "astrocommunity.pack.python.ruff" },
   { import = "astrocommunity.pack.bash" },
   { import = "astrocommunity.pack.yaml" },
   { import = "astrocommunity.pack.json" },
