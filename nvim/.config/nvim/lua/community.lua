@@ -15,6 +15,10 @@ return {
   { import = "astrocommunity.pack.yaml" },
   { import = "astrocommunity.pack.json" },
   { import = "astrocommunity.pack.markdown" },
+  { import = "astrocommunity.pack.terraform" },
+
+  -- Formatter shared across web filetypes (JS/TS/CSS/HTML/JSON/YAML/MD)
+  { import = "astrocommunity.pack.prettier" },
 
   -- Colorscheme
   { import = "astrocommunity.colorscheme.catppuccin" },
