@@ -7,7 +7,7 @@ ALREADY_INSTALLED_EXIT=42
 # ============================================================================
 # Recipes - define package lists here (order matters, stow should be early)
 # ============================================================================
-RECIPE_FEDORA=(fedora ssh stow zsh git gh aws btop clamav fnm claude cursor docker fonts ghostty gitkraken jujutsu just lazydocker lazygit nvim nvidia-container-toolkit opentofu timeshift uv vscode)
+RECIPE_FEDORA=(nvidia ssh stow zsh git gh btop clamav fnm claude docker fonts ghostty gitkraken just lazydocker lazygit nvim nvidia-container-toolkit opentofu timeshift uv vscode cursor aws)
 RECIPE_MACOS=(homebrew stow ssh aerospace aws btop git fnm claude fonts jujutsu just lazydocker lazygit libpq nvim opentofu starship uv)
 RECIPE_CONTAINER=(debian stow git zsh nvim starship lazygit fnm)
 RECIPE_PI=(debian stow git nvim zsh starship fnm btop gh just docker lazygit lazydocker tmux)
