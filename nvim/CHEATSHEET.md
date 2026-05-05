@@ -123,6 +123,30 @@ Press `<leader>` and wait — **which-key** shows all menus.
 | `s` | Jump to any location (then type chars) |
 | `S` | Jump to treesitter node |
 
+## Debug (nvim-dap)
+
+| Keys | Action |
+|---|---|
+| `<leader>db` | Toggle breakpoint |
+| `<leader>dB` | Conditional breakpoint |
+| `<leader>dc` | Start / continue |
+| `<leader>di` | Step into |
+| `<leader>do` | Step over |
+| `<leader>dO` | Step out |
+| `<leader>dq` | Quit debug session |
+| `<leader>dr` | Toggle REPL |
+| `<leader>du` | Toggle DAP UI |
+| `<leader>dE` | Evaluate expression |
+| `<leader>dh` | Hover variable |
+
+### Python debug (debugpy)
+
+| Keys | Action |
+|---|---|
+| `<leader>dPt` | Debug nearest test |
+| `<leader>dPc` | Debug test class |
+| `<leader>dPm` | Debug test method |
+
 ## Quick reference
 
 - **Open file tree**: `<leader>e`
