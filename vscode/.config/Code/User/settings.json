@@ -8,6 +8,7 @@
   "gitlens.ai.model": "gitkraken",
   "gitlens.ai.gitkraken.model": "gemini:gemini-2.0-flash",
   "window.restoreWindows": "none",
+  "dev.containers.gitCredentialHelperConfigLocation": "system",
   "dev.containers.defaultExtensions": [
     "anthropic.claude-code",
     "eamodio.gitlens",
