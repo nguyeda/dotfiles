@@ -1,6 +1,17 @@
 #!/bin/bash
 set -e
 
+FNM_PATH="$HOME/.local/share/fnm"
+if [ -d "$FNM_PATH" ]; then
+  export PATH="$FNM_PATH:$PATH"
+fi
+if command -v fnm >/dev/null 2>&1; then
+  eval "$(fnm env --shell bash)"
+fi
+
+echo "Pre-fetching ccstatusline..."
+npx -y ccstatusline@latest </dev/null >/dev/null 2>&1 || true
+
 PLUGINS=(
   typescript-lsp@claude-plugins-official
   pyright-lsp@claude-plugins-official

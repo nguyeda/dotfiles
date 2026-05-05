@@ -26,3 +26,5 @@
 	defaultBranch = main
 [safe]
 	directory = /workspace
+[credential]
+	helper = "!f() { /home/vscode/.vscode-server/bin/034f571df509819cc10b0c8129f66ef77a542f0e/node /tmp/vscode-remote-containers-5ff8a77f-6eac-41fc-b7fd-677ce91000bb.js git-credential-helper $*; }; f"
