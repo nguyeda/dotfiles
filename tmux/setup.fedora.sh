@@ -5,6 +5,8 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 sudo dnf install -y tmux
 
+stow -d "$(dirname "$SCRIPT_DIR")" -t "$HOME" "$(basename "$SCRIPT_DIR")"
+
 "$SCRIPT_DIR/setup_post.sh"
 
 echo "tmux setup complete!"

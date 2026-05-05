@@ -10,7 +10,7 @@ ALREADY_INSTALLED_EXIT=42
 RECIPE_FEDORA=(fedora ssh stow zsh git gh aws btop clamav fnm claude cursor docker fonts ghostty gitkraken jujutsu just lazydocker lazygit nvim nvidia-container-toolkit opentofu timeshift uv vscode)
 RECIPE_MACOS=(homebrew stow ssh aerospace aws btop git fnm claude fonts jujutsu just lazydocker lazygit libpq nvim opentofu starship uv)
 RECIPE_CONTAINER=(debian stow git zsh nvim starship lazygit fnm)
-RECIPE_PI=(debian stow git nvim zsh starship fnm btop gh just docker lazygit lazydocker)
+RECIPE_PI=(debian stow git nvim zsh starship fnm btop gh just docker lazygit lazydocker tmux)
 
 # ============================================================================
 # Detect OS and distro
@@ -18,23 +18,23 @@ RECIPE_PI=(debian stow git nvim zsh starship fnm btop gh just docker lazygit laz
 detect_distro() {
   OS="$(uname -s)"
   case "$OS" in
-    Linux)
-      if [ -f /etc/fedora-release ]; then
-        echo "fedora"
-      elif [ -f /etc/os-release ] && grep -q "^ID=debian" /etc/os-release; then
-        echo "debian"
-      else
-        echo "Unsupported Linux distro." >&2
-        exit 1
-      fi
-      ;;
-    Darwin)
-      echo "macos"
-      ;;
-    *)
-      echo "Unsupported OS: $OS" >&2
+  Linux)
+    if [ -f /etc/fedora-release ]; then
+      echo "fedora"
+    elif [ -f /etc/os-release ] && grep -q "^ID=debian" /etc/os-release; then
+      echo "debian"
+    else
+      echo "Unsupported Linux distro." >&2
       exit 1
-      ;;
+    fi
+    ;;
+  Darwin)
+    echo "macos"
+    ;;
+  *)
+    echo "Unsupported OS: $OS" >&2
+    exit 1
+    ;;
   esac
 }
 
@@ -43,18 +43,18 @@ detect_distro() {
 # ============================================================================
 stow_package() {
   local package="$1"
-  if ! command -v stow &> /dev/null; then
+  if ! command -v stow &>/dev/null; then
     return
   fi
   echo "Stowing $package..."
-  stow -n -v -d "$DOTFILES_DIR" -t "$HOME" "$package" 2>&1 \
-    | grep -E 'existing target is (not owned by stow|neither a (sym)?link nor a directory):' \
-    | sed 's/.*: //' \
-    | while IFS= read -r rel; do
-        [ -n "$rel" ] || continue
-        echo "  removing pre-existing $HOME/$rel"
-        rm -f "$HOME/$rel"
-      done
+  stow -n -v -d "$DOTFILES_DIR" -t "$HOME" "$package" 2>&1 |
+    grep -E 'existing target is (not owned by stow|neither a (sym)?link nor a directory):' |
+    sed 's/.*: //' |
+    while IFS= read -r rel; do
+      [ -n "$rel" ] || continue
+      echo "  removing pre-existing $HOME/$rel"
+      rm -f "$HOME/$rel"
+    done
   stow -d "$DOTFILES_DIR" -t "$HOME" "$package"
 }
 
@@ -184,23 +184,23 @@ FORCE=0
 
 while getopts "fp:r:h" opt; do
   case $opt in
-    f)
-      FORCE=1
-      ;;
-    p)
-      PACKAGE="$OPTARG"
-      ;;
-    r)
-      RECIPE="$OPTARG"
-      ;;
-    h)
-      usage
-      exit 0
-      ;;
-    *)
-      usage
-      exit 1
-      ;;
+  f)
+    FORCE=1
+    ;;
+  p)
+    PACKAGE="$OPTARG"
+    ;;
+  r)
+    RECIPE="$OPTARG"
+    ;;
+  h)
+    usage
+    exit 0
+    ;;
+  *)
+    usage
+    exit 1
+    ;;
   esac
 done
 
