@@ -9,7 +9,7 @@ MODPROBE_CONF="/etc/modprobe.d/nvidia.conf"
 MODESET_LINE="options nvidia_drm modeset=1"
 
 if [ ! -f "$MODPROBE_CONF" ] || ! grep -qF "$MODESET_LINE" "$MODPROBE_CONF"; then
-  sudo echo "$MODESET_LINE" >>"$MODPROBE_CONF"
+  echo "$MODESET_LINE" | sudo tee -a "$MODPROBE_CONF" >/dev/null
   echo "Added NVIDIA modeset option to modprobe configuration"
 else
   echo "NVIDIA modeset already configured in modprobe"
@@ -21,7 +21,7 @@ DRACUT_CONF="/etc/dracut.conf.d/nvidia.conf"
 FORCE_DRIVERS_LINE='force_drivers+=" nvidia nvidia_drm nvidia_modeset nvidia_uvm "'
 
 if [ ! -f "$DRACUT_CONF" ] || ! grep -qF "$FORCE_DRIVERS_LINE" "$DRACUT_CONF"; then
-  sudo echo "$FORCE_DRIVERS_LINE" >>"$DRACUT_CONF"
+  echo "$FORCE_DRIVERS_LINE" | sudo tee -a "$DRACUT_CONF" >/dev/null
   echo "Added NVIDIA drivers to dracut configuration"
 else
   echo "NVIDIA drivers already configured in dracut"
