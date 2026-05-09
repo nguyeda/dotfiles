@@ -5,6 +5,19 @@
 # These run on every OS — branch inside `script` if mac vs. linux differs.
 
 groups:
+  chezmoi:
+    description: Dotfiles manager (https://chezmoi.io)
+    check: command -v chezmoi
+    script: |
+      if [[ "$(uname -s)" == "Darwin" ]]; then
+        brew install chezmoi
+      else
+        # Install into ~/.local/bin so we don't need sudo
+        BINDIR="$HOME/.local/bin"
+        mkdir -p "$BINDIR"
+        sh -c "$(curl -fsLS get.chezmoi.io)" -- -b "$BINDIR"
+      fi
+
   fnm:
     description: Fast Node.js version manager (https://fnm.vercel.app)
     check: command -v fnm
