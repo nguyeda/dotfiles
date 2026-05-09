@@ -1,0 +1,97 @@
+# Debian / Ubuntu / Raspbian package groups.
+# Schema mirrors fedora.yaml. APT-specific keys:
+#   apt_keys:    list of GPG keys to fetch and dearmor under /etc/apt/keyrings
+#   apt_sources: list of sources.list.d entries
+
+groups:
+  core:
+    packages:
+      - git
+      - zsh
+      - stow
+      - curl
+      - unzip
+      - ca-certificates
+      - ripgrep
+      - fd-find
+      - build-essential
+
+  # Apt's neovim is too old (< 0.11); install official tarball release
+  nvim-tarball:
+    custom:
+      - name: nvim-tarball
+        check: |
+          command -v nvim >/dev/null 2>&1 \
+            && [ "$(nvim --version | head -1 | awk '{print $2}' | tr -d 'v' | cut -d. -f1-2)" \> "0.10" ]
+        script: |
+          NVIM_VERSION="${NVIM_VERSION:-stable}"
+          case "$(uname -m)" in
+            x86_64)        asset="nvim-linux-x86_64.tar.gz" ;;
+            aarch64|arm64) asset="nvim-linux-arm64.tar.gz" ;;
+            *) echo "Unsupported arch for nvim binary: $(uname -m)"; exit 1 ;;
+          esac
+          TMP="$(mktemp -d)"; trap 'rm -rf "$TMP"' EXIT
+          curl -fL --retry 3 -o "$TMP/nvim.tgz" \
+            "https://github.com/neovim/neovim/releases/download/${NVIM_VERSION}/${asset}"
+          sudo rm -rf /opt/nvim
+          sudo mkdir -p /opt/nvim
+          sudo tar -xzf "$TMP/nvim.tgz" -C /opt/nvim --strip-components=1
+          sudo ln -sf /opt/nvim/bin/nvim /usr/local/bin/nvim
+
+  cli:
+    packages:
+      - btop
+      - gh
+      - just
+      - tmux
+
+  git-ui:
+    # apt may not have lazygit on older releases — try, ignore failure
+    packages: [lazygit]
+    optional: true
+    custom:
+      - name: lazydocker
+        check: command -v lazydocker
+        script: |
+          curl -fsSL https://raw.githubusercontent.com/jesseduffield/lazydocker/master/scripts/install_update_linux.sh | bash
+
+  cloud:
+    custom:
+      - name: aws-cli
+        check: command -v aws
+        script: |
+          TMP="$(mktemp -d)"; trap 'rm -rf "$TMP"' EXIT
+          case "$(uname -m)" in
+            x86_64)        AWSCLI_URL=https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip ;;
+            aarch64|arm64) AWSCLI_URL=https://awscli.amazonaws.com/awscli-exe-linux-aarch64.zip ;;
+          esac
+          curl -fsSL "$AWSCLI_URL" -o "$TMP/awscliv2.zip"
+          unzip -q "$TMP/awscliv2.zip" -d "$TMP"
+          sudo "$TMP/aws/install" --update
+      - name: session-manager-plugin
+        check: command -v session-manager-plugin
+        script: |
+          TMP="$(mktemp -d)"; trap 'rm -rf "$TMP"' EXIT
+          case "$(uname -m)" in
+            x86_64)        SMP_URL=https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/debian_amd64/session-manager-plugin.deb ;;
+            aarch64|arm64) SMP_URL=https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/debian_arm64/session-manager-plugin.deb ;;
+          esac
+          curl -fsSL "$SMP_URL" -o "$TMP/smp.deb"
+          sudo dpkg -i -E "$TMP/smp.deb"
+
+  docker:
+    apt_keys:
+      - url: https://download.docker.com/linux/debian/gpg
+        path: /etc/apt/keyrings/docker.asc
+    apt_sources:
+      - file: /etc/apt/sources.list.d/docker.list
+        line: 'deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/debian $(. /etc/os-release; echo $VERSION_CODENAME) stable'
+    packages:
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+      - docker-buildx-plugin
+      - docker-compose-plugin
+    post_install:
+      - sudo systemctl enable --now docker
+      - sudo usermod -aG docker "$USER" || true

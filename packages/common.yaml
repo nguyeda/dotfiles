@@ -1,0 +1,58 @@
+# Cross-distro / curl-installer tools. Each group is a single tool with a
+# `check` (skip if exits 0) and a `script`. Order in the recipe controls
+# install order, so list dependencies first.
+#
+# These run on every OS — branch inside `script` if mac vs. linux differs.
+
+groups:
+  fnm:
+    description: Fast Node.js version manager (https://fnm.vercel.app)
+    check: command -v fnm
+    script: |
+      if [[ "$(uname -s)" == "Darwin" ]]; then
+        brew install fnm
+      else
+        curl -fsSL https://fnm.vercel.app/install | bash -s -- --skip-shell
+      fi
+
+  starship:
+    description: Cross-shell prompt
+    check: command -v starship
+    script: |
+      curl -sS https://starship.rs/install.sh | sh -s -- -y
+
+  uv:
+    description: Python package + runtime manager (Astral)
+    check: command -v uv
+    script: |
+      curl -fsSL https://astral.sh/uv/install.sh | bash
+
+  claude:
+    description: Claude Code CLI (claude.ai/code)
+    check: command -v claude
+    script: |
+      curl -fsSL https://claude.ai/install.sh | bash
+
+  opencode:
+    description: opencode CLI
+    check: command -v opencode
+    script: |
+      if [[ "$(uname -s)" == "Darwin" ]]; then
+        brew install anomalyco/tap/opencode
+      else
+        curl -fsSL https://opencode.ai/install | bash
+      fi
+
+  jj-musl:
+    description: jujutsu via static musl binary (linux non-fedora)
+    check: command -v jj
+    script: |
+      case "$(uname -m)" in
+        x86_64)  TARGET="x86_64-unknown-linux-musl" ;;
+        aarch64) TARGET="aarch64-unknown-linux-musl" ;;
+        *) echo "Unsupported arch for jj: $(uname -m)"; exit 0 ;;
+      esac
+      VERSION="$(curl -fsSL https://api.github.com/repos/jj-vcs/jj/releases/latest \
+        | grep '"tag_name"' | sed 's/.*"v\(.*\)".*/\1/')"
+      URL="https://github.com/jj-vcs/jj/releases/download/v${VERSION}/jj-v${VERSION}-${TARGET}.tar.gz"
+      curl -fsSL "$URL" | sudo tar xz -C /usr/local/bin jj

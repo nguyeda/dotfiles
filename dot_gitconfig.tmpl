@@ -1,0 +1,39 @@
+; user.name / user.email live in ~/.gitconfig.local — written interactively
+; the first time by run_once_after_50-configure-git.sh.
+[include]
+	path = ~/.gitconfig.local
+
+[core]
+	excludesfile = ~/.gitignore_global
+	autocrlf = input
+
+[color]
+	branch = auto
+	diff = auto
+	interactive = auto
+	status = auto
+
+[alias]
+	st = status
+	co = checkout
+	sw = switch
+	pr = pull --rebase
+	prom = pull --rebase origin master
+	lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'
+	hist = log --all --graph --pretty
+	rb = "!f() { git rebase -i HEAD~$1; }; f"
+	fap = fetch --prune
+	fapr = "!f() { git fetch --prune && git pr; }; f"
+	yolo = push -f
+	i = show --pretty=format:'%Cred%h%Creset %C(yellow)%d%Creset%n%s' -s HEAD
+
+[init]
+	defaultBranch = main
+
+[safe]
+	directory = /workspace
+
+{{- if eq .role "devcontainer" }}
+[credential]
+	helper = "!f() { /home/vscode/.vscode-server/bin/8b640eef5a6c6089c029249d48efa5c99adf7d51/node /tmp/vscode-remote-containers-724573d7-a77e-4b1c-b072-a790257a8f57.js git-credential-helper $*; }; f"
+{{- end }}

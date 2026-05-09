@@ -1,0 +1,28 @@
+# Recipe = role → distro groups + common (cross-distro) tools.
+#
+# Edit a role's group list to change what gets installed.
+# Group names refer to keys in `packages/<distro>.yaml` and `packages/common.yaml`.
+#
+# `macos: [brewfile]` is a magic group — it runs `brew bundle --file=Brewfile`
+# instead of looking up a group definition.
+
+roles:
+  desktop-mac:
+    macos:  [cli, vcs, containers, python, langs, iac, crypto-db, niche, gui]
+    common: [fnm, claude, opencode]
+
+  desktop-fedora:
+    fedora: [core, cli, git-ui, terminals, iac, editors, gui-extras, cloud, docker, nvidia]
+    common: [fnm, claude, opencode]
+
+  pi:
+    debian: [core, nvim-tarball, cli, git-ui, docker]
+    common: [fnm, starship, claude]
+
+  ec2:
+    debian: [core, nvim-tarball, cli, cloud]
+    common: [fnm, starship, uv, jj-musl]
+
+  devcontainer:
+    debian: [core, nvim-tarball]
+    common: [fnm, starship]

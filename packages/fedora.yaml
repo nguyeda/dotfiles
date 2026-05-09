@@ -1,0 +1,171 @@
+# Fedora package groups.
+# Schema:
+#   groups:
+#     <name>:
+#       detect:        # optional shell expr; if it exits non-zero, group is skipped
+#       packages:      # plain dnf packages
+#       coprs:         # COPR repos to enable, plus packages to install from each
+#         - copr: owner/name
+#           packages: [...]
+#       repos:         # custom .repo files (contents OR from_repofile/from_url)
+#         - file: /etc/yum.repos.d/foo.repo
+#           contents: |
+#             [foo]
+#             ...
+#           gpg_key: https://...        # optional pre-import
+#           packages: [foo]
+#       custom:        # ad-hoc installers
+#         - name: thing
+#           check: command -v thing      # exits 0 → already installed, skip
+#           script: |
+#             ...
+#       post_install:  # shell snippets run after this group is done
+#         - sudo systemctl enable --now docker
+
+groups:
+  # ---- Bare minimum any fedora machine wants -------------------------------
+  core:
+    packages:
+      - git
+      - zsh
+      - stow
+      - neovim
+      - curl
+      - unzip
+      - ripgrep
+      - fd-find
+
+  # ---- General CLI productivity --------------------------------------------
+  cli:
+    packages:
+      - btop
+      - gh
+      - just
+      - jj
+      - uv
+      - tmux
+
+  # ---- Git / docker TUIs ---------------------------------------------------
+  git-ui:
+    coprs:
+      - copr: dejan/lazygit
+        packages: [lazygit]
+    custom:
+      - name: lazydocker
+        check: command -v lazydocker
+        script: |
+          curl -fsSL https://raw.githubusercontent.com/jesseduffield/lazydocker/master/scripts/install_update_linux.sh | bash
+
+  # ---- Terminal emulators --------------------------------------------------
+  terminals:
+    coprs:
+      - copr: scottames/ghostty
+        packages: [ghostty]
+
+  # ---- Infrastructure-as-code ----------------------------------------------
+  iac:
+    repos:
+      - file: /etc/yum.repos.d/opentofu.repo
+        contents: |
+          [opentofu]
+          name=opentofu
+          baseurl=https://packages.opentofu.org/opentofu/tofu/rpm_any/rpm_any/$basearch
+          repo_gpgcheck=0
+          gpgcheck=1
+          enabled=1
+          gpgkey=https://get.opentofu.org/opentofu.gpg
+                 https://packages.opentofu.org/opentofu/tofu/gpgkey
+        packages: [tofu]
+      - file: /etc/yum.repos.d/hashicorp.repo
+        from_repofile: https://rpm.releases.hashicorp.com/fedora/hashicorp.repo
+        packages: [terraform]
+
+  # ---- IDE / editors -------------------------------------------------------
+  editors:
+    repos:
+      - file: /etc/yum.repos.d/vscode.repo
+        gpg_key: https://packages.microsoft.com/keys/microsoft.asc
+        contents: |
+          [code]
+          name=Visual Studio Code
+          baseurl=https://packages.microsoft.com/yumrepos/vscode
+          enabled=1
+          autorefresh=1
+          type=rpm-md
+          gpgcheck=1
+          gpgkey=https://packages.microsoft.com/keys/microsoft.asc
+        packages: [code]
+      - file: /etc/yum.repos.d/cursor.repo
+        contents: |
+          [cursor]
+          name=Cursor
+          baseurl=https://downloads.cursor.com/yumrepo
+          enabled=1
+          gpgcheck=1
+          gpgkey=https://downloads.cursor.com/keys/anysphere.asc
+        packages: [cursor]
+
+  # ---- GUI / desktop extras (workstation-only) -----------------------------
+  gui-extras:
+    packages:
+      - clamav
+      - clamd
+      - clamav-update
+      - timeshift
+    custom:
+      - name: gitkraken
+        check: command -v gitkraken
+        script: |
+          sudo dnf install -y https://release.gitkraken.com/linux/gitkraken-amd64.rpm
+
+  # ---- Cloud SDKs (curl bundled — not in dnf) ------------------------------
+  cloud:
+    custom:
+      - name: aws-cli
+        check: command -v aws
+        script: |
+          TMP="$(mktemp -d)"; trap 'rm -rf "$TMP"' EXIT
+          case "$(uname -m)" in
+            x86_64)  AWSCLI_URL=https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip ;;
+            aarch64) AWSCLI_URL=https://awscli.amazonaws.com/awscli-exe-linux-aarch64.zip ;;
+          esac
+          curl -fsSL "$AWSCLI_URL" -o "$TMP/awscliv2.zip"
+          unzip -q "$TMP/awscliv2.zip" -d "$TMP"
+          sudo "$TMP/aws/install" --update
+
+  # ---- Docker engine -------------------------------------------------------
+  docker:
+    repos:
+      - file: /etc/yum.repos.d/docker-ce.repo
+        from_repofile: https://download.docker.com/linux/fedora/docker-ce.repo
+        packages: [docker-ce, docker-ce-cli, containerd.io, docker-buildx-plugin, docker-compose-plugin]
+        install_flags: ["--allowerasing"]
+    post_install:
+      - sudo systemctl enable --now docker
+      - sudo usermod -aG docker "$USER" || true
+
+  # ---- NVIDIA driver + container toolkit -----------------------------------
+  nvidia:
+    detect: 'lspci 2>/dev/null | grep -qi nvidia'
+    packages:
+      - dnf-plugins-core
+      - akmod-nvidia
+    repos:
+      - file: /etc/yum.repos.d/nvidia-container-toolkit.repo
+        from_url: https://nvidia.github.io/libnvidia-container/stable/rpm/nvidia-container-toolkit.repo
+        packages: [nvidia-container-toolkit]
+    custom:
+      - name: nvidia-modprobe
+        check: grep -qF 'options nvidia_drm modeset=1' /etc/modprobe.d/nvidia.conf 2>/dev/null
+        script: |
+          sudo mkdir -p /etc/modprobe.d
+          echo 'options nvidia_drm modeset=1' | sudo tee -a /etc/modprobe.d/nvidia.conf >/dev/null
+      - name: nvidia-dracut
+        check: grep -qF 'force_drivers+=" nvidia' /etc/dracut.conf.d/nvidia.conf 2>/dev/null
+        script: |
+          sudo mkdir -p /etc/dracut.conf.d
+          echo 'force_drivers+=" nvidia nvidia_drm nvidia_modeset nvidia_uvm "' \
+            | sudo tee -a /etc/dracut.conf.d/nvidia.conf >/dev/null
+          sudo dracut --force
+    post_install:
+      - if command -v docker >/dev/null 2>&1; then sudo nvidia-ctk runtime configure --runtime=docker && sudo systemctl restart docker || true; fi

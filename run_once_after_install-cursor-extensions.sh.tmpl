@@ -1,0 +1,22 @@
+#!/bin/bash
+# Install Cursor extensions from extensions/cursor.txt (only when `cursor` exists).
+set -euo pipefail
+
+{{- if ne .role "desktop-fedora" }}
+exit 0
+{{- end }}
+
+if ! command -v cursor >/dev/null 2>&1; then
+    echo "[cursor] 'cursor' CLI not on PATH; skipping extension install."
+    exit 0
+fi
+
+EXTENSIONS_FILE="{{ .chezmoi.sourceDir }}/extensions/cursor.txt"
+[ -f "$EXTENSIONS_FILE" ] || exit 0
+
+while IFS= read -r ext || [ -n "$ext" ]; do
+    [[ -z "$ext" || "$ext" =~ ^# ]] && continue
+    cursor --install-extension "$ext" --force
+done < "$EXTENSIONS_FILE"
+
+echo "[cursor] extensions installed."

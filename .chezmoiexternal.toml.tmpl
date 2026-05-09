@@ -1,0 +1,9 @@
+{{- /* External clones managed by chezmoi (cloned & periodically refreshed). */ -}}
+{{- /* refreshPeriod is "168h" = once a week.                                */ -}}
+
+{{- if ne .role "devcontainer" }}
+[".tmux/plugins/tpm"]
+    type = "git-repo"
+    url = "https://github.com/tmux-plugins/tpm.git"
+    refreshPeriod = "168h"
+{{- end }}

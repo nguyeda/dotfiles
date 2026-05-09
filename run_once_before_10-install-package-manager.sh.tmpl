@@ -1,0 +1,36 @@
+#!/bin/bash
+# Ensure the platform package manager is present.
+#   - macOS: install Homebrew if missing
+#   - Linux: dnf/apt are part of the base image; nothing to do
+set -euo pipefail
+
+{{- if eq .chezmoi.os "darwin" }}
+if command -v brew >/dev/null 2>&1; then
+    echo "[pkg-mgr] homebrew already installed."
+    exit 0
+fi
+echo "[pkg-mgr] installing homebrew..."
+NONINTERACTIVE=1 /bin/bash -c \
+    "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+# Make brew available in the current shell so subsequent run_once_* scripts see it.
+if [ -x /opt/homebrew/bin/brew ]; then
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+elif [ -x /usr/local/bin/brew ]; then
+    eval "$(/usr/local/bin/brew shellenv)"
+fi
+{{- else if eq (index .chezmoi.osRelease "id") "fedora" }}
+echo "[pkg-mgr] fedora dnf available."
+{{- else if or (eq (index .chezmoi.osRelease "id") "debian") (eq (index .chezmoi.osRelease "id") "ubuntu") (eq (index .chezmoi.osRelease "id") "raspbian") }}
+echo "[pkg-mgr] debian apt available; running apt-get update"
+sudo apt-get update
+# Locale pieces previously handled by debian/setup.sh
+sudo apt-get install -y curl ca-certificates locales unzip git
+if ! locale -a | grep -qx 'en_US.utf8'; then
+    sudo sed -i 's/^# *en_US.UTF-8 UTF-8$/en_US.UTF-8 UTF-8/' /etc/locale.gen
+    sudo locale-gen en_US.UTF-8
+fi
+sudo update-locale LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8
+{{- else if eq (index .chezmoi.osRelease "id") "amzn" }}
+echo "[pkg-mgr] amazon linux dnf/yum available."
+{{- end }}

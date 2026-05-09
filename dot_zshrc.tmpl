@@ -1,0 +1,105 @@
+##################################################################
+# environment
+export PATH=~/.local/bin:$PATH
+export LANG=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
+export EDITOR="nvim"
+
+# never beep
+setopt NO_BEEP
+
+{{- if eq .chezmoi.os "darwin" }}
+##################################################################
+# homebrew
+[[ -d /opt/homebrew/bin ]] && export PATH="/opt/homebrew/bin:$PATH"
+{{- end }}
+
+##################################################################
+# aliases
+alias vim="nvim"
+alias vi="nvim"
+alias ll="ls -l"
+alias la="ls -la"
+
+{{- if and (ne .role "devcontainer") (ne .role "ec2") }}
+
+##################################################################
+# tmux
+t() {
+  if [[ -n "$1" ]]; then
+    tmux attach -t "$1" 2>/dev/null || tmux new -s "$1"
+  else
+    tmux attach || tmux new
+  fi
+}
+{{- end }}
+
+##################################################################
+# terragrunt
+if command -v tofu &> /dev/null; then
+  alias tf=tofu
+  alias tg=terragrunt
+  export TG_PROVIDER_CACHE=true
+  export TG_DEPENDENCY_FETCH_OUTPUT_FROM_STATE=true
+  export TG_QUEUE_EXCLUDE_EXTERNAL=true
+  export TG_TF_PATH=$(which tofu)
+fi
+
+##################################################################
+# history
+setopt SHARE_HISTORY
+HISTFILE=$HOME/.zhistory
+SAVEHIST=1000
+HISTSIZE=999
+setopt HIST_EXPIRE_DUPS_FIRST
+
+autoload -U up-line-or-beginning-search
+autoload -U down-line-or-beginning-search
+zle -N up-line-or-beginning-search
+zle -N down-line-or-beginning-search
+bindkey '^[[A' up-line-or-beginning-search
+bindkey '^[[B' down-line-or-beginning-search
+
+##################################################################
+# auto-completion
+zstyle ':completion:*:*:git:*' script ~/.zsh/git-completion.bash
+fpath+=~/.zsh                # git
+fpath+=~/.docker/completions # docker
+fpath+=~/.zfunc              # rustup, uv
+
+autoload -U compinit && compinit
+
+##################################################################
+# fnm
+if [ -x "$HOME/.local/share/fnm/fnm" ]; then
+  export PATH="$HOME/.local/share/fnm:$PATH"
+fi
+if command -v fnm &> /dev/null; then
+  eval "$(fnm env --use-on-cd --shell zsh)"
+fi
+
+{{- if or (eq .role "desktop-mac") (eq .role "desktop-fedora") }}
+
+##################################################################
+# opencode
+if [ -d "$HOME/.opencode/bin" ]; then
+  export PATH="$HOME/.opencode/bin:$PATH"
+fi
+{{- end }}
+
+##################################################################
+# pgp
+export GPG_TTY=$(tty)
+if command -v gpg &> /dev/null; then
+  export SOPS_GPG_EXEC=$(which gpg)
+fi
+
+##################################################################
+# local overrides (untracked, gitignored)
+[ -f "$HOME/.zshrc.local" ] && source "$HOME/.zshrc.local"
+
+##################################################################
+# starship (keep last - initializes prompt)
+if command -v starship &> /dev/null; then
+  eval "$(starship init zsh)"
+fi

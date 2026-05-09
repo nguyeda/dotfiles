@@ -1,0 +1,119 @@
+# macOS package groups. The installer (install/lib/macos.sh) renders each
+# group into an in-memory Brewfile fragment and pipes it to `brew bundle`,
+# which gives us idempotency + cleanup detection for free.
+#
+# Schema:
+#   groups:
+#     <name>:
+#       description:
+#       detect:                 # optional — group skipped if expr fails
+#       taps: [str, ...]        # `tap "..."`
+#       formulas: [str, ...]    # `brew "..."`
+#       formulas_with_options:  # `brew "name", key: value, ...`
+#         - name: libpq
+#           link: true
+#       casks: [str, ...]       # `cask "..."`
+#       post_install: [...]
+#
+# Add a `# kept-but-unused` YAML comment next to anything you remove, so the
+# history stays as living documentation. Removing the active line and adding
+# `# brew "foo"` works equally well.
+
+groups:
+  # ---- Core CLI / shell -----------------------------------------------------
+  cli:
+    formulas:
+      - git
+      - gh
+      - neovim
+      - tmux
+      - fnm
+      - starship
+      - btop
+      - coreutils
+      - watch
+      - jq
+      - nmap
+
+  # ---- Version control / code review ---------------------------------------
+  vcs:
+    formulas:
+      - jj
+      - lazygit
+      # - git-filter-repo  # kept-but-unused: bring back if you need history surgery
+
+  # ---- Containers / docker tooling -----------------------------------------
+  containers:
+    taps:
+      - jesseduffield/lazydocker
+    formulas:
+      - jesseduffield/lazydocker/lazydocker
+
+  # ---- Python toolchain ----------------------------------------------------
+  python:
+    formulas:
+      - uv
+      - python@3.13
+      - python@3.14
+      - ruff
+      # - black           # kept-but-unused: replaced by ruff format
+      # - mypy            # kept-but-unused: pull on a per-project basis
+      # - poetry          # kept-but-unused: uv covers this now
+      # - pipx            # kept-but-unused: uv tool run / uvx covers this
+      # - pip-tools       # kept-but-unused: same
+
+  # ---- Other languages -----------------------------------------------------
+  langs:
+    formulas: []
+      # - go              # kept-but-unused
+      # - rust            # kept-but-unused — install via rustup if you need it
+
+  # ---- Infrastructure-as-code + secrets ------------------------------------
+  iac:
+    taps:
+      - updatecli/updatecli
+    formulas:
+      - opentofu
+      - terragrunt
+      - terraform-docs
+      - tflint
+      - sops
+      - updatecli/updatecli/updatecli
+      # - terraform       # kept-but-unused: we use opentofu
+      # - trivy           # kept-but-unused: security scanner
+
+  # ---- Crypto / database --------------------------------------------------
+  crypto-db:
+    formulas:
+      - gnupg
+    formulas_with_options:
+      - name: libpq
+        link: true
+    # - openssl@1.1       # kept-but-unused: legacy
+
+  # ---- Misc / niche --------------------------------------------------------
+  niche:
+    formulas:
+      - just
+      - icann-rdap
+      # - tesseract       # kept-but-unused: OCR
+      # - cruft           # kept-but-unused: cookiecutter project linting
+
+  # ---- GUI apps (casks) ----------------------------------------------------
+  gui:
+    description: Desktop GUI tools — only on a real Mac workstation
+    taps:
+      - nikitabobko/tap
+      - ngrok/ngrok
+    casks:
+      - nikitabobko/tap/aerospace
+      - chromium
+      - raycast
+      - gcloud-cli
+      - ngrok
+      - session-manager-plugin
+      - ghostty
+      # - fig             # kept-but-unused: deprecated
+      - 1password-cli   # handled by run_once_before_00 install script
+      # - koekeishiya/formulae/yabai   # tiling WM (manual-install path)
+      # - koekeishiya/formulae/skhd    # hotkey daemon

@@ -1,0 +1,42 @@
+#!/bin/bash
+# Install Nerd Fonts. Skipped on roles without a desktop UI.
+set -euo pipefail
+
+{{- if or (eq .role "devcontainer") (eq .role "ec2") (eq .role "pi") }}
+echo "[fonts] role={{ .role }} — skipping font install."
+exit 0
+{{- end }}
+
+FONTS_FILE="{{ .chezmoi.sourceDir }}/fonts/fonts.txt"
+if [ ! -f "$FONTS_FILE" ]; then
+    echo "[fonts] $FONTS_FILE missing; nothing to do."
+    exit 0
+fi
+
+{{- if eq .chezmoi.os "darwin" }}
+FONT_DIR="$HOME/Library/Fonts"
+{{- else }}
+FONT_DIR="$HOME/.local/share/fonts"
+{{- end }}
+mkdir -p "$FONT_DIR"
+
+while IFS= read -r line || [ -n "$line" ]; do
+    [[ -z "$line" || "$line" =~ ^# ]] && continue
+    name="${line%%=*}"
+    url="${line#*=}"
+    if [ -d "$FONT_DIR/$name" ]; then
+        echo "[fonts] $name already present, skipping."
+        continue
+    fi
+    echo "[fonts] installing $name..."
+    TMP="$(mktemp -d)"
+    curl -fsSL "$url" -o "$TMP/$name.zip"
+    unzip -o -q "$TMP/$name.zip" -d "$FONT_DIR/$name"
+    rm -rf "$TMP"
+done < "$FONTS_FILE"
+
+{{- if ne .chezmoi.os "darwin" }}
+fc-cache -f "$FONT_DIR"
+{{- end }}
+
+echo "[fonts] done."

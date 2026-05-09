@@ -1,0 +1,49 @@
+#!/bin/bash
+# Configure git user.name / user.email interactively the first time.
+# Writes to ~/.gitconfig.local (which is [include]'d by the chezmoi-managed
+# ~/.gitconfig), so a future `chezmoi apply` does not clobber it.
+set -euo pipefail
+
+LOCAL="$HOME/.gitconfig.local"
+
+# Bail if running non-interactively (devcontainer Dockerfile, EC2 user-data, etc.)
+if ! [ -t 0 ]; then
+    echo "[git] non-interactive shell; skipping git user prompt."
+    echo "[git] set user.name / user.email manually:"
+    echo "      git config -f ~/.gitconfig.local user.name 'Your Name'"
+    echo "      git config -f ~/.gitconfig.local user.email 'you@example.com'"
+    exit 0
+fi
+
+current_name="$(git config -f "$LOCAL" --get user.name 2>/dev/null || true)"
+current_email="$(git config -f "$LOCAL" --get user.email 2>/dev/null || true)"
+
+if [ -n "$current_name" ] && [ -n "$current_email" ]; then
+    echo "[git] user already configured: $current_name <$current_email> (in $LOCAL)"
+    exit 0
+fi
+
+echo
+echo "=== git user setup ==="
+echo "Writing to $LOCAL (included by ~/.gitconfig)."
+echo
+
+default_name="${current_name:-{{ index (index . "chezmoi") "username" | default "" }}}"
+default_email="${current_email:-}"
+
+read -r -p "Git author name${default_name:+ [$default_name]}: " name
+name="${name:-$default_name}"
+
+read -r -p "Git email${default_email:+ [$default_email]}: " email
+email="${email:-$default_email}"
+
+if [ -z "$name" ] || [ -z "$email" ]; then
+    echo "[git] name and email are both required; aborting." >&2
+    exit 1
+fi
+
+mkdir -p "$(dirname "$LOCAL")"
+git config -f "$LOCAL" user.name  "$name"
+git config -f "$LOCAL" user.email "$email"
+
+echo "[git] wrote user.name='$name' user.email='$email' to $LOCAL"

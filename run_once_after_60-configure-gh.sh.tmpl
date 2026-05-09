@@ -1,0 +1,99 @@
+#!/bin/bash
+# Interactive GitHub CLI setup:
+#   1. If `gh` not installed, bail.
+#   2. If not authenticated, ask whether to authenticate now.
+#   3. If a local SSH key exists, check whether GitHub already has it.
+#      If not, ask whether to add it (titled with the hostname by default,
+#      with a chance to override).
+set -euo pipefail
+
+# ---------------------------------------------------------------------------
+# Bail conditions
+# ---------------------------------------------------------------------------
+if ! command -v gh >/dev/null 2>&1; then
+    echo "[gh] gh CLI not installed on this role; skipping."
+    exit 0
+fi
+
+if ! [ -t 0 ]; then
+    echo "[gh] non-interactive shell; skipping gh prompt."
+    echo "[gh] run 'gh auth login' manually if you want GitHub CLI access."
+    exit 0
+fi
+
+prompt_yn() {
+    # $1=question $2=default (Y/n or y/N)
+    local q="$1" def="${2:-N}" hint="[y/N]" reply
+    [[ "$def" =~ [Yy] ]] && hint="[Y/n]"
+    read -r -p "$q $hint " reply || true
+    reply="${reply:-$def}"
+    [[ "$reply" =~ ^[Yy]$ ]]
+}
+
+# ---------------------------------------------------------------------------
+# Authentication
+# ---------------------------------------------------------------------------
+if gh auth status >/dev/null 2>&1; then
+    echo "[gh] already authenticated."
+else
+    echo
+    echo "=== gh authentication ==="
+    if prompt_yn "Run 'gh auth login' now?" Y; then
+        gh auth login || {
+            echo "[gh] gh auth login failed; rerun manually." >&2
+            exit 0
+        }
+    else
+        echo "[gh] skipping auth. Run 'gh auth login' later if needed."
+        exit 0
+    fi
+fi
+
+# ---------------------------------------------------------------------------
+# SSH key sync
+# ---------------------------------------------------------------------------
+# Pick a public key to consider. Prefer ed25519 over rsa.
+PUBKEY=""
+for candidate in "$HOME/.ssh/id_ed25519.pub" "$HOME/.ssh/id_rsa.pub" "$HOME/.ssh/id_ecdsa.pub"; do
+    if [ -f "$candidate" ]; then
+        PUBKEY="$candidate"
+        break
+    fi
+done
+
+if [ -z "$PUBKEY" ]; then
+    echo "[gh] no SSH public key found in ~/.ssh; skipping SSH key sync."
+    echo "[gh] generate one with: ssh-keygen -t ed25519"
+    exit 0
+fi
+
+# Strip type/comment, keep only the base64 body — that's what GitHub stores.
+LOCAL_BODY="$(awk '{print $2}' "$PUBKEY")"
+
+# `gh ssh-key list` columns: TITLE  KEY  ID  ...
+# Match against the base64 body (column-independent).
+if gh ssh-key list 2>/dev/null | grep -Fq -- "$LOCAL_BODY"; then
+    echo "[gh] SSH key $PUBKEY is already on GitHub."
+    exit 0
+fi
+
+echo
+echo "=== gh ssh-key add ==="
+echo "Local public key: $PUBKEY"
+echo "(not currently registered on your GitHub account)"
+echo
+
+if ! prompt_yn "Add this key to your GitHub account?" Y; then
+    echo "[gh] skipping SSH key add."
+    exit 0
+fi
+
+DEFAULT_TITLE="$(hostname -s 2>/dev/null || hostname)"
+read -r -p "Title for the key on GitHub [$DEFAULT_TITLE]: " TITLE
+TITLE="${TITLE:-$DEFAULT_TITLE}"
+
+if gh ssh-key add "$PUBKEY" --title "$TITLE"; then
+    echo "[gh] added $PUBKEY to GitHub as '$TITLE'."
+else
+    echo "[gh] gh ssh-key add failed; rerun manually if needed." >&2
+fi

@@ -1,0 +1,38 @@
+#!/bin/bash
+# Generate an ED25519 SSH key if none exists yet. Skipped on devcontainer
+# (host's keys are mounted in) and any non-interactive bootstrap.
+set -euo pipefail
+
+{{- if eq .role "devcontainer" }}
+exit 0
+{{- end }}
+
+SSH_DIR="$HOME/.ssh"
+SSH_KEY="$SSH_DIR/id_ed25519"
+
+mkdir -p "$SSH_DIR"
+chmod 700 "$SSH_DIR"
+
+if [ -f "$SSH_KEY" ]; then
+    chmod 600 "$SSH_KEY"
+    exit 0
+fi
+
+if ! [ -t 0 ]; then
+    echo "[ssh] non-interactive shell; not generating an SSH key."
+    echo "[ssh] generate one later with: ssh-keygen -t ed25519"
+    exit 0
+fi
+
+echo
+echo "=== ssh key setup ==="
+echo "No key at $SSH_KEY; generating a new ED25519 keypair."
+echo "Press Enter at the passphrase prompt to skip a passphrase."
+echo
+
+ssh-keygen -t ed25519 -f "$SSH_KEY" -C "$(whoami)@$(hostname -s 2>/dev/null || hostname)"
+chmod 600 "$SSH_KEY"
+
+echo
+echo "[ssh] public key:"
+cat "$SSH_KEY.pub"

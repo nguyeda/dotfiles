@@ -1,0 +1,15 @@
+#!/bin/bash
+# tmux plugin manager bootstrap. The repo itself is cloned by
+# .chezmoiexternal.toml; this script just installs the listed plugins once.
+set -euo pipefail
+
+{{- if eq .role "devcontainer" }}
+exit 0
+{{- end }}
+
+TPM_DIR="$HOME/.tmux/plugins/tpm"
+if [ -x "$TPM_DIR/bin/install_plugins" ]; then
+    "$TPM_DIR/bin/install_plugins" || true
+fi
+
+echo "[tpm] done."

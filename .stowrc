@@ -1,6 +1,0 @@
---ignore='setup\.sh'
---ignore='setup\..*\.sh'
---ignore='setup_pre\.sh'
---ignore='setup_pre\..*\.sh'
---ignore='setup_post\.sh'
---ignore='setup_post\..*\.sh'

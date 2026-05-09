@@ -1,0 +1,32 @@
+README.md
+CLAUDE.md
+LICENSE
+extensions
+fonts
+packages
+install
+
+{{/* macOS window-manager / hotkey daemon — only on desktop-mac */}}
+{{- if ne .role "desktop-mac" }}
+.yabairc
+.skhdrc
+.config/aerospace
+.config/yabai
+{{- end }}
+
+{{/* Server / minimal roles: no GUI terminal */}}
+{{- if or (eq .role "devcontainer") (eq .role "ec2") (eq .role "pi") }}
+.config/ghostty
+{{- end }}
+
+{{/* Devcontainer: skip tmux, vscode/cursor — host machine handles those */}}
+{{- if eq .role "devcontainer" }}
+.config/tmux
+.tmux.conf
+{{- end }}
+
+{{/* VSCode + Cursor user settings only land on desktop-fedora today */}}
+{{- if ne .role "desktop-fedora" }}
+.config/Code
+.config/Cursor
+{{- end }}

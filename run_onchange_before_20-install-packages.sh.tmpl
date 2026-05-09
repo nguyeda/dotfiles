@@ -1,0 +1,25 @@
+#!/bin/bash
+# Thin wrapper that delegates to install/install.sh.
+#
+# `run_onchange_` re-runs whenever the rendered text of this file changes.
+# We embed sha-256 hashes of every YAML manifest below so that editing any
+# package list / recipe triggers a rerun on the next `chezmoi apply`.
+#
+# Manifest hashes (do not edit by hand — they're computed by chezmoi):
+#   recipes.yaml = {{ include "packages/recipes.yaml" | sha256sum }}
+#   common.yaml  = {{ include "packages/common.yaml"  | sha256sum }}
+{{- if eq .chezmoi.os "darwin" }}
+#   macos.yaml   = {{ include "packages/macos.yaml" | sha256sum }}
+{{- else if eq .chezmoi.os "linux" }}
+{{-   if eq (index .chezmoi.osRelease "id") "fedora" }}
+#   fedora.yaml  = {{ include "packages/fedora.yaml" | sha256sum }}
+{{-   else if or (eq (index .chezmoi.osRelease "id") "debian") (eq (index .chezmoi.osRelease "id") "ubuntu") (eq (index .chezmoi.osRelease "id") "raspbian") }}
+#   debian.yaml  = {{ include "packages/debian.yaml" | sha256sum }}
+{{-   end }}
+{{- end }}
+#   role         = {{ .role }}
+#   os           = {{ .chezmoi.os }}
+#   distro       = {{ index .chezmoi.osRelease "id" | default "n/a" }}
+set -euo pipefail
+
+exec "{{ .chezmoi.sourceDir }}/install/install.sh" --role "{{ .role }}"
