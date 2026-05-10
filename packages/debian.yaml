@@ -42,8 +42,12 @@ groups:
     packages:
       - btop
       - gh
-      - just
       - tmux
+
+  # Apt's `just` is too old on Pi (raspbian); pi installs via the curl
+  # script in common.yaml instead. Other debian roles (ec2) keep apt.
+  just-apt:
+    packages: [just]
 
   git-ui:
     # apt may not have lazygit on older releases — try, ignore failure

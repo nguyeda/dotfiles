@@ -56,6 +56,14 @@ groups:
         curl -fsSL https://opencode.ai/install | bash
       fi
 
+  just:
+    description: just command runner — official installer (apt's is too old on Pi)
+    check: command -v just
+    script: |
+      mkdir -p "$HOME/.local/bin"
+      curl --proto '=https' --tlsv1.2 -sSf https://just.systems/install.sh \
+        | bash -s -- --to "$HOME/.local/bin"
+
   jj-musl:
     description: jujutsu via static musl binary (linux non-fedora)
     check: command -v jj

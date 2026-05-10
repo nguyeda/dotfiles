@@ -17,10 +17,10 @@ roles:
 
   pi:
     debian: [core, nvim-tarball, cli, git-ui, docker]
-    common: [chezmoi, fnm, starship, claude]
+    common: [chezmoi, fnm, starship, claude, just]
 
   ec2:
-    debian: [core, nvim-tarball, cli, cloud]
+    debian: [core, nvim-tarball, cli, just-apt, cloud]
     common: [chezmoi, fnm, starship, uv, jj-musl]
 
   devcontainer:
