@@ -23,6 +23,8 @@ install
 {{- if eq .role "devcontainer" }}
 .config/tmux
 .tmux.conf
+{{/* git author info is mounted from host (or set manually) — don't prompt */}}
+run_once_after_50-configure-git.sh
 {{- end }}
 
 {{/* VSCode + Cursor user settings only land on desktop-fedora today */}}
