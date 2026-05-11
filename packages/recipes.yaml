@@ -16,11 +16,11 @@ roles:
     common: [chezmoi, fnm, claude, opencode]
 
   pi:
-    debian: [core, nvim-tarball, cli, git-ui, docker]
+    debian: [core, git, nvim-tarball, cli, git-ui, docker]
     common: [chezmoi, fnm, starship, claude, just]
 
   ec2:
-    debian: [core, nvim-tarball, cli, just-apt, cloud]
+    debian: [core, git, nvim-tarball, cli, just-apt, cloud]
     common: [chezmoi, fnm, starship, uv, jj-musl]
 
   devcontainer:

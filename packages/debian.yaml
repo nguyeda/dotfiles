@@ -6,7 +6,6 @@
 groups:
   core:
     packages:
-      - git
       - zsh
       - stow
       - curl
@@ -15,6 +14,11 @@ groups:
       - ripgrep
       - fd-find
       - build-essential
+
+  # Split out so devcontainer can skip it (provided by the git feature).
+  git:
+    packages:
+      - git
 
   # Apt's neovim is too old (< 0.11); install official tarball release
   nvim-tarball:
