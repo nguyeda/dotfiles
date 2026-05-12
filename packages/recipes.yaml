@@ -26,3 +26,7 @@ roles:
   devcontainer:
     debian: [core, nvim-tarball]
     common: [chezmoi, fnm, starship]
+
+  ec2-devbox:
+    amazon: [core, nvim-tarball]
+    common: [chezmoi, fnm, starship, claude]

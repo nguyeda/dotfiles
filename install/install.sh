@@ -60,7 +60,7 @@ fi
 
 if [ "$ACTION" = "list-groups" ]; then
     case "$DISTRO_ARG" in
-        fedora|debian|macos|common)
+        fedora|debian|amazon|macos|common)
             yq -r '.groups | keys | .[]' "$PACKAGES_DIR/$DISTRO_ARG.yaml" ;;
         *) log_err "unknown distro: $DISTRO_ARG"; exit 1 ;;
     esac
@@ -108,7 +108,7 @@ if [ "$ONLY_COMMON" -eq 0 ]; then
                 fedora_install_group "$g"
             done < <(yaml_groups_for_role "$PACKAGES_DIR/recipes.yaml" "$ROLE" "fedora")
             ;;
-        debian|amazon)
+        debian)
             # shellcheck source=/dev/null
             . "$INSTALL_DIR/lib/debian.sh"
             sudo apt-get update
@@ -117,6 +117,15 @@ if [ "$ONLY_COMMON" -eq 0 ]; then
                 if [ -n "$ONLY_GROUPS" ] && ! grep -qx "$g" <<<"${ONLY_GROUPS//,/$'\n'}"; then continue; fi
                 debian_install_group "$g"
             done < <(yaml_groups_for_role "$PACKAGES_DIR/recipes.yaml" "$ROLE" "debian")
+            ;;
+        amazon)
+            # shellcheck source=/dev/null
+            . "$INSTALL_DIR/lib/amazon.sh"
+            while IFS= read -r g; do
+                [ -n "$g" ] || continue
+                if [ -n "$ONLY_GROUPS" ] && ! grep -qx "$g" <<<"${ONLY_GROUPS//,/$'\n'}"; then continue; fi
+                amazon_install_group "$g"
+            done < <(yaml_groups_for_role "$PACKAGES_DIR/recipes.yaml" "$ROLE" "amazon")
             ;;
         *)
             log_err "unsupported distro: $DISTRO"; exit 1 ;;

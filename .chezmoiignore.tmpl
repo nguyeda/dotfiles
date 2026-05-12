@@ -15,7 +15,7 @@ install
 {{- end }}
 
 {{/* Server / minimal roles: no GUI terminal */}}
-{{- if or (eq .role "devcontainer") (eq .role "ec2") (eq .role "pi") }}
+{{- if or (eq .role "devcontainer") (eq .role "ec2") (eq .role "ec2-devbox") (eq .role "pi") }}
 .config/ghostty
 {{- end }}
 

@@ -19,8 +19,11 @@ if [ -f "$SSH_KEY" ]; then
 fi
 
 if ! [ -t 0 ]; then
-    echo "[ssh] non-interactive shell; not generating an SSH key."
-    echo "[ssh] generate one later with: ssh-keygen -t ed25519"
+    echo "[ssh] non-interactive; generating ed25519 key without passphrase."
+    ssh-keygen -t ed25519 -N '' -f "$SSH_KEY" \
+        -C "$(whoami)@$(hostname -s 2>/dev/null || hostname)"
+    chmod 600 "$SSH_KEY"
+    echo "[ssh] public key:"; cat "$SSH_KEY.pub"
     exit 0
 fi
 

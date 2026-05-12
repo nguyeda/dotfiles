@@ -1,0 +1,44 @@
+# Amazon Linux 2023 package groups.
+# Schema mirrors debian.yaml, minus apt-specific keys.
+# Supported subkeys: packages, custom, post_install, optional, detect.
+
+groups:
+  core:
+    packages:
+      - git
+      - zsh
+      - tar
+      - gzip
+      - curl
+      - unzip
+      - ca-certificates
+      - gcc
+      - gcc-c++
+      - make
+      - ripgrep
+      - fd-find
+      - tmux
+      - gh
+      - btop
+
+  # AL2023's nvim (if available) is too old; install official tarball release.
+  nvim-tarball:
+    custom:
+      - name: nvim-tarball
+        check: |
+          command -v nvim >/dev/null 2>&1 \
+            && [ "$(nvim --version | head -1 | awk '{print $2}' | tr -d 'v' | cut -d. -f1-2)" \> "0.10" ]
+        script: |
+          NVIM_VERSION="${NVIM_VERSION:-stable}"
+          case "$(uname -m)" in
+            x86_64)        asset="nvim-linux-x86_64.tar.gz" ;;
+            aarch64|arm64) asset="nvim-linux-arm64.tar.gz" ;;
+            *) echo "Unsupported arch for nvim binary: $(uname -m)"; exit 1 ;;
+          esac
+          TMP="$(mktemp -d)"; trap 'rm -rf "$TMP"' EXIT
+          curl -fL --retry 3 -o "$TMP/nvim.tgz" \
+            "https://github.com/neovim/neovim/releases/download/${NVIM_VERSION}/${asset}"
+          sudo rm -rf /opt/nvim
+          sudo mkdir -p /opt/nvim
+          sudo tar -xzf "$TMP/nvim.tgz" -C /opt/nvim --strip-components=1
+          sudo ln -sf /opt/nvim/bin/nvim /usr/local/bin/nvim

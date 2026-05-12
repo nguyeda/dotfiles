@@ -4,7 +4,7 @@
 {{- /* script (run_once_after_50-configure-git.sh), not chezmoi prompts.   */ -}}
 
 {{- $role := promptChoiceOnce . "role" "Machine role"
-    (list "desktop-mac" "desktop-fedora" "devcontainer" "pi" "ec2") -}}
+    (list "desktop-mac" "desktop-fedora" "devcontainer" "pi" "ec2" "ec2-devbox") -}}
 
 [data]
     role = {{ $role | quote }}

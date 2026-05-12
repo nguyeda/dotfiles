@@ -2,7 +2,7 @@
 # Install Nerd Fonts. Skipped on roles without a desktop UI.
 set -euo pipefail
 
-{{- if or (eq .role "devcontainer") (eq .role "ec2") (eq .role "pi") }}
+{{- if or (eq .role "devcontainer") (eq .role "ec2") (eq .role "ec2-devbox") (eq .role "pi") }}
 echo "[fonts] role={{ .role }} — skipping font install."
 exit 0
 {{- end }}
