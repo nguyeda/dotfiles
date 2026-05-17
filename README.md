@@ -7,7 +7,7 @@ and _what configs render_.
 ## Bootstrap a fresh machine
 
 ```bash
-sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply davnn
+sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply nguyeda
 ```
 
 This will:
@@ -37,9 +37,25 @@ This will:
 ### Non-interactive (CI / devcontainer / EC2 user-data)
 
 ```bash
-sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply davnn \
+sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply nguyeda \
     --promptChoice role=devcontainer
 ```
+
+### Bootstrapping from an existing checkout
+
+If this repo is already cloned somewhere (e.g. `~/.dotfiles`) and you'd
+rather chezmoi use that tree as its source — instead of cloning a second
+copy into `~/.local/share/chezmoi` — run the bundled bootstrap:
+
+```bash
+./install/init.sh                       # interactive role prompt
+./install/init.sh --role desktop-mac    # non-interactive
+./install/init.sh --role ec2 --bin-dir ~/.local/bin
+```
+
+It installs `chezmoi` into `/opt/homebrew/bin` (Apple Silicon) or
+`/usr/local/bin` (everything else) — using `sudo` only if the target
+isn't writable — then runs `chezmoi init --apply --source=<this dir>`.
 
 The git/gh/ssh post-install scripts skip themselves when stdin is not a tty,
 so this is safe in non-interactive bootstrap. Set git user manually after:
@@ -110,6 +126,7 @@ packages/debian.yaml                     # apt groups (covers pi/ec2/devcontaine
 packages/common.yaml                     # cross-distro curl installers
 
 # ── installer machinery ─────────────────────────────────────────────────────
+install/init.sh                          # bootstrap chezmoi + apply this checkout
 install/install.sh                       # entry point — read recipes.yaml, dispatch
 install/lib/{common,yaml,fedora,debian,macos,common-tools}.sh
 
