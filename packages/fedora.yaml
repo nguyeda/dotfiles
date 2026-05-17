@@ -41,9 +41,39 @@ groups:
       - btop
       - gh
       - just
-      - jj
       - uv
       - tmux
+    custom:
+      - name: jj
+        check: command -v jj
+        script: |
+          JJ_VERSION="${JJ_VERSION:-v0.41.0}"
+          case "$(uname -m)" in
+            x86_64)  asset="jj-${JJ_VERSION}-x86_64-unknown-linux-musl.tar.gz" ;;
+            aarch64) asset="jj-${JJ_VERSION}-aarch64-unknown-linux-musl.tar.gz" ;;
+            *) echo "Unsupported arch for jj: $(uname -m)"; exit 1 ;;
+          esac
+          TMP="$(mktemp -d)"; trap 'rm -rf "$TMP"' EXIT
+          curl -fL --retry 3 -o "$TMP/jj.tgz" \
+            "https://github.com/jj-vcs/jj/releases/download/${JJ_VERSION}/${asset}"
+          tar -xzf "$TMP/jj.tgz" -C "$TMP"
+          sudo install -m 0755 "$TMP/jj" /usr/local/bin/jj
+      - name: sops
+        check: |
+          SOPS_VERSION="${SOPS_VERSION:-v3.13.1}"
+          command -v sops >/dev/null 2>&1 \
+            && [ "v$(sops --version | awk '{print $2; exit}')" = "$SOPS_VERSION" ]
+        script: |
+          SOPS_VERSION="${SOPS_VERSION:-v3.13.1}"
+          case "$(uname -m)" in
+            x86_64)        asset="sops-${SOPS_VERSION}.linux.amd64" ;;
+            aarch64|arm64) asset="sops-${SOPS_VERSION}.linux.arm64" ;;
+            *) echo "Unsupported arch for sops: $(uname -m)"; exit 1 ;;
+          esac
+          TMP="$(mktemp -d)"; trap 'rm -rf "$TMP"' EXIT
+          curl -fL --retry 3 -o "$TMP/sops" \
+            "https://github.com/getsops/sops/releases/download/${SOPS_VERSION}/${asset}"
+          sudo install -m 0755 "$TMP/sops" /usr/local/bin/sops
 
   # ---- Git / docker TUIs ---------------------------------------------------
   git-ui:

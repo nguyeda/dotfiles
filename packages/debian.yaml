@@ -47,6 +47,23 @@ groups:
       - btop
       - gh
       - tmux
+    custom:
+      - name: sops
+        check: |
+          SOPS_VERSION="${SOPS_VERSION:-v3.13.1}"
+          command -v sops >/dev/null 2>&1 \
+            && [ "v$(sops --version | awk '{print $2; exit}')" = "$SOPS_VERSION" ]
+        script: |
+          SOPS_VERSION="${SOPS_VERSION:-v3.13.1}"
+          case "$(uname -m)" in
+            x86_64)        asset="sops-${SOPS_VERSION}.linux.amd64" ;;
+            aarch64|arm64) asset="sops-${SOPS_VERSION}.linux.arm64" ;;
+            *) echo "Unsupported arch for sops: $(uname -m)"; exit 1 ;;
+          esac
+          TMP="$(mktemp -d)"; trap 'rm -rf "$TMP"' EXIT
+          curl -fL --retry 3 -o "$TMP/sops" \
+            "https://github.com/getsops/sops/releases/download/${SOPS_VERSION}/${asset}"
+          sudo install -m 0755 "$TMP/sops" /usr/local/bin/sops
 
   # Apt's `just` is too old on Pi (raspbian); pi installs via the curl
   # script in common.yaml instead. Other debian roles (ec2) keep apt.
