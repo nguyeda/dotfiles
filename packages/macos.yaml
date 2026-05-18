@@ -109,6 +109,7 @@ groups:
       - google-chrome
       - zen
       - slack
+      - keybase
       - raycast
       - gcloud-cli
       - ngrok

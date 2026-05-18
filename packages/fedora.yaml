@@ -163,6 +163,14 @@ groups:
         check: command -v gitkraken
         script: |
           sudo dnf install -y https://release.gitkraken.com/linux/gitkraken-amd64.rpm
+      - name: keybase
+        check: command -v keybase
+        script: |
+          # Import the signing key first — the RPM's own %post tries to do
+          # this, but it runs inside our dnf transaction and fails on the
+          # rpm lock, leaving future `dnf upgrade keybase` unverifiable.
+          sudo rpm --import https://keybase.io/docs/server_security/code_signing_key.asc
+          sudo dnf install -y https://prerelease.keybase.io/keybase_amd64.rpm
 
   # ---- Cloud SDKs (curl bundled — not in dnf) ------------------------------
   cloud:
