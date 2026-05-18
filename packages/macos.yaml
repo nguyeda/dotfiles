@@ -108,6 +108,7 @@ groups:
     casks:
       - nikitabobko/tap/aerospace
       - chromium
+      - google-chrome
       - zen
       - raycast
       - gcloud-cli

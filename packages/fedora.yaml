@@ -142,6 +142,17 @@ groups:
       - clamd
       - clamav-update
       - timeshift
+    repos:
+      - file: /etc/yum.repos.d/google-chrome.repo
+        gpg_key: https://dl.google.com/linux/linux_signing_key.pub
+        contents: |
+          [google-chrome]
+          name=google-chrome
+          baseurl=https://dl.google.com/linux/chrome/rpm/stable/x86_64
+          enabled=1
+          gpgcheck=1
+          gpgkey=https://dl.google.com/linux/linux_signing_key.pub
+        packages: [google-chrome-stable]
     custom:
       - name: gitkraken
         check: command -v gitkraken
