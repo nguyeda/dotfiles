@@ -110,7 +110,9 @@ groups:
       - zen
       - slack
       - keybase
+      - protonvpn
       - raycast
+      - syncthing
       - gcloud-cli
       - ngrok
       - session-manager-plugin

@@ -1,0 +1,63 @@
+#!/usr/bin/env bash
+# Lock syncthing down to LAN-only: no relays, no global discovery, no NAT
+# punching. Local discovery stays on so devices on the same network still
+# find each other. Re-runs whenever this script's body changes.
+set -euo pipefail
+
+{{ if or (eq .role "desktop-mac") (eq .role "desktop-fedora") -}}
+
+if ! command -v syncthing >/dev/null 2>&1; then
+    echo "[syncthing] binary not found; skipping (install hasn't run yet?)"
+    exit 0
+fi
+
+{{ if eq .chezmoi.os "darwin" -}}
+CONFIG_DIR="$HOME/Library/Application Support/Syncthing"
+{{- else -}}
+# Syncthing >= 1.27 defaults to XDG_STATE_HOME; fall back to legacy ~/.config.
+if [ -f "$HOME/.local/state/syncthing/config.xml" ]; then
+    CONFIG_DIR="$HOME/.local/state/syncthing"
+elif [ -f "$HOME/.config/syncthing/config.xml" ]; then
+    CONFIG_DIR="$HOME/.config/syncthing"
+else
+    CONFIG_DIR="$HOME/.local/state/syncthing"
+fi
+{{- end }}
+
+CONFIG_XML="$CONFIG_DIR/config.xml"
+
+if [ ! -f "$CONFIG_XML" ]; then
+    echo "[syncthing] no config found; generating one at $CONFIG_DIR"
+    mkdir -p "$CONFIG_DIR"
+    syncthing generate --config="$CONFIG_DIR" >/dev/null
+fi
+
+# Flip the three knobs that allow non-LAN traffic. Syncthing writes each
+# option on its own line, so a line-anchored sed is safe and readable.
+patch_opt() {
+    local key="$1" want="$2"
+    if grep -qE "<${key}>(true|false)</${key}>" "$CONFIG_XML"; then
+        sed -i.bak -E "s|<${key}>(true|false)</${key}>|<${key}>${want}</${key}>|" "$CONFIG_XML"
+    else
+        echo "[syncthing] warning: <${key}> not present in config; skipping"
+    fi
+}
+
+patch_opt relaysEnabled         false
+patch_opt globalAnnounceEnabled false
+patch_opt natEnabled            false
+patch_opt localAnnounceEnabled  true
+
+rm -f "${CONFIG_XML}.bak"
+
+echo "[syncthing] LAN-only mode applied to $CONFIG_XML"
+echo "[syncthing] restart syncthing for changes to take effect:"
+{{ if eq .chezmoi.os "darwin" -}}
+echo "           launchctl kickstart -k gui/\$(id -u)/syncthing  # if running as agent"
+{{- else -}}
+echo "           systemctl --user restart syncthing  # if enabled as a user service"
+{{- end }}
+
+{{- else -}}
+echo "[syncthing] role {{ .role }} doesn't install syncthing; skipping"
+{{- end }}

@@ -144,6 +144,7 @@ groups:
       - clamd
       - clamav-update
       - timeshift
+      - syncthing
     repos:
       - file: /etc/yum.repos.d/google-chrome.repo
         gpg_key: https://dl.google.com/linux/linux_signing_key.pub
@@ -171,6 +172,19 @@ groups:
           # rpm lock, leaving future `dnf upgrade keybase` unverifiable.
           sudo rpm --import https://keybase.io/docs/server_security/code_signing_key.asc
           sudo dnf install -y https://prerelease.keybase.io/keybase_amd64.rpm
+      - name: protonvpn
+        check: rpm -q proton-vpn-gnome-desktop
+        script: |
+          # ProtonVPN ships a release rpm that drops the stable repo into
+          # /etc/yum.repos.d/, then the desktop client is a normal dnf install.
+          sudo dnf install -y \
+            "https://repo.protonvpn.com/fedora-$(rpm -E %fedora)-stable/protonvpn-stable-release/protonvpn-stable-release-1.0.4-1.noarch.rpm"
+          sudo dnf install -y proton-vpn-gnome-desktop
+    post_install:
+      # Run syncthing as a per-user systemd service, and enable linger so it
+      # keeps running (and starts at boot) without an active login session.
+      - sudo loginctl enable-linger "$USER"
+      - systemctl --user enable --now syncthing.service
 
   # ---- Cloud SDKs (curl bundled — not in dnf) ------------------------------
   cloud:
