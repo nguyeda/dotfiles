@@ -19,6 +19,8 @@
 #           check: command -v thing      # exits 0 → already installed, skip
 #           script: |
 #             ...
+#       flatpaks:      # Flathub app IDs (auto-installs flatpak + flathub remote)
+#         - com.example.App
 #       post_install:  # shell snippets run after this group is done
 #         - sudo systemctl enable --now docker
 
@@ -153,36 +155,14 @@ groups:
           gpgcheck=1
           gpgkey=https://dl.google.com/linux/linux_signing_key.pub
         packages: [google-chrome-stable]
+    flatpaks:
+      - com.slack.Slack
+      - app.zen_browser.zen
     custom:
       - name: gitkraken
         check: command -v gitkraken
         script: |
           sudo dnf install -y https://release.gitkraken.com/linux/gitkraken-amd64.rpm
-      - name: zen-browser
-        check: '[ -x /opt/zen/zen ]'
-        script: |
-          case "$(uname -m)" in
-            x86_64)  asset="zen.linux-x86_64.tar.xz" ;;
-            aarch64) asset="zen.linux-aarch64.tar.xz" ;;
-            *) echo "Unsupported arch for zen: $(uname -m)"; exit 1 ;;
-          esac
-          TMP="$(mktemp -d)"; trap 'rm -rf "$TMP"' EXIT
-          curl -fL --retry 3 -o "$TMP/zen.tar.xz" \
-            "https://github.com/zen-browser/desktop/releases/latest/download/${asset}"
-          tar -xJf "$TMP/zen.tar.xz" -C "$TMP"
-          sudo rm -rf /opt/zen
-          sudo mv "$TMP/zen" /opt/zen
-          sudo ln -sf /opt/zen/zen /usr/local/bin/zen
-          sudo tee /usr/share/applications/zen.desktop >/dev/null <<'DESKTOP'
-          [Desktop Entry]
-          Name=Zen Browser
-          Exec=/opt/zen/zen %u
-          Icon=/opt/zen/browser/chrome/icons/default/default128.png
-          Type=Application
-          Categories=Network;WebBrowser;
-          MimeType=text/html;text/xml;application/xhtml+xml;x-scheme-handler/http;x-scheme-handler/https;
-          StartupWMClass=zen
-          DESKTOP
 
   # ---- Cloud SDKs (curl bundled — not in dnf) ------------------------------
   cloud:

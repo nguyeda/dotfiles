@@ -12,6 +12,29 @@ dnf_install() {
     sudo dnf install -y "$@"
 }
 
+# Ensure flatpak + Flathub remote are configured. Cheap to re-run.
+flatpak_ensure_setup() {
+    if ! command -v flatpak >/dev/null 2>&1; then
+        log "installing flatpak"
+        sudo dnf install -y flatpak
+    fi
+    if ! flatpak remotes --columns=name 2>/dev/null | grep -qx flathub; then
+        log "adding flathub remote"
+        sudo flatpak remote-add --if-not-exists flathub \
+            https://flathub.org/repo/flathub.flatpakrepo
+    fi
+}
+
+flatpak_install() {
+    local app="$1"
+    if flatpak info "$app" >/dev/null 2>&1; then
+        log_ok "flatpak ${app} already installed"
+        return 0
+    fi
+    log "installing flatpak ${app}"
+    sudo flatpak install -y --noninteractive flathub "$app"
+}
+
 dnf_copr_enable() {
     local copr="$1"
     if sudo dnf copr list --enabled 2>/dev/null | grep -q "^${copr}\$"; then
@@ -128,6 +151,18 @@ fedora_install_group() {
                     < <(yq -r ".groups.\"$group\".repos[$i].install_flags[]?" "$yaml")
                 sudo dnf install -y "${flags[@]}" "${repo_pkgs[@]}"
             fi
+        done
+    fi
+
+    # Flatpaks (from Flathub)
+    local flatpaks=()
+    while IFS= read -r p; do [ -n "$p" ] && flatpaks+=("$p"); done \
+        < <(yaml_group_strings "$yaml" "$group" "flatpaks")
+    if [ "${#flatpaks[@]}" -gt 0 ]; then
+        flatpak_ensure_setup
+        local app
+        for app in "${flatpaks[@]}"; do
+            flatpak_install "$app"
         done
     fi
 

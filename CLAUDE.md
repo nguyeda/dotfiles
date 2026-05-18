@@ -88,12 +88,21 @@ Pick the right file based on what kind of install it is:
 | Fedora COPR-only package | `packages/fedora.yaml` → `groups.<name>.coprs: [{copr, packages}]` |
 | Fedora package needing custom .repo | `packages/fedora.yaml` → `groups.<name>.repos: [{file, contents \| from_repofile \| from_url, packages}]` |
 | Fedora curl-installer / one-off | `packages/fedora.yaml` → `groups.<name>.custom: [{name, check, script}]` |
+| Fedora Flatpak (Flathub) | `packages/fedora.yaml` → `groups.<name>.flatpaks: [com.example.App]` (flatpak + Flathub remote auto-installed) |
 | Debian/Pi apt package | `packages/debian.yaml` → `groups.<name>.packages: [...]` |
 | Debian custom apt repo | `packages/debian.yaml` → `groups.<name>.apt_keys + apt_sources + packages` |
 | Cross-distro curl installer | `packages/common.yaml` → new entry under `groups.` |
 | New role / changed group selection | `packages/recipes.yaml` → edit `roles.<role>` |
 | macOS package | `packages/macos.yaml` → `groups.<name>.formulas` / `casks` / `taps` |
 | New helper function in installer | `install/lib/<distro>.sh` |
+
+**Prefer official sources.** When picking how to install something, the
+order of preference is: official distro repo → upstream's own repo / cask
+pointing at upstream's CDN → upstream's GitHub release tarball → community
+COPR/PPA/third-party repo. Reach for community/third-party packaging only
+when nothing official exists, and call it out in the commit message.
+Homebrew casks that are thin pointers to vendor URLs (e.g. `google-chrome`
+fetching from `dl.google.com`) count as official for this purpose.
 
 After editing any YAML, the SHA-256 of every manifest is embedded in
 `run_onchange_before_20-install-packages.sh.tmpl`, so the next `chezmoi apply`

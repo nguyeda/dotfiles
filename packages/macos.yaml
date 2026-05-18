@@ -110,6 +110,7 @@ groups:
       - chromium
       - google-chrome
       - zen
+      - slack
       - raycast
       - gcloud-cli
       - ngrok
