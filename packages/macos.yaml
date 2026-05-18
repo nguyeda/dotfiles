@@ -70,15 +70,13 @@ groups:
 
   # ---- Infrastructure-as-code + secrets ------------------------------------
   iac:
-    taps:
-      - updatecli/updatecli
     formulas:
       - opentofu
       - terragrunt
       - terraform-docs
       - tflint
       - sops
-      - updatecli/updatecli/updatecli
+      # updatecli now installed via packages/common.yaml (all roles)
       # - terraform       # kept-but-unused: we use opentofu
       # - trivy           # kept-but-unused: security scanner
 

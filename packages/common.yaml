@@ -64,6 +64,26 @@ groups:
       curl --proto '=https' --tlsv1.2 -sSf https://just.systems/install.sh \
         | bash -s -- --to "$HOME/.local/bin"
 
+  updatecli:
+    description: Declarative dependency manager (https://updatecli.io)
+    check: command -v updatecli
+    script: |
+      if [[ "$(uname -s)" == "Darwin" ]]; then
+        brew install updatecli/updatecli/updatecli
+      else
+        case "$(uname -m)" in
+          x86_64)  TARGET="Linux_x86_64" ;;
+          aarch64) TARGET="Linux_arm64" ;;
+          *) echo "Unsupported arch for updatecli: $(uname -m)"; exit 1 ;;
+        esac
+        VERSION="$(curl -fsSL https://api.github.com/repos/updatecli/updatecli/releases/latest \
+          | grep '"tag_name"' | sed 's/.*"v\(.*\)".*/\1/')"
+        URL="https://github.com/updatecli/updatecli/releases/download/v${VERSION}/updatecli_${TARGET}.tar.gz"
+        TMP="$(mktemp -d)"; trap 'rm -rf "$TMP"' EXIT
+        curl -fsSL "$URL" | tar xz -C "$TMP"
+        sudo install -m 0755 "$TMP/updatecli" /usr/local/bin/updatecli
+      fi
+
   jj-musl:
     description: jujutsu via static musl binary (linux non-fedora)
     check: command -v jj

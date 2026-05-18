@@ -9,24 +9,24 @@
 roles:
   desktop-mac:
     macos:  [cli, vcs, containers, python, langs, iac, crypto-db, niche, gui]
-    common: [chezmoi, fnm, claude, opencode]
+    common: [chezmoi, fnm, claude, opencode, updatecli]
 
   desktop-fedora:
     fedora: [core, cli, git-ui, terminals, iac, editors, gui-extras, cloud, docker, nvidia]
-    common: [chezmoi, fnm, claude, opencode]
+    common: [chezmoi, fnm, claude, opencode, updatecli]
 
   pi:
     debian: [core, git, nvim-tarball, cli, git-ui, docker]
-    common: [chezmoi, fnm, starship, claude, just]
+    common: [chezmoi, fnm, starship, claude, just, updatecli]
 
   ec2:
     debian: [core, git, nvim-tarball, cli, just-apt, cloud]
-    common: [chezmoi, fnm, starship, uv, jj-musl]
+    common: [chezmoi, fnm, starship, uv, jj-musl, updatecli]
 
   devcontainer:
     debian: [core, nvim-tarball]
-    common: [chezmoi, fnm, starship]
+    common: [chezmoi, fnm, starship, updatecli]
 
   ec2-devbox:
     amazon: [core, nvim-tarball]
-    common: [chezmoi, fnm, starship, claude]
+    common: [chezmoi, fnm, starship, claude, updatecli]
