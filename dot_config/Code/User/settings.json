@@ -24,5 +24,8 @@
   "aws.telemetry": false,
   "aws.cloudformation.telemetry.enabled": false,
   "git.autofetch": true,
-  "workbench.activityBar.location": "top"
+  "workbench.activityBar.location": "top",
+  "window.autoDetectColorScheme": true,
+  "workbench.preferredLightColorTheme": "Default Light 2026",
+  "workbench.preferredDarkColorTheme": "Default Dark 2026"
 }
