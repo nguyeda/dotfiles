@@ -12,7 +12,7 @@ roles:
     common: [chezmoi, fnm, claude, opencode, updatecli]
 
   desktop-fedora:
-    fedora: [core, cli, git-ui, terminals, iac, editors, gui-extras, cloud, docker, nvidia]
+    fedora: [core, cli, git-ui, terminals, iac, editors, gui-extras, cloud, docker, nvidia, rgb-fans]
     common: [chezmoi, fnm, claude, opencode, updatecli]
 
   pi:
