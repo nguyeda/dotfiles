@@ -36,6 +36,7 @@ groups:
       - unzip
       - ripgrep
       - fd-find
+      - postgresql
 
   # ---- General CLI productivity --------------------------------------------
   cli:

@@ -14,6 +14,7 @@ groups:
       - ripgrep
       - fd-find
       - build-essential
+      - postgresql-client
 
   # Split out so devcontainer can skip it (provided by the git feature).
   git:

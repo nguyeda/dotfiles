@@ -20,6 +20,7 @@ groups:
       - tmux
       - gh
       - btop
+      - postgresql15
 
   # AL2023's nvim (if available) is too old; install official tarball release.
   nvim-tarball:
