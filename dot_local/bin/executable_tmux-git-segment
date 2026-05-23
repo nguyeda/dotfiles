@@ -1,0 +1,12 @@
+#!/bin/sh
+# Output the git-branch tmux segment (with transition arrows) if in a git repo,
+# else just output a peach->green transition arrow. Arg $1: pane_current_path.
+PATH_ARG="${1:-.}"
+BRANCH=$(git -C "$PATH_ARG" branch --show-current 2>/dev/null)
+RARROW=$(printf '\xee\x82\xb0')
+GIT_I=$(printf '\xee\x9c\xa5')
+if [ -n "$BRANCH" ]; then
+  printf '%s' "#[fg=#{@thm_peach},bg=#{@thm_yellow}]${RARROW}#[fg=#{@thm_crust},bg=#{@thm_yellow}] ${GIT_I} ${BRANCH} #[fg=#{@thm_yellow},bg=#{@thm_green}]${RARROW}"
+else
+  printf '%s' "#[fg=#{@thm_peach},bg=#{@thm_green}]${RARROW}"
+fi
