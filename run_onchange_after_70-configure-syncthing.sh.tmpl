@@ -37,7 +37,7 @@ fi
 patch_opt() {
     local key="$1" want="$2"
     if grep -qE "<${key}>(true|false)</${key}>" "$CONFIG_XML"; then
-        sed -i.bak -E "s|<${key}>(true|false)</${key}>|<${key}>${want}</${key}>|" "$CONFIG_XML"
+        sed -i.bak -E "s#<${key}>(true|false)</${key}>#<${key}>${want}</${key}>#" "$CONFIG_XML"
     else
         echo "[syncthing] warning: <${key}> not present in config; skipping"
     fi
