@@ -27,8 +27,8 @@ install
 run_once_after_50-configure-git.sh
 {{- end }}
 
-{{/* VSCode + Cursor user settings only land on desktop-fedora today */}}
-{{- if ne .role "desktop-fedora" }}
+{{/* VSCode + Cursor user settings on desktop-fedora and desktop-mac */}}
+{{- if and (ne .role "desktop-fedora") (ne .role "desktop-mac") }}
 .config/Code
 .config/Cursor
 {{- end }}

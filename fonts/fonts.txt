@@ -1,0 +1,4 @@
+# Format: name=url
+# name becomes the subdirectory under the font dir; url must be a zip archive.
+
+MapleMono-NF=https://github.com/subframe7536/maple-font/releases/download/v7.9/MapleMono-NF.zip
