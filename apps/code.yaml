@@ -1,0 +1,25 @@
+id: code
+description: Visual Studio Code with extensions from extensions/vscode.txt
+install:
+  fedora:
+    packages: [code]
+    pre_install: |
+      sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
+      sudo tee /etc/yum.repos.d/vscode.repo >/dev/null <<'EOF'
+      [code]
+      name=Visual Studio Code
+      baseurl=https://packages.microsoft.com/yumrepos/vscode
+      enabled=1
+      autorefresh=1
+      type=rpm-md
+      gpgcheck=1
+      gpgkey=https://packages.microsoft.com/keys/microsoft.asc
+      EOF
+    post_install:
+      - |
+        EXTENSIONS_FILE="$DOTFILES_DIR/extensions/vscode.txt"
+        [ -f "$EXTENSIONS_FILE" ] || exit 0
+        while IFS= read -r ext || [ -n "$ext" ]; do
+          [[ -z "$ext" || "$ext" =~ ^# ]] && continue
+          code --install-extension "$ext" --force
+        done < "$EXTENSIONS_FILE"

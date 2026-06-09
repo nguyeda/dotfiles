@@ -1,0 +1,4 @@
+id: ripgrep
+description: ripgrep search tool
+install:
+  default: { packages: [ripgrep] }

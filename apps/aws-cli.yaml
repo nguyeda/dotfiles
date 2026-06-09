@@ -1,0 +1,14 @@
+id: aws-cli
+description: AWS CLI v2
+check: command -v aws
+install:
+  default:
+    script: |
+      TMP="$(mktemp -d)"; trap 'rm -rf "$TMP"' EXIT
+      case "$(uname -m)" in
+        x86_64)        AWSCLI_URL=https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip ;;
+        aarch64|arm64) AWSCLI_URL=https://awscli.amazonaws.com/awscli-exe-linux-aarch64.zip ;;
+      esac
+      curl -fsSL "$AWSCLI_URL" -o "$TMP/awscliv2.zip"
+      unzip -q "$TMP/awscliv2.zip" -d "$TMP"
+      sudo "$TMP/aws/install" --update

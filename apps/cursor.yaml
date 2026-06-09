@@ -1,0 +1,22 @@
+id: cursor
+description: Cursor editor with extensions from extensions/cursor.txt
+install:
+  fedora:
+    packages: [cursor]
+    pre_install: |
+      sudo tee /etc/yum.repos.d/cursor.repo >/dev/null <<'EOF'
+      [cursor]
+      name=Cursor
+      baseurl=https://downloads.cursor.com/yumrepo
+      enabled=1
+      gpgcheck=1
+      gpgkey=https://downloads.cursor.com/keys/anysphere.asc
+      EOF
+    post_install:
+      - |
+        EXTENSIONS_FILE="$DOTFILES_DIR/extensions/cursor.txt"
+        [ -f "$EXTENSIONS_FILE" ] || exit 0
+        while IFS= read -r ext || [ -n "$ext" ]; do
+          [[ -z "$ext" || "$ext" =~ ^# ]] && continue
+          cursor --install-extension "$ext" --force
+        done < "$EXTENSIONS_FILE"

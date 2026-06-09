@@ -1,0 +1,26 @@
+id: openrgb
+description: OpenRGB GUI/CLI with local SDK service setup
+install:
+  fedora:
+    packages: [openrgb]
+    post_install:
+      - |
+        echo i2c-dev | sudo tee /etc/modules-load.d/openrgb.conf >/dev/null
+        sudo modprobe i2c-dev || true
+        sudo tee /etc/systemd/system/openrgb.service >/dev/null <<'EOF'
+        [Unit]
+        Description=OpenRGB SDK server (RGB backend for CoolerControl)
+        After=systemd-modules-load.service
+        Before=coolercontrold.service
+
+        [Service]
+        Type=simple
+        ExecStart=/usr/bin/openrgb --server --server-host 127.0.0.1 --server-port 6742 --noautoconnect
+        Restart=on-failure
+        RestartSec=5
+
+        [Install]
+        WantedBy=multi-user.target
+        EOF
+        sudo systemctl daemon-reload
+        sudo systemctl enable --now openrgb.service

@@ -1,0 +1,8 @@
+id: ghostty
+description: Ghostty terminal
+install:
+  macos: { casks: [ghostty] }
+  fedora:
+    packages: [ghostty]
+    pre_install: |
+      sudo dnf copr enable -y scottames/ghostty

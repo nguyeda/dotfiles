@@ -1,0 +1,6 @@
+id: ngrok
+description: ngrok tunnel CLI
+install:
+  macos:
+    taps: [ngrok/ngrok]
+    casks: [ngrok]

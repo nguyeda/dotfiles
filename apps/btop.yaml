@@ -1,0 +1,4 @@
+id: btop
+description: Resource monitor
+install:
+  default: { packages: [btop] }

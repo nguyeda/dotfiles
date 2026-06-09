@@ -1,0 +1,18 @@
+id: jj
+description: Jujutsu VCS
+check: command -v jj
+install:
+  macos: { packages: [jj] }
+  default:
+    script: |
+      JJ_VERSION="${JJ_VERSION:-v0.41.0}"
+      case "$(uname -m)" in
+        x86_64)  asset="jj-${JJ_VERSION}-x86_64-unknown-linux-musl.tar.gz" ;;
+        aarch64) asset="jj-${JJ_VERSION}-aarch64-unknown-linux-musl.tar.gz" ;;
+        *) echo "Unsupported arch for jj: $(uname -m)"; exit 1 ;;
+      esac
+      TMP="$(mktemp -d)"; trap 'rm -rf "$TMP"' EXIT
+      curl -fL --retry 3 -o "$TMP/jj.tgz" \
+        "https://github.com/jj-vcs/jj/releases/download/${JJ_VERSION}/${asset}"
+      tar -xzf "$TMP/jj.tgz" -C "$TMP"
+      sudo install -m 0755 "$TMP/jj" /usr/local/bin/jj

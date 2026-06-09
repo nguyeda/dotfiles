@@ -1,0 +1,10 @@
+id: chezmoi
+description: Dotfiles manager
+check: command -v chezmoi
+install:
+  macos: { packages: [chezmoi] }
+  default:
+    script: |
+      BINDIR="$HOME/.local/bin"
+      mkdir -p "$BINDIR"
+      sh -c "$(curl -fsLS get.chezmoi.io)" -- -b "$BINDIR"

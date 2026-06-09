@@ -1,0 +1,4 @@
+id: gcloud-cli
+description: Google Cloud CLI
+install:
+  macos: { casks: [gcloud-cli] }

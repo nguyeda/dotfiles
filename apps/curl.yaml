@@ -1,0 +1,4 @@
+id: curl
+description: curl HTTP client
+install:
+  default: { packages: [curl] }

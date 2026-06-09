@@ -1,0 +1,36 @@
+id: fonts
+description: Nerd Fonts from fonts/fonts.txt
+install:
+  macos:
+    script: |
+      FONTS_FILE="$DOTFILES_DIR/fonts/fonts.txt"
+      [ -f "$FONTS_FILE" ] || exit 0
+      FONT_DIR="$HOME/Library/Fonts"
+      mkdir -p "$FONT_DIR"
+      while IFS= read -r line || [ -n "$line" ]; do
+        [[ -z "$line" || "$line" =~ ^# ]] && continue
+        name="${line%%=*}"
+        url="${line#*=}"
+        [ -d "$FONT_DIR/$name" ] && continue
+        TMP="$(mktemp -d)"
+        curl -fsSL "$url" -o "$TMP/$name.zip"
+        unzip -o -q "$TMP/$name.zip" -d "$FONT_DIR/$name"
+        rm -rf "$TMP"
+      done < "$FONTS_FILE"
+  linux:
+    script: |
+      FONTS_FILE="$DOTFILES_DIR/fonts/fonts.txt"
+      [ -f "$FONTS_FILE" ] || exit 0
+      FONT_DIR="$HOME/.local/share/fonts"
+      mkdir -p "$FONT_DIR"
+      while IFS= read -r line || [ -n "$line" ]; do
+        [[ -z "$line" || "$line" =~ ^# ]] && continue
+        name="${line%%=*}"
+        url="${line#*=}"
+        [ -d "$FONT_DIR/$name" ] && continue
+        TMP="$(mktemp -d)"
+        curl -fsSL "$url" -o "$TMP/$name.zip"
+        unzip -o -q "$TMP/$name.zip" -d "$FONT_DIR/$name"
+        rm -rf "$TMP"
+      done < "$FONTS_FILE"
+      fc-cache -f "$FONT_DIR"

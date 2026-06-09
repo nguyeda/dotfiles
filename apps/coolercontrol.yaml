@@ -1,0 +1,9 @@
+id: coolercontrol
+description: CoolerControl fan/LCD controller
+install:
+  fedora:
+    packages: [coolercontrol]
+    pre_install: |
+      sudo dnf copr enable -y codifryed/CoolerControl
+    post_install:
+      - sudo systemctl enable --now coolercontrold.service

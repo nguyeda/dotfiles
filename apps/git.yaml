@@ -1,0 +1,4 @@
+id: git
+description: Git version control
+install:
+  default: { packages: [git] }

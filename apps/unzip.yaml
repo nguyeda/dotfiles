@@ -1,0 +1,4 @@
+id: unzip
+description: unzip archive tool
+install:
+  default: { packages: [unzip] }

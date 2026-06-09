@@ -1,0 +1,4 @@
+id: icann-rdap
+description: ICANN RDAP CLI
+install:
+  macos: { packages: [icann-rdap] }

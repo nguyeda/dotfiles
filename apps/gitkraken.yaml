@@ -1,0 +1,7 @@
+id: gitkraken
+description: GitKraken Git GUI
+check: command -v gitkraken
+install:
+  fedora:
+    script: |
+      sudo dnf install -y https://release.gitkraken.com/linux/gitkraken-amd64.rpm

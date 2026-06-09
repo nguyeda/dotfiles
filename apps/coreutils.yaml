@@ -1,0 +1,4 @@
+id: coreutils
+description: GNU core utilities
+install:
+  macos: { packages: [coreutils] }

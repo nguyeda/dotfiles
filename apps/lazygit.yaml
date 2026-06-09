@@ -1,0 +1,12 @@
+id: lazygit
+description: Git TUI
+check: command -v lazygit
+install:
+  macos: { packages: [lazygit] }
+  fedora:
+    packages: [lazygit]
+    pre_install: |
+      sudo dnf copr enable -y dejan/lazygit
+  debian:
+    packages: [lazygit]
+    optional: true

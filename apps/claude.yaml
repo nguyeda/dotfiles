@@ -1,0 +1,7 @@
+id: claude
+description: Claude Code CLI
+check: command -v claude
+install:
+  default:
+    script: |
+      curl -fsSL https://claude.ai/install.sh | bash

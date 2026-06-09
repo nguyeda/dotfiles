@@ -1,0 +1,4 @@
+id: jq
+description: JSON processor
+install:
+  macos: { packages: [jq] }

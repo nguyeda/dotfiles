@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Shared helpers — sourced by install.sh and the per-distro libs.
+# Shared helpers sourced by the root installer and package libraries.
 # Idempotent: re-sourcing is safe.
 
 # Colours (only when on a tty)

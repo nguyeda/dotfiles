@@ -1,0 +1,18 @@
+id: nvidia
+description: NVIDIA driver and container toolkit
+install:
+  fedora:
+    detect: lspci 2>/dev/null | grep -qi nvidia
+    packages: [akmod-nvidia, nvidia-container-toolkit]
+    pre_install: |
+      sudo dnf install -y dnf-plugins-core
+      sudo dnf config-manager addrepo --from-repofile=https://nvidia.github.io/libnvidia-container/stable/rpm/nvidia-container-toolkit.repo
+    post_install:
+      - |
+        sudo mkdir -p /etc/modprobe.d /etc/dracut.conf.d
+        grep -qF 'options nvidia_drm modeset=1' /etc/modprobe.d/nvidia.conf 2>/dev/null \
+          || echo 'options nvidia_drm modeset=1' | sudo tee -a /etc/modprobe.d/nvidia.conf >/dev/null
+        grep -qF 'force_drivers+=" nvidia' /etc/dracut.conf.d/nvidia.conf 2>/dev/null \
+          || echo 'force_drivers+=" nvidia nvidia_drm nvidia_modeset nvidia_uvm "' | sudo tee -a /etc/dracut.conf.d/nvidia.conf >/dev/null
+        sudo dracut --force
+      - if command -v docker >/dev/null 2>&1; then sudo nvidia-ctk runtime configure --runtime=docker && sudo systemctl restart docker || true; fi

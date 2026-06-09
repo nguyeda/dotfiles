@@ -1,0 +1,12 @@
+id: just
+description: just command runner
+check: command -v just
+install:
+  macos: { packages: [just] }
+  fedora: { packages: [just] }
+  debian: { packages: [just] }
+  default:
+    script: |
+      mkdir -p "$HOME/.local/bin"
+      curl --proto '=https' --tlsv1.2 -sSf https://just.systems/install.sh \
+        | bash -s -- --to "$HOME/.local/bin"

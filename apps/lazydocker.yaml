@@ -1,0 +1,10 @@
+id: lazydocker
+description: Docker TUI
+check: command -v lazydocker
+install:
+  macos:
+    taps: [jesseduffield/lazydocker]
+    packages: [jesseduffield/lazydocker/lazydocker]
+  default:
+    script: |
+      curl -fsSL https://raw.githubusercontent.com/jesseduffield/lazydocker/master/scripts/install_update_linux.sh | bash

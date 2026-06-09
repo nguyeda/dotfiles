@@ -1,0 +1,4 @@
+id: gh
+description: GitHub CLI
+install:
+  default: { packages: [gh] }

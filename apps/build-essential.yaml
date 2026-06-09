@@ -1,0 +1,4 @@
+id: build-essential
+description: Debian compiler/build basics
+install:
+  debian: { packages: [build-essential] }

@@ -1,0 +1,26 @@
+# Packages for Raspberry Pi / Debian-family hosts.
+packages:
+  - chezmoi
+  - zsh
+  - stow
+  - curl
+  - unzip
+  - ca-certificates
+  - ripgrep
+  - fd-find
+  - build-essential
+  - postgresql-client
+  - git
+  - neovim
+  - btop
+  - gh
+  - tmux
+  - sops
+  - lazygit
+  - lazydocker
+  - docker
+  - fnm
+  - starship
+  - claude
+  - just
+  - updatecli

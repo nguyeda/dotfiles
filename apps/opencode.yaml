@@ -1,0 +1,10 @@
+id: opencode
+description: opencode CLI
+check: command -v opencode
+install:
+  macos:
+    taps: [anomalyco/tap]
+    packages: [opencode]
+  default:
+    script: |
+      curl -fsSL https://opencode.ai/install | bash

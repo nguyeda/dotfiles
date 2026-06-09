@@ -1,0 +1,16 @@
+# Packages for devcontainers and Codespaces.
+packages:
+  - chezmoi
+  - zsh
+  - stow
+  - curl
+  - unzip
+  - ca-certificates
+  - ripgrep
+  - fd-find
+  - build-essential
+  - postgresql-client
+  - neovim
+  - fnm
+  - starship
+  - updatecli

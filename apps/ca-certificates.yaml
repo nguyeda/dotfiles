@@ -1,0 +1,4 @@
+id: ca-certificates
+description: CA certificate bundle
+install:
+  default: { packages: [ca-certificates] }

@@ -1,0 +1,4 @@
+id: timeshift
+description: System snapshot tool
+install:
+  fedora: { packages: [timeshift] }

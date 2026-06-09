@@ -1,0 +1,9 @@
+id: keybase
+description: Keybase desktop app
+check: command -v keybase
+install:
+  macos: { casks: [keybase] }
+  fedora:
+    script: |
+      sudo rpm --import https://keybase.io/docs/server_security/code_signing_key.asc
+      sudo dnf install -y https://prerelease.keybase.io/keybase_amd64.rpm

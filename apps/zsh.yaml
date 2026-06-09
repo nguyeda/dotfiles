@@ -1,0 +1,4 @@
+id: zsh
+description: Z shell
+install:
+  default: { packages: [zsh] }

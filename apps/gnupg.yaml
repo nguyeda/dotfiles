@@ -1,0 +1,4 @@
+id: gnupg
+description: GNU Privacy Guard
+install:
+  macos: { packages: [gnupg] }

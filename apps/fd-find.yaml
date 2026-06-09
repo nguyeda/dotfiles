@@ -1,0 +1,4 @@
+id: fd-find
+description: fd file finder
+install:
+  default: { packages: [fd-find] }

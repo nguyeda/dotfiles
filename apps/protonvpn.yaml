@@ -1,0 +1,10 @@
+id: protonvpn
+description: Proton VPN desktop app
+install:
+  macos: { casks: [protonvpn] }
+  fedora:
+    check: rpm -q proton-vpn-gnome-desktop
+    packages: [proton-vpn-gnome-desktop]
+    pre_install: |
+      sudo dnf install -y \
+        "https://repo.protonvpn.com/fedora-$(rpm -E %fedora)-stable/protonvpn-stable-release/protonvpn-stable-release-1.0.4-1.noarch.rpm"

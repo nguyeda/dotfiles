@@ -1,0 +1,4 @@
+id: clamav
+description: ClamAV antivirus scanner, daemon, and signature updater
+install:
+  fedora: { packages: [clamav, clamd, clamav-update] }

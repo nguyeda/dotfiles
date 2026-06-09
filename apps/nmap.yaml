@@ -1,0 +1,4 @@
+id: nmap
+description: Network scanner
+install:
+  macos: { packages: [nmap] }

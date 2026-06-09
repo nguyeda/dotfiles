@@ -1,0 +1,4 @@
+id: ruff
+description: Ruff Python linter/formatter
+install:
+  macos: { packages: [ruff] }

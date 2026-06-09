@@ -1,0 +1,4 @@
+id: watch
+description: watch command
+install:
+  macos: { packages: [watch] }

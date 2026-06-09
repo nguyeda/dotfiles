@@ -1,0 +1,5 @@
+id: slack
+description: Slack desktop app
+install:
+  macos: { casks: [slack] }
+  fedora: { flatpaks: [com.slack.Slack] }

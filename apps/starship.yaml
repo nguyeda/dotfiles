@@ -1,0 +1,8 @@
+id: starship
+description: Cross-shell prompt
+check: command -v starship
+install:
+  macos: { packages: [starship] }
+  default:
+    script: |
+      curl -sS https://starship.rs/install.sh | sh -s -- -y

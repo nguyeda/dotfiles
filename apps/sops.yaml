@@ -1,0 +1,17 @@
+id: sops
+description: Mozilla SOPS secrets editor
+check: command -v sops
+install:
+  macos: { packages: [sops] }
+  default:
+    script: |
+      SOPS_VERSION="${SOPS_VERSION:-v3.13.1}"
+      case "$(uname -m)" in
+        x86_64)        asset="sops-${SOPS_VERSION}.linux.amd64" ;;
+        aarch64|arm64) asset="sops-${SOPS_VERSION}.linux.arm64" ;;
+        *) echo "Unsupported arch for sops: $(uname -m)"; exit 1 ;;
+      esac
+      TMP="$(mktemp -d)"; trap 'rm -rf "$TMP"' EXIT
+      curl -fL --retry 3 -o "$TMP/sops" \
+        "https://github.com/getsops/sops/releases/download/${SOPS_VERSION}/${asset}"
+      sudo install -m 0755 "$TMP/sops" /usr/local/bin/sops

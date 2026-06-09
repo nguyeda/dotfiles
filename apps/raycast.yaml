@@ -1,0 +1,4 @@
+id: raycast
+description: Raycast launcher
+install:
+  macos: { casks: [raycast] }

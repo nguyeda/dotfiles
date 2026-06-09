@@ -1,0 +1,14 @@
+id: session-manager-plugin
+description: AWS Session Manager Plugin
+check: command -v session-manager-plugin
+install:
+  macos: { casks: [session-manager-plugin] }
+  debian:
+    script: |
+      TMP="$(mktemp -d)"; trap 'rm -rf "$TMP"' EXIT
+      case "$(uname -m)" in
+        x86_64)        SMP_URL=https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/debian_amd64/session-manager-plugin.deb ;;
+        aarch64|arm64) SMP_URL=https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/debian_arm64/session-manager-plugin.deb ;;
+      esac
+      curl -fsSL "$SMP_URL" -o "$TMP/smp.deb"
+      sudo dpkg -i -E "$TMP/smp.deb"

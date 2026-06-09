@@ -1,0 +1,6 @@
+id: aerospace
+description: AeroSpace window manager
+install:
+  macos:
+    taps: [nikitabobko/tap]
+    casks: [nikitabobko/tap/aerospace]

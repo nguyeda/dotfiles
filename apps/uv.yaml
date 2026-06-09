@@ -1,0 +1,9 @@
+id: uv
+description: Python package and runtime manager
+check: command -v uv
+install:
+  macos: { packages: [uv] }
+  fedora: { packages: [uv] }
+  default:
+    script: |
+      curl -fsSL https://astral.sh/uv/install.sh | bash

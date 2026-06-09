@@ -1,0 +1,4 @@
+id: tmux
+description: Terminal multiplexer
+install:
+  default: { packages: [tmux] }

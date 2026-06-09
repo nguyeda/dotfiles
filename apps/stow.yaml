@@ -1,0 +1,4 @@
+id: stow
+description: GNU Stow
+install:
+  default: { packages: [stow] }

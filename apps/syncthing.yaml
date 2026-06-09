@@ -1,0 +1,9 @@
+id: syncthing
+description: File synchronization service
+install:
+  macos: { casks: [syncthing] }
+  fedora:
+    packages: [syncthing]
+    post_install:
+      - sudo loginctl enable-linger "$USER"
+      - systemctl --user enable --now syncthing.service

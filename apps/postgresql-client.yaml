@@ -1,0 +1,10 @@
+id: postgresql-client
+description: PostgreSQL client tools (psql)
+check: command -v psql
+install:
+  macos:
+    packages: [libpq]
+    post_install:
+      - brew link --force libpq || true
+  fedora: { packages: [postgresql] }
+  debian: { packages: [postgresql-client] }

@@ -1,0 +1,8 @@
+id: fnm
+description: Fast Node.js version manager
+check: command -v fnm
+install:
+  macos: { packages: [fnm] }
+  default:
+    script: |
+      curl -fsSL https://fnm.vercel.app/install | bash -s -- --skip-shell
