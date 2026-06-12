@@ -1,0 +1,19 @@
+home/dot_zshrc.tmpl
+  s_fe1a47957ad159::t_7593ede1a3c0a4 23-24
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.6",
+  "base_commit_sha": "f72a3a614adc479c7e590cef2a53e92a8c5906b6",
+  "prompts": {},
+  "sessions": {
+    "s_fe1a47957ad159": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_1452766d9ffeQ2SZ3iotoKVA7a",
+        "model": "gpt-5.5"
+      },
+      "human_author": "David Nguyen <david@nguyen.eu>"
+    }
+  }
+}
