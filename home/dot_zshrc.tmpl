@@ -20,6 +20,8 @@ alias vim="nvim"
 alias vi="nvim"
 alias ll="ls -l"
 alias la="ls -la"
+alias claude-legit='CLAUDE_CONFIG_DIR="$HOME/.claude.legit" claude'
+alias claude-dng='CLAUDE_CONFIG_DIR="$HOME/.claude.dng" claude'
 
 {{- if ne .role "devcontainer" }}
 
@@ -86,6 +88,18 @@ if [ -d "$HOME/.opencode/bin" ]; then
   export PATH="$HOME/.opencode/bin:$PATH"
 fi
 {{- end }}
+
+##################################################################
+# git-ai
+if [ -d "$HOME/.git-ai/bin" ]; then
+  export PATH="$HOME/.git-ai/bin:$PATH"
+fi
+
+##################################################################
+# cubic
+if [ -d "$HOME/.cubic/bin" ]; then
+  export PATH="$HOME/.cubic/bin:$PATH"
+fi
 
 ##################################################################
 # pgp

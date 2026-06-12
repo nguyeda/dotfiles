@@ -1,0 +1,83 @@
+#!/bin/bash
+# Keep alternate Claude Code config directories linked to ~/.claude while
+# leaving credentials and account-local settings isolated per profile.
+#
+# Re-run when top-level ~/.claude entries change:
+# {{ output "sh" "-c" "if [ -d \"$HOME/.claude\" ]; then (cd \"$HOME/.claude\" && for p in .* *; do case \"$p\" in .|..) continue ;; esac; [ -e \"$p\" ] || [ -L \"$p\" ] || continue; printf '%s\\n' \"$p\"; done | sort); fi" | quote }}
+set -euo pipefail
+
+MASTER="$HOME/.claude"
+PROFILES=("$HOME/.claude.legit" "$HOME/.claude.dng")
+
+if [ ! -d "$MASTER" ]; then
+    echo "[claude-alt] $MASTER does not exist; skipping."
+    exit 0
+fi
+
+should_skip() {
+    local name="$1"
+
+    case "$name" in
+        .claude.json|.claude.json.*|backups|mcp-needs-auth-cache.json|session-env|settings.json|settings.json.*|settings.local.json|settings.local.json.*|shell-snapshots)
+            return 0
+            ;;
+    esac
+
+    case "$name" in
+        *[Aa][Uu][Tt][Hh]*|*[Oo][Aa][Uu][Tt][Hh]*|*[Tt][Oo][Kk][Ee][Nn]*|*[Cc][Rr][Ee][Dd][Ee][Nn][Tt][Ii][Aa][Ll]*)
+            return 0
+            ;;
+    esac
+
+    return 1
+}
+
+sync_profile() {
+    local profile="$1"
+    local source name dest target
+
+    mkdir -p "$profile"
+
+    for source in "$MASTER"/* "$MASTER"/.[!.]* "$MASTER"/..?*; do
+        [ -e "$source" ] || [ -L "$source" ] || continue
+
+        name="${source##*/}"
+        should_skip "$name" && continue
+
+        dest="$profile/$name"
+        if [ -L "$dest" ]; then
+            target="$(readlink "$dest" || true)"
+            if [ "$target" != "$source" ]; then
+                rm "$dest"
+                ln -s "$source" "$dest"
+                echo "[claude-alt] updated $dest -> $source"
+            fi
+        elif [ -e "$dest" ]; then
+            echo "[claude-alt] keeping existing non-symlink $dest"
+        else
+            ln -s "$source" "$dest"
+            echo "[claude-alt] linked $dest -> $source"
+        fi
+    done
+
+    for dest in "$profile"/* "$profile"/.[!.]* "$profile"/..?*; do
+        [ -L "$dest" ] || continue
+
+        target="$(readlink "$dest" || true)"
+        case "$target" in
+            "$MASTER"/*)
+                name="${dest##*/}"
+                if should_skip "$name" || { [ ! -e "$MASTER/$name" ] && [ ! -L "$MASTER/$name" ]; }; then
+                    rm "$dest"
+                    echo "[claude-alt] removed stale/excluded symlink $dest"
+                fi
+                ;;
+        esac
+    done
+}
+
+for profile in "${PROFILES[@]}"; do
+    sync_profile "$profile"
+done
+
+echo "[claude-alt] done."
