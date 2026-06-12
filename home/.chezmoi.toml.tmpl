@@ -6,6 +6,10 @@
 {{- $role := promptChoiceOnce . "role" "Machine role"
     (list "desktop-mac" "desktop-fedora" "devcontainer" "pi") -}}
 
+# Read the source state from the working repo, not the default
+# ~/.local/share/chezmoi. Keeps bare `chezmoi apply` and `just apply` in sync.
+sourceDir = "~/.dotfiles"
+
 [data]
     role = {{ $role | quote }}
 
