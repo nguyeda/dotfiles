@@ -1,0 +1,23 @@
+home/dot_zshrc.tmpl
+  s_06d60d48c4bce7::t_230724d4b30146 93-103
+  s_06d60d48c4bce7::t_26a713f6e5d742 23-24
+home/run_onchange_after_80-configure-claude-alt-profiles.sh.tmpl
+  s_06d60d48c4bce7::t_d521b8dacf04c2 1-5,7-83
+  s_06d60d48c4bce7::t_ec5ee6122644e1 6
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.6",
+  "base_commit_sha": "82e807cf19206d827dcb89660595da60c2ca8ce8",
+  "prompts": {},
+  "sessions": {
+    "s_06d60d48c4bce7": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_148a5e42fffeUBIkhddfYMFjMj",
+        "model": "gpt-5.5"
+      },
+      "human_author": "David Nguyen <david@nguyen.eu>"
+    }
+  }
+}
