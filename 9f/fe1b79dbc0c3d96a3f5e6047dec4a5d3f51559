@@ -1,0 +1,19 @@
+home/dot_tmux.conf
+  s_3174ced7d4eb32::t_63d654af470cb3 33,50
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.6",
+  "base_commit_sha": "9ffe1b79dbc0c3d96a3f5e6047dec4a5d3f51559",
+  "prompts": {},
+  "sessions": {
+    "s_3174ced7d4eb32": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_144b90a76ffeEZSkjY2SyVw0mS",
+        "model": "gpt-5.5"
+      },
+      "human_author": null
+    }
+  }
+}
