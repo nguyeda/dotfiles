@@ -1,0 +1,19 @@
+home/private_dot_claude/skills/opencode/SKILL.md
+  s_eeac84261b7c91::t_fc30bdafcd23db 1-32
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.8",
+  "base_commit_sha": "901668704fc1b767c9c9ef9a2ad03caeb2f5c67e",
+  "prompts": {},
+  "sessions": {
+    "s_eeac84261b7c91": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_1350b698effedOwXfDwL2r4HK8",
+        "model": "gpt-5.5"
+      },
+      "human_author": "David Nguyen <david@nguyen.eu>"
+    }
+  }
+}
