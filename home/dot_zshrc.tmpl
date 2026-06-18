@@ -34,6 +34,22 @@ t() {
     tmux attach || tmux new
   fi
 }
+
+##################################################################
+# zellij
+# `z legit` attaches to the session if it exists, else creates it.
+# `attach --create` does the check-or-create atomically.
+z() {
+  if [[ -n "$ZELLIJ" ]]; then
+    echo "Already inside zellij session '$ZELLIJ_SESSION_NAME'." >&2
+    return 1
+  fi
+  if [[ -n "$1" ]]; then
+    zellij attach --create "$1"
+  else
+    zellij attach --create main
+  fi
+}
 {{- end }}
 
 ##################################################################

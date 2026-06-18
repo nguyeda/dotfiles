@@ -1,0 +1,4 @@
+id: zellij
+description: Terminal workspace and multiplexer
+install:
+  default: { packages: [zellij] }
