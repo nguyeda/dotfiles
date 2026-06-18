@@ -1,0 +1,27 @@
+recipe/desktop-mac.yaml
+  s_7171b19cf6a330::t_1b39aa5a6f6ddf 8
+home/dot_config/zellij/config.kdl
+  s_7171b19cf6a330::t_c521412e05ba9f 1-4
+apps/zellij.yaml
+  s_7171b19cf6a330::t_62a9bf63dce8d7 1-4
+home/dot_zshrc.tmpl
+  s_7171b19cf6a330::t_cfa2fc4a9ff420 37-52
+recipe/desktop-fedora.yaml
+  s_7171b19cf6a330::t_08518f536690a1 18
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.8",
+  "base_commit_sha": "2c2d9f3671fea7e2b78bd67d3eccd2ca77d3f85e",
+  "prompts": {},
+  "sessions": {
+    "s_7171b19cf6a330": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "d038439f-558f-4ae1-9601-9e04dee4f6ca",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "David Nguyen <david@nguyen.eu>"
+    }
+  }
+}
