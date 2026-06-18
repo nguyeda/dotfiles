@@ -238,7 +238,7 @@ if [ "$INIT" -eq 1 ] && [ "$PLAN" -eq 0 ]; then
     log_step "chezmoi init --apply (source=$DOTFILES_DIR, role=$ROLE)"
     chezmoi init --apply \
         --source="$DOTFILES_DIR" \
-        --promptChoice "role=$ROLE"
+        --promptChoice "Machine role=$ROLE"
 fi
 
 if [ "$INIT" -eq 1 ]; then
