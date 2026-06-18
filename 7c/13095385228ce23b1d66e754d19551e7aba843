@@ -1,0 +1,19 @@
+install.sh
+  s_594a90699d9172::t_ed542da0dc4566 241
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.8",
+  "base_commit_sha": "7c13095385228ce23b1d66e754d19551e7aba843",
+  "prompts": {},
+  "sessions": {
+    "s_594a90699d9172": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "d8abee3a-2870-4534-a999-2db1b6c9cd57",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "David Nguyen <david@nguyen.eu>"
+    }
+  }
+}
