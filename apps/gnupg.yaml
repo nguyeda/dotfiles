@@ -1,4 +1,4 @@
 id: gnupg
 description: GNU Privacy Guard
 install:
-  macos: { packages: [gnupg] }
+  macos: { packages: [gnupg, pinentry-mac] }
