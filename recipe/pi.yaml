@@ -14,7 +14,7 @@ packages:
   - neovim
   - btop
   - gh
-  - tmux
+  - zellij
   - sops
   - lazygit
   - lazydocker

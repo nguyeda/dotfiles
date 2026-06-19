@@ -14,7 +14,6 @@ packages:
   - gh
   - just
   - uv
-  - tmux
   - zellij
   - fnm
   - starship

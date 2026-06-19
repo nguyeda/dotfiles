@@ -4,7 +4,6 @@ packages:
   - git
   - gh
   - neovim
-  - tmux
   - zellij
   - fnm
   - starship
