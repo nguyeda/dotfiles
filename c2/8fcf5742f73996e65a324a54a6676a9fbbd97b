@@ -1,0 +1,19 @@
+recipe/pi.yaml
+  s_d7feb6e080e687::t_ed08687bc21517 17
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.8",
+  "base_commit_sha": "c28fcf5742f73996e65a324a54a6676a9fbbd97b",
+  "prompts": {},
+  "sessions": {
+    "s_d7feb6e080e687": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "2196c0e0-a891-4945-b869-aa51e201481f",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "David Nguyen <david@nguyen.eu>"
+    }
+  }
+}
