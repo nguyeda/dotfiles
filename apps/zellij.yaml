@@ -1,4 +1,10 @@
 id: zellij
 description: Terminal workspace and multiplexer
+check: command -v zellij
 install:
+  macos: { packages: [zellij] }
+  fedora:
+    packages: [zellij]
+    pre_install: |
+      sudo dnf copr enable -y varlad/zellij
   default: { packages: [zellij] }
