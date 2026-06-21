@@ -1,5 +1,0 @@
-id: zen-browser
-description: Zen browser
-install:
-  macos: { casks: [zen] }
-  fedora: { flatpaks: [app.zen_browser.zen] }
