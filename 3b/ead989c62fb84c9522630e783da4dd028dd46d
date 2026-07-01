@@ -1,0 +1,21 @@
+apps/gnupg.yaml
+  s_e184315dc494cc::t_75fc5e1ec52fe7 5
+recipe/server-fedora.yaml
+  s_e184315dc494cc::t_45ff0ee6ca410e 1-32
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.8",
+  "base_commit_sha": "3bead989c62fb84c9522630e783da4dd028dd46d",
+  "prompts": {},
+  "sessions": {
+    "s_e184315dc494cc": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "92e04145-1352-46f8-8a19-7a29bd35bfcd",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "David Nguyen <david@nguyen.eu>"
+    }
+  }
+}
