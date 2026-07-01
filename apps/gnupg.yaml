@@ -2,3 +2,4 @@ id: gnupg
 description: GNU Privacy Guard
 install:
   macos: { packages: [gnupg, pinentry-mac] }
+  fedora: { packages: [gnupg2, pinentry] }

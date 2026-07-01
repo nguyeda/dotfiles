@@ -1,0 +1,32 @@
+# Packages for a headless Fedora dev box (no X server).
+# Derived from desktop-fedora.yaml with all GUI/desktop-only packages removed.
+packages:
+  - chezmoi
+  - git
+  - zsh
+  - stow
+  - neovim
+  - curl
+  - unzip
+  - ripgrep
+  - fd-find
+  - postgresql-client
+  - btop
+  - gh
+  - just
+  - uv
+  - zellij
+  - fnm
+  - starship
+  - jj
+  - sops
+  - gnupg
+  - lazygit
+  - lazydocker
+  - terraform-tools
+  - claude
+  - opencode
+  - updatecli
+  - 1password-cli
+  - aws-cli
+  - docker
