@@ -1,0 +1,5 @@
+id: tflint
+description: TFLint Terraform linter
+check: command -v tflint
+install:
+  macos: { packages: [tflint] }

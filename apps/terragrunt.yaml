@@ -1,0 +1,15 @@
+id: terragrunt
+description: Terragrunt (Terraform/OpenTofu orchestration wrapper)
+check: command -v terragrunt
+install:
+  macos: { packages: [terragrunt] }
+  fedora:
+    # Not packaged for dnf/HashiCorp repos; install the release binary.
+    script: |
+      case "$(uname -m)" in
+        x86_64)        TG_ARCH=amd64 ;;
+        aarch64|arm64) TG_ARCH=arm64 ;;
+      esac
+      sudo curl -fsSL -o /usr/local/bin/terragrunt \
+        "https://github.com/gruntwork-io/terragrunt/releases/latest/download/terragrunt_linux_${TG_ARCH}"
+      sudo chmod +x /usr/local/bin/terragrunt

@@ -23,7 +23,8 @@ packages:
   - gnupg
   - lazygit
   - lazydocker
-  - terraform-tools
+  - opentofu
+  - terragrunt
   - claude
   - opencode
   - updatecli

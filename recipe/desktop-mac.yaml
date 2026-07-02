@@ -16,7 +16,10 @@ packages:
   - lazydocker
   - uv
   - ruff
-  - terraform-tools
+  - opentofu
+  - terragrunt
+  - terraform-docs
+  - tflint
   - sops
   - gnupg
   - postgresql-client

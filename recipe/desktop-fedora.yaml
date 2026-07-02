@@ -22,7 +22,9 @@ packages:
   - lazygit
   - lazydocker
   - ghostty
-  - terraform-tools
+  - opentofu
+  - terraform
+  - terragrunt
   - claude
   - opencode
   - updatecli

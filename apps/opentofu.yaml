@@ -1,10 +1,10 @@
-id: terraform-tools
-description: Terraform/OpenTofu CLI tooling
+id: opentofu
+description: OpenTofu (Terraform-compatible IaC CLI)
+check: command -v tofu
 install:
-  macos:
-    packages: [opentofu, terragrunt, terraform-docs, tflint]
+  macos: { packages: [opentofu] }
   fedora:
-    packages: [tofu, terraform]
+    packages: [tofu]
     pre_install: |
       sudo tee /etc/yum.repos.d/opentofu.repo >/dev/null <<'EOF'
       [opentofu]
@@ -16,4 +16,3 @@ install:
       gpgkey=https://get.opentofu.org/opentofu.gpg
              https://packages.opentofu.org/opentofu/tofu/gpgkey
       EOF
-      sudo dnf config-manager addrepo --from-repofile=https://rpm.releases.hashicorp.com/fedora/hashicorp.repo

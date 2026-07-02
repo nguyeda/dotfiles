@@ -1,0 +1,5 @@
+id: terraform-docs
+description: terraform-docs documentation generator
+check: command -v terraform-docs
+install:
+  macos: { packages: [terraform-docs] }

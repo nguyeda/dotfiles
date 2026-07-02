@@ -1,0 +1,8 @@
+id: terraform
+description: HashiCorp Terraform
+check: command -v terraform
+install:
+  fedora:
+    packages: [terraform]
+    pre_install: |
+      sudo dnf config-manager addrepo --from-repofile=https://rpm.releases.hashicorp.com/fedora/hashicorp.repo
