@@ -1,0 +1,33 @@
+apps/opentofu.yaml
+  s_e184315dc494cc::t_f269f3a0292569 1-3,5,7
+recipe/server-fedora.yaml
+  s_e184315dc494cc::t_8470699dd1e3ef 26-27
+apps/terraform.yaml
+  s_e184315dc494cc::t_153d1bd38cb453 1-8
+recipe/desktop-mac.yaml
+  s_e184315dc494cc::t_d1b9e3806093ff 19-22
+apps/tflint.yaml
+  s_e184315dc494cc::t_88daba2d7efb7a 1-5
+apps/terragrunt.yaml
+  s_e184315dc494cc::t_a7c9c7fd8dcbdc 1-15
+apps/terraform-docs.yaml
+  s_e184315dc494cc::t_4ad072532c51b8 1-5
+recipe/desktop-fedora.yaml
+  s_e184315dc494cc::t_629e0abff8ecd5 25-27
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.8",
+  "base_commit_sha": "fcdff7f173c48467f30132ee100518b6569fe842",
+  "prompts": {},
+  "sessions": {
+    "s_e184315dc494cc": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "92e04145-1352-46f8-8a19-7a29bd35bfcd",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "David Nguyen <david@nguyen.eu>"
+    }
+  }
+}
