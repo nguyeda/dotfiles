@@ -2,3 +2,5 @@
 // Keep keybindings and status bar at their defaults for now; only the theme
 // is overridden. catppuccin-mocha is a built-in theme (zellij >= 0.40).
 theme "catppuccin-mocha"
+mirror_session true
+
