@@ -38,6 +38,11 @@
                 "run"
             ],
             "enabled": true
+        },
+        "cubic": {
+            "type": "remote",
+            "url": "https://www.cubic.dev/api/mcp",
+            "enabled": true
         }
     }
 }
