@@ -1,0 +1,19 @@
+home/dot_config/opencode/opencode.json
+  s_22e194d024afdf::t_2f03e8269835e1 41-45
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "c76a0febd2c35f3e75f5844c74b9609994f40b48",
+  "prompts": {},
+  "sessions": {
+    "s_22e194d024afdf": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "d45d4693-7e6c-4edd-92e6-dbdce9515332",
+        "model": "claude-fable-5"
+      },
+      "human_author": "David Nguyen <david@nguyen.eu>"
+    }
+  }
+}
