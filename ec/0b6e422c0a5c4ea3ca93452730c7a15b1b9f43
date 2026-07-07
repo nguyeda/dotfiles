@@ -1,0 +1,50 @@
+home/private_dot_claude/CLAUDE.md
+  s_5e3d3ff94bb25a::t_35c86f01c4f791 14-16,27-32,34,41
+  s_5e3d3ff94bb25a::t_feed6286acae2f 33,35
+  s_5e3d3ff94bb25a::t_d2ecb04f29e380 13,17-25
+  s_0c1438c6cba6e0::t_443c26a6cb83a9 36-40
+  s_5e3d3ff94bb25a::t_444232e3785251 1,3,5-12,26
+home/private_dot_claude/skills/codex-review/SKILL.md
+  s_5e3d3ff94bb25a::t_312cf03df57508 1-2,9-15,20-26,28-35,37-38,40-41,43-44,48,54-55,57-60,70-78,85-88,95-98
+  s_0c1438c6cba6e0::t_2118c8342d5262 93
+  s_0c1438c6cba6e0::t_1dc632a397ab34 89-92,94
+  s_0c1438c6cba6e0::t_68b612850d5a24 16-19,27,36,39,42,45-47,49-52,56,61-69
+  s_5e3d3ff94bb25a::t_0d7b604270a18c 3-8
+  s_0c1438c6cba6e0::t_0950e910b9b3d2 79-84
+  s_0c1438c6cba6e0::t_5d7fc77cb5c36f 53
+home/private_dot_claude/skills/codex-computer-use/SKILL.md
+  s_5e3d3ff94bb25a::t_1067768c620993 1-2,8-15,18-32,34-40,44,53-69
+  s_5e3d3ff94bb25a::t_0d7b604270a18c 3-7,16-17
+  s_0c1438c6cba6e0::t_60b66b8d46264a 33,41-43,45-52
+home/private_dot_claude/skills/codex-challenge/SKILL.md
+  s_0c1438c6cba6e0::t_1a3f3c4db3dc63 1-85
+home/private_dot_claude/skills/codex-implementation/SKILL.md
+  s_5e3d3ff94bb25a::t_09840465e1992b 1-2,8-11,14,18,25-40,42-48,52,61,64-77,80-115,119-120
+  s_5e3d3ff94bb25a::t_d0d269bf8da407 3-7,12-13,15-17,62-63,78-79,116-118
+  s_0c1438c6cba6e0::t_66badc26ba1092 41,49-51,53-60
+  s_0c1438c6cba6e0::t_3931af3c7f8d0c 19-24
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "ec0b6e422c0a5c4ea3ca93452730c7a15b1b9f43",
+  "prompts": {},
+  "sessions": {
+    "s_0c1438c6cba6e0": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "7702ac7d-2ba5-415f-a481-bdb64e3fa4b4",
+        "model": "claude-fable-5"
+      },
+      "human_author": null
+    },
+    "s_5e3d3ff94bb25a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "1f5c2e9f-f8ec-4762-8a8a-52df57b2e501",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "David Nguyen <david@nguyen.eu>"
+    }
+  }
+}
