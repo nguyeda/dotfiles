@@ -1,0 +1,32 @@
+home/private_dot_claude/skills/codex-review/SKILL.md
+  s_5e3d3ff94bb25a::t_0d7b604270a18c 3-8
+  s_5e3d3ff94bb25a::t_312cf03df57508 1-2,9-69
+home/private_dot_claude/skills/codex-computer-use/SKILL.md
+  s_5e3d3ff94bb25a::t_1067768c620993 1-2,8-15,18-58
+  s_5e3d3ff94bb25a::t_0d7b604270a18c 3-7,16-17
+home/private_dot_claude/CLAUDE.md
+  s_5e3d3ff94bb25a::t_35c86f01c4f791 14-16,27-32,34,36,39
+  s_5e3d3ff94bb25a::t_d2ecb04f29e380 13,17-25
+  s_5e3d3ff94bb25a::t_0d7b604270a18c 37-38
+  s_5e3d3ff94bb25a::t_feed6286acae2f 33,35
+  s_5e3d3ff94bb25a::t_444232e3785251 1,3,5-12,26
+home/private_dot_claude/skills/codex-implementation/SKILL.md
+  s_5e3d3ff94bb25a::t_09840465e1992b 1-2,8-11,14,18-44,47-60,63-98,102-103
+  s_5e3d3ff94bb25a::t_d0d269bf8da407 3-7,12-13,15-17,45-46,61-62,99-101
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "92cd02fdbe71254079271039bfa7dfe10a1df2cb",
+  "prompts": {},
+  "sessions": {
+    "s_5e3d3ff94bb25a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "1f5c2e9f-f8ec-4762-8a8a-52df57b2e501",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "David Nguyen <david@nguyen.eu>"
+    }
+  }
+}
