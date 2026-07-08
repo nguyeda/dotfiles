@@ -1,0 +1,10 @@
+id: gnome-remote-desktop
+description: GNOME built-in RDP server (Wayland-compatible)
+# Preinstalled on Fedora Workstation; declared here so minimal installs pull it
+# in. Remote-login setup (credentials, TLS, enabling the system daemon, firewall)
+# is a manual, secret-bearing step run via `sudo grdctl --system` — not tracked
+# here. See repo notes / `grdctl --help`.
+check: command -v grdctl
+install:
+  fedora:
+    packages: [gnome-remote-desktop]

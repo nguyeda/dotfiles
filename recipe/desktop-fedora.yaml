@@ -34,6 +34,7 @@ packages:
   - clamav
   - timeshift
   - syncthing
+  - gnome-remote-desktop
   - google-chrome
   - slack
   - zen-browser
