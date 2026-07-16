@@ -1,6 +1,8 @@
 #!/bin/bash
 # Keep alternate Claude Code config directories linked to ~/.claude while
-# leaving credentials and account-local settings isolated per profile.
+# leaving credentials, per-account state (.claude.json + backups), and
+# volatile session state (session-env, shell-snapshots) isolated per profile.
+# Shared config such as settings.json is symlinked so all profiles stay in sync.
 #
 # Re-run when top-level ~/.claude entries change:
 # {{ output "sh" "-c" "if [ -d \"$HOME/.claude\" ]; then (cd \"$HOME/.claude\" && for p in .* *; do case \"$p\" in .|..) continue ;; esac; [ -e \"$p\" ] || [ -L \"$p\" ] || continue; printf '%s\\n' \"$p\"; done | sort); fi" | quote }}
@@ -18,7 +20,7 @@ should_skip() {
     local name="$1"
 
     case "$name" in
-        .claude.json|.claude.json.*|backups|mcp-needs-auth-cache.json|session-env|settings.json|settings.json.*|settings.local.json|settings.local.json.*|shell-snapshots)
+        .claude.json|.claude.json.*|backups|mcp-needs-auth-cache.json|session-env|shell-snapshots)
             return 0
             ;;
     esac
