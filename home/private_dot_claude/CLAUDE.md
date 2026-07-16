@@ -11,9 +11,12 @@
 
 ## Picking the right models for workflows and subagents
 
-Rankings, higher = better. Cost reflects what I actually pay, not list price: GPT inference is cheap for me on the
-OpenAI Pro 5x subscription, noticeably lower than Opus on a comparable Pro 5x sub. Intelligence is how hard a problem
-you can hand the model unsupervised. Taste covers UI/UX, code quality, API design, and copy.
+Rankings, higher = better across every column — including cost, where a **higher score means cheaper** (9 = cheapest
+to run, not most expensive). Do not read a high cost score as "expensive." Cost reflects what I actually pay, not list
+price: GPT inference is cheap for me on the OpenAI Pro 5x subscription, noticeably lower than Opus on a comparable Pro
+5x sub. Intelligence is how hard a problem you can hand the model unsupervised. Taste covers UI/UX, code quality, API
+design, and copy. Note that the columns are independent: a model can be cheap (high cost score) without being the most
+intelligent — check the intelligence and taste columns before picking a model for its job.
 
 | model    | cost | intelligence | taste |
 | -------- | ---- | ------------ | ----- |
