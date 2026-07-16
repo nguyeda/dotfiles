@@ -1,0 +1,19 @@
+home/private_dot_claude/CLAUDE.md
+  s_346d9848bc6f8d::t_6ebc4418e121c9 14-19
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "fbaa572638761f9eeee5aa43113ebaa24d795e8d",
+  "prompts": {},
+  "sessions": {
+    "s_346d9848bc6f8d": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "6b870b9e-c140-445a-970d-74b141f088fb",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "David Nguyen <david@nguyen.eu>"
+    }
+  }
+}
