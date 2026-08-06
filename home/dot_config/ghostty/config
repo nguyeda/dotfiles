@@ -3,5 +3,7 @@ theme = dark:catppuccin-frappier.conf,light:Catppuccin Latte
 background-opacity = 1.0
 background-blur = true
 
+macos-option-as-alt = true
+
 keybind = shift+enter=text:\n
 keybind = super+b=esc:b
