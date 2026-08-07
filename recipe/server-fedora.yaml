@@ -27,6 +27,7 @@ packages:
   - terragrunt
   - claude
   - opencode
+  - codex
   - updatecli
   - 1password-cli
   - aws-cli

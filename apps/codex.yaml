@@ -1,0 +1,22 @@
+id: codex
+description: OpenAI Codex CLI
+check: command -v codex
+install:
+  macos:
+    casks: [codex]
+  default:
+    script: |
+      case "$(uname -m)" in
+        x86_64)  TARGET="x86_64-unknown-linux-musl" ;;
+        aarch64) TARGET="aarch64-unknown-linux-musl" ;;
+        *) echo "Unsupported arch for codex: $(uname -m)"; exit 1 ;;
+      esac
+      # The package bundle (same artifact the Homebrew cask uses) ships the
+      # code-mode host and bundled bwrap/rg/zsh alongside the codex binary.
+      URL="https://github.com/openai/codex/releases/latest/download/codex-package-${TARGET}.tar.gz"
+      TMP="$(mktemp -d)"; trap 'rm -rf "$TMP"' EXIT
+      curl -fsSL "$URL" | tar xz -C "$TMP"
+      sudo rm -rf /opt/codex
+      sudo mkdir -p /opt/codex
+      sudo cp -a "$TMP/." /opt/codex/
+      sudo ln -sfn /opt/codex/bin/codex /usr/local/bin/codex

@@ -27,6 +27,7 @@ packages:
   - icann-rdap
   - claude
   - opencode
+  - codex
   - updatecli
   - 1password-cli
   - aerospace
