@@ -3,7 +3,14 @@ theme = dark:catppuccin-frappier.conf,light:Catppuccin Latte
 background-opacity = 1.0
 background-blur = true
 
-macos-option-as-alt = true
+# Keep option as a macOS modifier: enabling this breaks the option-key
+# combos that compose special characters such as { } [ ] ~ | \ @ #
+macos-option-as-alt = false
 
 keybind = shift+enter=text:\n
 keybind = super+b=esc:b
+
+# Pass option+i / option+o through as alt so zellij's MoveTab bindings work
+# without turning on macos-option-as-alt globally
+keybind = alt+i=esc:i
+keybind = alt+o=esc:o
