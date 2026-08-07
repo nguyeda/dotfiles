@@ -1,6 +1,18 @@
 id: ngrok
 description: ngrok tunnel CLI
+check: command -v ngrok
 install:
   macos:
     taps: [ngrok/ngrok]
     casks: [ngrok]
+  default:
+    # ngrok ships no RPM repo, only apt and prebuilt tarballs.
+    script: |
+      case "$(uname -m)" in
+        x86_64)  asset="ngrok-v3-stable-linux-amd64.tgz" ;;
+        aarch64) asset="ngrok-v3-stable-linux-arm64.tgz" ;;
+        *) echo "Unsupported arch for ngrok: $(uname -m)"; exit 1 ;;
+      esac
+      TMP="$(mktemp -d)"; trap 'rm -rf "$TMP"' EXIT
+      curl -fsSL --retry 3 "https://bin.equinox.io/c/bNyj1mQVY4c/${asset}" | tar xz -C "$TMP"
+      sudo install -m 0755 "$TMP/ngrok" /usr/local/bin/ngrok

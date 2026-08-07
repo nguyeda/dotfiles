@@ -3,3 +3,16 @@ description: terraform-docs documentation generator
 check: command -v terraform-docs
 install:
   macos: { packages: [terraform-docs] }
+  default:
+    script: |
+      TFDOCS_VERSION="${TFDOCS_VERSION:-v0.24.0}"
+      case "$(uname -m)" in
+        x86_64)  arch="amd64" ;;
+        aarch64) arch="arm64" ;;
+        *) echo "Unsupported arch for terraform-docs: $(uname -m)"; exit 1 ;;
+      esac
+      TMP="$(mktemp -d)"; trap 'rm -rf "$TMP"' EXIT
+      curl -fL --retry 3 -o "$TMP/terraform-docs.tgz" \
+        "https://github.com/terraform-docs/terraform-docs/releases/download/${TFDOCS_VERSION}/terraform-docs-${TFDOCS_VERSION}-linux-${arch}.tar.gz"
+      tar -xzf "$TMP/terraform-docs.tgz" -C "$TMP"
+      sudo install -m 0755 "$TMP/terraform-docs" /usr/local/bin/terraform-docs

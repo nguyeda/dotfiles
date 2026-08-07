@@ -25,6 +25,7 @@ packages:
   - opentofu
   - terraform
   - terragrunt
+  - terraform-docs
   - claude
   - opencode
   - codex
@@ -43,6 +44,7 @@ packages:
   - keybase
   - protonvpn
   - aws-cli
+  - ngrok
   - docker
   - openrgb
   - coolercontrol

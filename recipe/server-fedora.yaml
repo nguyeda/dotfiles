@@ -25,6 +25,7 @@ packages:
   - lazydocker
   - opentofu
   - terragrunt
+  - terraform-docs
   - claude
   - opencode
   - codex
