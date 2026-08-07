@@ -5,7 +5,7 @@
 # Shared config such as settings.json is symlinked so all profiles stay in sync.
 #
 # Re-run when top-level ~/.claude entries change:
-# {{ output "sh" "-c" "if [ -d \"$HOME/.claude\" ]; then (cd \"$HOME/.claude\" && for p in .* *; do case \"$p\" in .|..) continue ;; esac; [ -e \"$p\" ] || [ -L \"$p\" ] || continue; printf '%s\\n' \"$p\"; done | sort); fi" | quote }}
+# {{ output "sh" "-c" "if [ -d \"$HOME/.claude\" ]; then (cd \"$HOME/.claude\" && for p in .* *; do case \"$p\" in .|..|settings.json.backup*|*.bak|stats-cache.json|policy-limits.json|remote-settings.json|.last-update-result.json) continue ;; esac; [ -e \"$p\" ] || [ -L \"$p\" ] || continue; printf '%s\\n' \"$p\"; done | sort); fi" | quote }}
 set -euo pipefail
 
 MASTER="$HOME/.claude"
@@ -21,6 +21,15 @@ should_skip() {
 
     case "$name" in
         .claude.json|.claude.json.*|backups|mcp-needs-auth-cache.json|session-env|shell-snapshots)
+            return 0
+            ;;
+        # Per-account state pushed or computed per profile; sharing it would leak
+        # one account's org policy or usage stats into the other.
+        policy-limits.json|remote-settings.json|stats-cache.json|.last-update-result.json)
+            return 0
+            ;;
+        # Settings backups: pure noise, and each new one re-triggers this script.
+        settings.json.backup*|*.bak)
             return 0
             ;;
     esac
