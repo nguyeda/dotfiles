@@ -29,7 +29,6 @@ packages:
   - claude
   - opencode
   - codex
-  - git-ai
   - updatecli
   - 1password-cli
   - code

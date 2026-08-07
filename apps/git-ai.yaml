@@ -1,7 +1,0 @@
-id: git-ai
-description: Git proxy with AI authorship tracking
-check: command -v git-ai || [ -x "$HOME/.git-ai/bin/git-ai" ]
-install:
-  default:
-    script: |
-      curl -fsSL https://usegitai.com/install.sh | bash
