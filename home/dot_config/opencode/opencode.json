@@ -29,16 +29,6 @@
             "type": "remote",
             "url": "https://mcp.linear.app/mcp"
         },
-        "MCP_DOCKER": {
-            "type": "local",
-            "command": [
-                "docker",
-                "mcp",
-                "gateway",
-                "run"
-            ],
-            "enabled": true
-        },
         "cubic": {
             "type": "remote",
             "url": "https://www.cubic.dev/api/mcp",
