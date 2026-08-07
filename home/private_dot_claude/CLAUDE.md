@@ -2,21 +2,29 @@
 
 ## Code style
 
-- Always strive for concise, simple solutions
-- If a problem can be solved in a simpler way, propose it
+- Concise, simple solutions. If there's a simpler way, propose it.
 
 ## Task management
 
-- If computer use is helpful for completing or verifying work, shell out to Codex for it
+- Shell out to Codex when computer use helps complete or verify work.
 
-## Picking the right models for workflows and subagents
+## Context discipline
 
-Rankings, higher = better across every column — including cost, where a **higher score means cheaper** (9 = cheapest
-to run, not most expensive). Do not read a high cost score as "expensive." Cost reflects what I actually pay, not list
-price: GPT inference is cheap for me on the OpenAI Pro 5x subscription, noticeably lower than Opus on a comparable Pro
-5x sub. Intelligence is how hard a problem you can hand the model unsupervised. Taste covers UI/UX, code quality, API
-design, and copy. Note that the columns are independent: a model can be cheap (high cost score) without being the most
-intelligent — check the intelligence and taste columns before picking a model for its job.
+Keep the main thread small — tool output is re-read every later turn.
+
+- Prefer Grep, Glob, and Read over shell `grep`, `find`, `cat`, `head`, `tail`, `sed`, `ls`, `echo`.
+- Read with `offset`/`limit`; don't read a whole file to check one symbol.
+- Absolute paths, never `cd`.
+- Cap verbose commands (`| tail -30`, `--short`, `--oneline`, `-q`). No full build logs, test runs, or
+  diffs unless I asked to see them.
+- Delegate "where is X / how does Y work" to a subagent. Return the conclusion, not the file dumps.
+- Batch writes when a tool echoes its full object back on every call.
+
+## Picking models for workflows and subagents
+
+Higher = better in every column, including cost — **9 = cheapest for me to run**, not most expensive
+(GPT is cheap on my OpenAI Pro 5x sub). Columns are independent: check intelligence (how much I can
+hand it unsupervised) and taste (UI/UX, code quality, API design, copy) before picking on cost alone.
 
 | model    | cost | intelligence | taste |
 | -------- | ---- | ------------ | ----- |
@@ -25,20 +33,15 @@ intelligent — check the intelligence and taste columns before picking a model 
 | opus-4.8 | 4    | 7            | 8     |
 | fable-5  | 2    | 9            | 9     |
 
-How to apply:
-
-- These are defaults, not limits. You have standing permission to override them: if a cheaper model's output doesn't
-  meet the bar, rerun or redo the work with a smarter model without asking. Judge the output, not the price tag.
-  Escalating costs less than shipping mediocre work.
-- Don't let cost prevent you from using the right model for the job. Instead take advantage of cheaper options to get
-  more information and try things, before moving the work to a more expensive option.
-- Bulk/mechanical work (clear-spec implementation, data analysis, migrations): gpt-5.5 — it's cheap.
-- Anything user-facing (UI, copy, API design) needs taste ≥ 7.
-- Reviews of plans/implementations: fable-5 or opus-4.8, optionally gpt-5.5 as an extra independent perspective.
-- Never use Haiku.
-- Mechanics: gpt-5.5 runs through the Codex CLI — `codex exec` (my ~/.codex/config.toml defaults to gpt-5.5). Use the
-  codex skills: codex-challenge (second opinions on plans/designs), codex-review (diff review), codex-implementation
-  (scoped patches), codex-computer-use (GUI/runtime verification). For work they don't cover (investigation, data
-  analysis), run `codex exec -s read-only` directly with a self-contained prompt. Codex replaces opencode as the
-  gpt-5.5 channel; `/opencode` remains as a manual, user-invoked fallback only.
-- Claude models (sonnet-5, opus-4.8, fable-5) run via the Agent/Workflow model parameter.
+- Defaults, not limits. Escalate to a smarter model without asking when output misses the bar —
+  cheaper than shipping mediocre work.
+- Use cheap models to explore and gather information first, then move the work up.
+- Bulk/mechanical (clear-spec implementation, data analysis, migrations): gpt-5.5.
+- User-facing (UI, copy, API design): taste ≥ 7.
+- Reviews of plans/implementations: fable-5 or opus-4.8; add gpt-5.5 for an independent perspective.
+- Never Haiku.
+- gpt-5.5 runs via the Codex CLI (`~/.codex/config.toml` already defaults to it). Use the skills:
+  codex-challenge (second opinions), codex-review (diffs), codex-implementation (scoped patches),
+  codex-computer-use (GUI/runtime). Anything else: `codex exec -s read-only` with a self-contained
+  prompt. `/opencode` is a manual fallback only.
+- Claude models run via the Agent/Workflow `model` parameter.
