@@ -1,0 +1,56 @@
+#!/usr/bin/env bash
+# Inject an [otel] block into ~/.codex/config.toml pointing Codex at the local
+# collector.
+#
+# config.toml is deliberately NOT chezmoi-managed: the Codex desktop app rewrites
+# it (see the [desktop] sections), so owning the whole file would fight the app.
+# Instead this maintains one marker-delimited block and leaves everything else be.
+set -euo pipefail
+
+{{ if or (eq .role "desktop-mac") (eq .role "desktop-fedora") -}}
+
+CONFIG="$HOME/.codex/config.toml"
+BEGIN="# >>> dotfiles otel >>>"
+END="# <<< dotfiles otel <<<"
+
+if [ ! -f "$CONFIG" ]; then
+    echo "[codex-otel] $CONFIG not found; skipping (codex not set up yet?)"
+    exit 0
+fi
+
+# Drop any previous block so values actually update rather than duplicating.
+if grep -qF "$BEGIN" "$CONFIG"; then
+    TMP="$(mktemp)"
+    awk -v b="$BEGIN" -v e="$END" '
+        index($0, b) { skip = 1 }
+        !skip { print }
+        index($0, e) { skip = 0 }
+    ' "$CONFIG" > "$TMP"
+    mv "$TMP" "$CONFIG"
+fi
+
+cat >> "$CONFIG" <<'TOML'
+# >>> dotfiles otel >>>
+[otel]
+environment = "dev"
+# Match Claude Code's capture level; everything stays self-hosted.
+log_user_prompt = true
+
+# NOTE: metrics_exporter defaults to "statsig", which ships metrics to
+# ab.chatgpt.com. Setting it explicitly keeps them on the LAN.
+[otel.exporter.otlp-grpc]
+endpoint = "http://127.0.0.1:9317"
+
+[otel.trace_exporter.otlp-grpc]
+endpoint = "http://127.0.0.1:9317"
+
+[otel.metrics_exporter.otlp-grpc]
+endpoint = "http://127.0.0.1:9317"
+# <<< dotfiles otel <<<
+TOML
+
+echo "[codex-otel] [otel] block written to $CONFIG"
+
+{{- else -}}
+echo "[codex-otel] role {{ .role }} has no local collector; skipping"
+{{- end }}
