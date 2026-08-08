@@ -24,3 +24,18 @@ run_once_after_50-configure-git.sh
 .config/Code
 .config/Cursor
 {{- end }}
+
+{{/* Local OTel collector: only the desktop roles run one */}}
+{{- if and (ne .role "desktop-fedora") (ne .role "desktop-mac") }}
+.config/otelcol-contrib
+Library/LaunchAgents/io.opentelemetry.otelcol-contrib.plist
+.config/systemd/user/otelcol-contrib.service
+run_onchange_after_85-otelcol-service.sh
+{{- end }}
+
+{{/* launchd is macOS-only; systemd units are not */}}
+{{- if ne .chezmoi.os "darwin" }}
+Library/LaunchAgents
+{{- else }}
+.config/systemd
+{{- end }}

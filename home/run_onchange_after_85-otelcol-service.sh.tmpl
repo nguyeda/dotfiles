@@ -1,0 +1,73 @@
+#!/usr/bin/env bash
+# Register the local OpenTelemetry Collector as a per-user service and restart it
+# whenever its config changes. Re-runs when this script or the collector config
+# changes.
+#
+# config hash: {{ include "dot_config/otelcol-contrib/config.yaml.tmpl" | sha256sum }}
+# binary: {{ output "sh" "-c" "/usr/local/bin/otelcol-contrib --version 2>/dev/null || echo not-installed" | trim }}
+#
+# The binary version is part of this script's change-detection hash on purpose:
+# on a fresh machine `chezmoi apply` runs before `just install`, so the first run
+# finds no binary and skips. Once the collector is installed the line above
+# changes, which makes chezmoi re-run this and register the service.
+set -euo pipefail
+
+{{ if or (eq .role "desktop-mac") (eq .role "desktop-fedora") -}}
+
+BIN=/usr/local/bin/otelcol-contrib
+CONFIG="$HOME/.config/otelcol-contrib/config.yaml"
+STATE="$HOME/.local/state/otelcol-contrib"
+
+if [ ! -x "$BIN" ]; then
+    echo "[otelcol] $BIN not found; skipping (run 'just install' first)"
+    exit 0
+fi
+
+# The file_storage extension will not create its own directory.
+mkdir -p "$STATE/queue"
+
+if ! "$BIN" validate --config "$CONFIG" >/dev/null 2>&1; then
+    echo "[otelcol] config validation FAILED - not (re)starting the service:"
+    "$BIN" validate --config "$CONFIG" || true
+    exit 1
+fi
+
+{{ if eq .chezmoi.os "darwin" -}}
+PLIST="$HOME/Library/LaunchAgents/io.opentelemetry.otelcol-contrib.plist"
+DOMAIN="gui/$(id -u)"
+LABEL="io.opentelemetry.otelcol-contrib"
+
+# bootstrap fails with EIO if the previous instance is still tearing down, so
+# wait for the label to actually disappear before re-registering.
+if launchctl print "$DOMAIN/$LABEL" >/dev/null 2>&1; then
+    launchctl bootout "$DOMAIN/$LABEL" 2>/dev/null || true
+    for _ in $(seq 1 30); do
+        launchctl print "$DOMAIN/$LABEL" >/dev/null 2>&1 || break
+        sleep 0.5
+    done
+fi
+
+if ! launchctl bootstrap "$DOMAIN" "$PLIST" 2>/dev/null; then
+    # Already registered (or a stale record): force a restart instead.
+    launchctl kickstart -k "$DOMAIN/$LABEL"
+fi
+launchctl enable "$DOMAIN/$LABEL"
+echo "[otelcol] launchd service (re)started"
+
+{{- else -}}
+systemctl --user daemon-reload
+systemctl --user enable --now otelcol-contrib.service
+systemctl --user restart otelcol-contrib.service
+echo "[otelcol] systemd user service (re)started"
+
+# Without lingering the collector stops at logout, losing the flush-on-reconnect
+# behaviour this whole setup exists for.
+if command -v loginctl >/dev/null 2>&1; then
+    loginctl enable-linger "$USER" 2>/dev/null || \
+        echo "[otelcol] could not enable linger; service will stop at logout"
+fi
+{{- end }}
+
+{{- else -}}
+echo "[otelcol] role {{ .role }} does not run a local collector; skipping"
+{{- end }}

@@ -1,0 +1,23 @@
+id: otelcol-contrib
+description: OpenTelemetry Collector (contrib) - local buffer for agent telemetry
+check: command -v otelcol-contrib
+install:
+  default:
+    script: |
+      OTELCOL_VERSION="${OTELCOL_VERSION:-0.158.0}"
+      case "$(uname -s)" in
+        Darwin) os=darwin ;;
+        Linux)  os=linux ;;
+        *) echo "Unsupported OS for otelcol-contrib: $(uname -s)"; exit 1 ;;
+      esac
+      case "$(uname -m)" in
+        x86_64)        arch=amd64 ;;
+        arm64|aarch64) arch=arm64 ;;
+        *) echo "Unsupported arch for otelcol-contrib: $(uname -m)"; exit 1 ;;
+      esac
+      asset="otelcol-contrib_${OTELCOL_VERSION}_${os}_${arch}.tar.gz"
+      TMP="$(mktemp -d)"; trap 'rm -rf "$TMP"' EXIT
+      curl -fL --retry 3 -o "$TMP/otelcol.tgz" \
+        "https://github.com/open-telemetry/opentelemetry-collector-releases/releases/download/v${OTELCOL_VERSION}/${asset}"
+      tar -xzf "$TMP/otelcol.tgz" -C "$TMP"
+      sudo install -m 0755 "$TMP/otelcol-contrib" /usr/local/bin/otelcol-contrib

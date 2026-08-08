@@ -50,3 +50,4 @@ packages:
   - coolercontrol
   - nvidia
   - fonts
+  - otelcol-contrib

@@ -1,0 +1,16 @@
+[Unit]
+Description=OpenTelemetry Collector (local buffer for agent telemetry)
+Documentation=https://opentelemetry.io/docs/collector/
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/otelcol-contrib --config=%h/.config/otelcol-contrib/config.yaml
+Restart=always
+RestartSec=5
+# The disk-backed queue lives here; the unit must not start before it exists.
+StateDirectory=otelcol-contrib
+
+[Install]
+WantedBy=default.target

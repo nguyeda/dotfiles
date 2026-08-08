@@ -1,0 +1,87 @@
+# Local OpenTelemetry Collector for agent harnesses (Claude Code, Codex, OpenCode).
+#
+# Harnesses export to 127.0.0.1 and never learn where the central collector is.
+# Everything is written to a disk-backed queue first, so telemetry survives the
+# machine being offline for days - the SDKs themselves buffer in memory only and
+# drop within seconds of the endpoint being unreachable.
+
+receivers:
+  otlp:
+    protocols:
+      # Deliberately outside the 4317/4318 family (and not x4317): those collide with
+      # local Docker stacks and per-worktree collectors. 93xx is this machine only.
+      grpc:
+        endpoint: 127.0.0.1:9317
+      http:
+        endpoint: 127.0.0.1:9318
+
+processors:
+  # The machine names itself here rather than in the shell. Resolved by chezmoi
+  # at apply time, so it cannot go stale the way a long-lived shell's $HOST does,
+  # and it applies to every harness without each one having to be told.
+  resource/host:
+    attributes:
+      - key: host.name
+        value: {{ .chezmoi.hostname }}
+        action: upsert
+
+  # Coalesce records into fewer, larger batches. This is what makes the on-disk
+  # queue last: queue_size counts batches, not records, so without this a busy
+  # day would burn through the queue on batch count alone.
+  batch:
+    timeout: 15s
+    send_batch_size: 4096
+    send_batch_max_size: 8192
+
+extensions:
+  # Backing store for the exporter's sending queue. Without this the queue is
+  # in-memory and dies with the process.
+  file_storage:
+    directory: {{ .chezmoi.homeDir }}/.local/state/otelcol-contrib/queue
+    timeout: 10s
+    compaction:
+      on_start: true
+      directory: {{ .chezmoi.homeDir }}/.local/state/otelcol-contrib/queue
+      max_transaction_size: 65536
+
+exporters:
+  otlp_grpc/central:
+    endpoint: tower.f19.loc:4317
+    tls:
+      insecure: true
+    sending_queue:
+      enabled: true
+      storage: file_storage
+      # Batches, not records, and only a ceiling - nothing is preallocated, so a
+      # large value costs nothing until it is actually used. Measured at ~393
+      # bytes/span on disk, ~9 batches/min while working, this is on the order of
+      # a month of continuous offline work for a few hundred MB.
+      # When full the collector drops NEW data rather than evicting old, so a
+      # very long outage keeps its beginning and loses its tail.
+      queue_size: 500000
+    retry_on_failure:
+      enabled: true
+      initial_interval: 5s
+      max_interval: 300s
+      # 0 = retry forever. This is the whole point: an offline laptop must not
+      # give up and discard the backlog.
+      max_elapsed_time: 0
+
+service:
+  extensions: [file_storage]
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors: [resource/host, batch]
+      exporters: [otlp_grpc/central]
+    metrics:
+      receivers: [otlp]
+      processors: [resource/host, batch]
+      exporters: [otlp_grpc/central]
+    logs:
+      receivers: [otlp]
+      processors: [resource/host, batch]
+      exporters: [otlp_grpc/central]
+  telemetry:
+    logs:
+      level: warn

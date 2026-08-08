@@ -36,3 +36,4 @@ packages:
   - ngrok
   - session-manager-plugin
   - fonts
+  - otelcol-contrib
