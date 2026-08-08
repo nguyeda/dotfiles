@@ -1,5 +1,7 @@
 theme = dark:catppuccin-frappier.conf,light:Catppuccin Latte
 
+shell-integration-features = ssh-env,ssh-terminfo
+
 background-opacity = 1.0
 background-blur = true
 
