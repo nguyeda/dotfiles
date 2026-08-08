@@ -1,0 +1,196 @@
+#!/usr/bin/php -q
+<?php
+/* dockerman - manage Unraid containers from the CLI while keeping them fully
+ * editable in the webGui. Uses the same xmlToCommand() the Docker tab uses, so
+ * containers are byte-identical to UI-created ones.
+ *
+ *   dockerman <name> [<name>...] [--dry-run] [--no-start] [--no-pull]
+ *   dockerman new <name> <image> [-p ...] [-v ...] [-e ...] [--apply] ...
+ */
+$docroot = '/usr/local/emhttp';
+require_once "$docroot/webGui/include/Wrappers.php";
+extract(parse_plugin_cfg('dynamix', true));
+require_once "$docroot/plugins/dynamix.docker.manager/include/DockerClient.php";
+require_once "$docroot/plugins/dynamix.docker.manager/include/Helpers.php";
+
+$var             = parse_ini_file('/var/local/emhttp/var.ini');
+$DockerClient    = new DockerClient();
+$DockerTemplates = new DockerTemplates();
+$DockerUpdate    = new DockerUpdate();
+// globals xmlToVar()/xmlToCommand() expect, same as the webGui bootstrap
+$custom          = DockerUtil::custom();
+$subnet          = DockerUtil::network($custom);
+$cpus            = DockerUtil::cpus();
+
+function fail($msg) { fwrite(STDERR, "dockerman: $msg\n"); exit(1); }
+function e($s) { return htmlspecialchars((string)$s, ENT_QUOTES | ENT_XML1, 'UTF-8'); }
+
+function usage() {
+  fwrite(STDERR, <<<TXT
+usage:
+  dockerman <name> [<name>...] [--dry-run] [--no-start] [--no-pull]
+      Create/recreate containers from their dockerMan template.
+
+  dockerman new <name> <image> [options]
+      Scaffold a template at templates-user/my-<name>.xml.
+
+      -p [HOST:]CONTAINER[/tcp|udp]   port mapping        (repeatable)
+      -v HOST:CONTAINER[:rw|ro]       bind mount          (repeatable)
+      -e KEY=VALUE                    environment var     (repeatable)
+      --net bridge|host|none|<name>   default: bridge
+      --webui URL                     e.g. 'http://[IP]:[PORT:8080]/'
+      --icon URL                      png/svg shown in the UI
+      --overview TEXT                 description
+      --category TEXT                 --support URL   --project URL
+      --extra PARAMS                  extra docker args (ExtraParams)
+      --privileged                    --force (overwrite)  --apply (create now)
+
+TXT);
+  exit(1);
+}
+
+/* ---------- apply: template -> running container ---------- */
+function apply($names, $dry, $noStart, $noPull) {
+  global $DockerClient, $DockerTemplates, $DockerUpdate;
+  foreach ($names as $name) {
+    $tmpl = $DockerTemplates->getUserTemplate($name);
+    if (!$tmpl) fail("no user template with <Name>$name</Name>");
+    // create_paths=true -> host bind-mount dirs get created, same as the UI does
+    [$cmd, $Name, $Repository] = xmlToCommand($tmpl, true);
+    if (!$noStart) $cmd = str_replace('/docker create ', '/docker run -d ', $cmd);
+
+    if ($dry) { echo "$cmd\n"; continue; }
+
+    if (!$noPull) {
+      echo "==> pull $Repository\n";
+      passthru('docker pull ' . escapeshellarg($Repository), $rc);
+      if ($rc !== 0) exit($rc);
+    }
+    exec('docker inspect --type=container ' . escapeshellarg($Name) . ' >/dev/null 2>&1', $_o, $exists);
+    if ($exists === 0) {
+      echo "==> replacing existing container $Name\n";
+      $DockerClient->stopContainer($Name);
+      $DockerClient->removeContainer($Name);
+      $DockerClient->flushCaches();
+    }
+    echo "==> $cmd\n";
+    passthru($cmd, $rc);
+    $DockerClient->flushCaches();
+    if ($rc !== 0) exit($rc);
+    // seed the update-status cache, else the UI shows "not available" until the
+    // next update check runs from the Docker tab
+    $image = preg_match('/:\S+$/', $Repository) ? $Repository : "$Repository:latest";
+    $DockerUpdate->reloadUpdateStatus($image);
+  }
+}
+
+/* ---------- new: scaffold a template ---------- */
+function scaffold($args) {
+  global $DockerTemplates;
+  $pos = []; $ports = []; $vols = []; $envs = [];
+  $o = ['net'=>'bridge','webui'=>'','icon'=>'','overview'=>'','category'=>'',
+        'support'=>'','project'=>'','extra'=>''];
+  $privileged = $force = $doApply = false;
+
+  for ($i = 0; $i < count($args); $i++) {
+    $a = $args[$i];
+    $next = function() use ($args, &$i, $a) {
+      if (!isset($args[$i+1])) fail("$a needs a value");
+      return $args[++$i];
+    };
+    switch ($a) {
+      case '-p': $ports[] = $next(); break;
+      case '-v': $vols[]  = $next(); break;
+      case '-e': $envs[]  = $next(); break;
+      case '--privileged': $privileged = true; break;
+      case '--force':      $force = true; break;
+      case '--apply':      $doApply = true; break;
+      default:
+        if (substr($a, 0, 2) === '--') {
+          $k = substr($a, 2);
+          if (!array_key_exists($k, $o)) fail("unknown option $a");
+          $o[$k] = $next();
+        } else $pos[] = $a;
+    }
+  }
+  if (count($pos) < 2) usage();
+  [$name, $image] = $pos;
+
+  $cfg = [];
+  foreach ($ports as $p) {
+    $proto = 'tcp';
+    if (preg_match('#^(.*)/(tcp|udp)$#i', $p, $m)) { $p = $m[1]; $proto = strtolower($m[2]); }
+    $parts = explode(':', $p);
+    $host = $parts[0];
+    $cont = $parts[1] ?? $parts[0];
+    if ($host === '' || $cont === '') fail("bad -p value: $p");
+    $cfg[] = ['Name'=>$cont, 'Target'=>$cont, 'Mode'=>$proto, 'Type'=>'Port', 'Value'=>$host];
+  }
+  foreach ($vols as $v) {
+    $parts = explode(':', $v);
+    if (count($parts) < 2) fail("bad -v value: $v (need HOST:CONTAINER)");
+    $mode = $parts[2] ?? 'rw';
+    if (!in_array($mode, ['rw','ro','slave','rslave'], true)) fail("bad mount mode: $mode");
+    $cfg[] = ['Name'=>trim(basename($parts[1]) ?: 'root'), 'Target'=>$parts[1],
+              'Mode'=>$mode, 'Type'=>'Path', 'Value'=>$parts[0]];
+  }
+  foreach ($envs as $env) {
+    $kv = explode('=', $env, 2);
+    if (count($kv) < 2) fail("bad -e value: $env (need KEY=VALUE)");
+    $cfg[] = ['Name'=>$kv[0], 'Target'=>$kv[0], 'Mode'=>'', 'Type'=>'Variable', 'Value'=>$kv[1]];
+  }
+
+  $rows = '';
+  foreach ($cfg as $c) {
+    $rows .= sprintf(
+      '  <Config Name="%s" Target="%s" Default="" Mode="%s" Description="" Type="%s" Display="always" Required="false" Mask="false">%s</Config>'."\n",
+      e($c['Name']), e($c['Target']), e($c['Mode']), $c['Type'], e($c['Value']));
+  }
+
+  $xml = '<?xml version="1.0"?>'."\n<Container version=\"2\">\n"
+    . '  <Name>'.e($name).'</Name>'."\n"
+    . '  <Repository>'.e($image).'</Repository>'."\n"
+    . "  <Registry/>\n"
+    . '  <Network>'.e($o['net']).'</Network>'."\n"
+    . "  <MyIP/>\n  <Shell>sh</Shell>\n"
+    . '  <Privileged>'.($privileged ? 'true' : 'false').'</Privileged>'."\n"
+    . '  <Support>'.e($o['support']).'</Support>'."\n"
+    . '  <Project>'.e($o['project']).'</Project>'."\n"
+    . '  <Overview>'.e($o['overview']).'</Overview>'."\n"
+    . '  <Category>'.e($o['category']).'</Category>'."\n"
+    . '  <WebUI>'.e($o['webui']).'</WebUI>'."\n"
+    . "  <TemplateURL/>\n"
+    . '  <Icon>'.e($o['icon']).'</Icon>'."\n"
+    . '  <ExtraParams>'.e($o['extra']).'</ExtraParams>'."\n"
+    . "  <PostArgs/>\n  <CPUset/>\n"
+    . '  <DateInstalled>'.time().'</DateInstalled>'."\n"
+    . "  <DonateText/>\n  <DonateLink/>\n  <Requires/>\n"
+    . $rows
+    . "  <TailscaleStateDir/>\n</Container>\n";
+
+  if ($o['icon'] !== '') {
+    exec('curl -sIL -o /dev/null -w %{http_code} -m 8 ' . escapeshellarg($o['icon']), $out, $rc);
+    $code = trim(implode('', $out));
+    if ($rc !== 0 || $code !== '200')
+      fwrite(STDERR, "warning: icon URL returned $code - the UI will fall back to a placeholder\n");
+  }
+
+  $path = $DockerTemplates->getUserTemplatePath($name);
+  if (file_exists($path) && !$force) fail("$path exists (use --force)");
+  if (!simplexml_load_string($xml)) fail('generated XML is invalid');
+  file_put_contents($path, $xml);
+  echo "==> wrote $path\n";
+
+  if ($doApply) apply([$name], false, false, false);
+  else echo "    review it, then: dockerman ".escapeshellarg($name)."\n";
+}
+
+/* ---------- dispatch ---------- */
+$args = array_slice($argv, 1);
+if (!$args) usage();
+if ($args[0] === 'new') { scaffold(array_slice($args, 1)); exit(0); }
+
+$flag  = fn($f) => in_array($f, $args, true);
+$names = array_values(array_filter($args, fn($a) => substr($a, 0, 2) !== '--'));
+if (!$names) usage();
+apply($names, $flag('--dry-run'), $flag('--no-start'), $flag('--no-pull'));
