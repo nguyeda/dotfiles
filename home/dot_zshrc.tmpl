@@ -119,6 +119,16 @@ if command -v gpg &> /dev/null; then
 fi
 
 ##################################################################
+# otel resource attributes for agent harnesses
+# _otel_resource_attrs and the opencode wrapper are defined in ~/.zshenv, so
+# that agent-spawned non-interactive shells get them too. All an interactive
+# shell adds is re-deriving `project` whenever you move between repos.
+if (( $+functions[_otel_resource_attrs] )); then
+  autoload -Uz add-zsh-hook
+  add-zsh-hook chpwd _otel_resource_attrs
+fi
+
+##################################################################
 # local overrides (untracked, gitignored)
 [ -f "$HOME/.zshrc.local" ] && source "$HOME/.zshrc.local"
 

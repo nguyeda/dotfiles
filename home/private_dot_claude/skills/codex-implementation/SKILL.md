@@ -62,6 +62,10 @@ never use `resume --last` — parallel sessions and worktrees make it ambiguous.
 Use `-s workspace-write` by default. Use `-s danger-full-access` only when the implementation truly needs access outside
 the repo, app launch automation, simulator work, package manager global state, or other machine-level operations.
 
+Codex joins this session's trace by itself: it reads `TRACEPARENT` from the environment, so the delegated run appears
+under the Bash span that launched it in Grafana. Run it with the environment it inherits — scrubbing that (`env -i`)
+drops both the trace link and the `project` attribute.
+
 ## Prompt Requirements
 
 Tell Codex:

@@ -30,3 +30,5 @@ Arguments: `$ARGUMENTS`
 
 - Prefer quoted arguments in the shell command so multi-word prompts and paths survive intact.
 - If opencode exits non-zero, include the relevant error output and the command shape that failed.
+- Unlike Codex, opencode does not join this session's trace: it ignores `TRACEPARENT`, and its telemetry comes from a
+  long-lived server process rather than the run you started. Correlate by time and project instead.

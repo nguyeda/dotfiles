@@ -1,0 +1,61 @@
+##################################################################
+# .zshenv - read by EVERY zsh, interactive or not.
+#
+# Agent harnesses are launched as subprocesses, and Claude Code strips all
+# OTEL_* variables out of the environment it hands to Bash-tool children (it
+# keeps TRACEPARENT, so a child can join its trace, but not the exporter or
+# resource config). .zshenv is sourced after that stripping, so what it exports
+# survives into codex/opencode when an agent launches them. .zshrc cannot do
+# this job: non-interactive shells never read it.
+
+##################################################################
+# volta
+export VOLTA_HOME="$HOME/.volta"
+[[ -d $VOLTA_HOME/bin ]] && export PATH="$VOLTA_HOME/bin:$PATH"
+
+{{- if or (eq .role "desktop-mac") (eq .role "desktop-fedora") }}
+
+##################################################################
+# otel resource attributes for agent harnesses
+# Claude Code, Codex and OpenCode emit no project/cwd attribute, so telemetry
+# can't be sliced per repo. Export it here and every harness inherits it -
+# including one an agent spawned on our behalf.
+#
+# Only `project` belongs here - it is the one attribute that genuinely changes
+# as you move between directories. host.name is stamped by the local OTel
+# collector instead, so it cannot go stale the way a long-lived shell's copy can.
+#
+# Prefer the git remote's repo name so worktrees (wk-1, wk-2, ...) report as the
+# repo they belong to rather than their checkout directory.
+_otel_resource_attrs() {
+  local url name root
+  url=$(git config --get remote.origin.url 2>/dev/null)
+  if [[ -n $url ]]; then
+    name=${${url##*/}%.git}
+  else
+    root=$(git rev-parse --show-toplevel 2>/dev/null) || root=$PWD
+    name=${${root:t}#.}
+  fi
+  export OTEL_RESOURCE_ATTRIBUTES="project=$name"
+}
+_otel_resource_attrs
+
+# Codex needs nothing further for trace linking: it reads TRACEPARENT itself
+# (codex_otel::trace_context - "TRACEPARENT detected; continuing trace from
+# parent context") and gets its exporter from ~/.codex/config.toml, so a Codex
+# run launched by Claude Code lands under the exact Bash span that spawned it.
+#
+# OpenCode cannot be linked, and the endpoint is all we can usefully give it:
+#   - it speaks OTLP/HTTP, so it needs 9318 rather than the gRPC 9317;
+#   - it never reads TRACEPARENT; and
+#   - `opencode run` attaches to a long-lived server process, and that server is
+#     what emits the telemetry. So per-invocation environment describes whichever
+#     shell happened to spawn the server, not the run you just started. Passing
+#     parent trace ids through here would be worse than passing nothing: the
+#     server would stamp every later run with the first caller's trace.
+# One consequence to remember: `project` on OpenCode spans is whatever the
+# server was started with. Restart the server after moving repos if you care.
+opencode() {
+  OTEL_EXPORTER_OTLP_ENDPOINT="http://127.0.0.1:9318" command opencode "$@"
+}
+{{- end }}

@@ -55,6 +55,10 @@ Use `-s danger-full-access` for GUI automation, iOS simulators, desktop app laun
 the repo. For non-GUI checks that only need the repo and artifact directory, prefer `-s workspace-write`. Add
 `--skip-git-repo-check` when the working directory is not a git repository.
 
+Codex joins this session's trace by itself: it reads `TRACEPARENT` from the environment, so the delegated run appears
+under the Bash span that launched it in Grafana. Run it with the environment it inherits — scrubbing that (`env -i`)
+drops both the trace link and the `project` attribute.
+
 ## Prompt Requirements
 
 Tell Codex:

@@ -51,6 +51,10 @@ Codex runs take minutes. Run the command with the Bash tool's `run_in_background
 read `$REPORT` when it completes. If a foreground run is genuinely needed, set the timeout to at least 600000 ms —
 never leave the default.
 
+Codex joins this session's trace by itself: it reads `TRACEPARENT` from the environment, so the delegated run appears
+under the Bash span that launched it in Grafana. Run it with the environment it inherits — scrubbing that (`env -i`)
+drops both the trace link and the `project` attribute.
+
 ## Review Prompt
 
 Ask Codex to use a code-review stance and produce findings the user can triage by number:
