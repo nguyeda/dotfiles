@@ -2,7 +2,22 @@ id: fnm
 description: Fast Node.js version manager
 check: command -v fnm
 install:
-  macos: { packages: [fnm] }
+  macos:
+    packages: [fnm]
+    post_install:
+      # Install the latest LTS and point the default alias at it, so packages
+      # installed later in the run already have a node to use.
+      - |
+        FNM="$(command -v fnm || echo "$HOME/.local/share/fnm/fnm")"
+        "$FNM" install --lts
+        "$FNM" alias lts-latest default
   default:
     script: |
       curl -fsSL https://fnm.vercel.app/install | bash -s -- --skip-shell
+    post_install:
+      # Install the latest LTS and point the default alias at it, so packages
+      # installed later in the run already have a node to use.
+      - |
+        FNM="$(command -v fnm || echo "$HOME/.local/share/fnm/fnm")"
+        "$FNM" install --lts
+        "$FNM" alias lts-latest default

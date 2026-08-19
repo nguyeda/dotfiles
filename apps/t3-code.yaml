@@ -5,7 +5,16 @@ install:
   fedora:
     check: command -v t3-code
     # Upstream ships no rpm or flatpak for Linux, only an x86_64 AppImage.
-    pre_install: sudo dnf install -y fuse-libs
+    # The AppImage needs libfuse.so.2. The t3 server needs node, which the fnm
+    # manifest installs earlier in the run; fail early and loudly if it did not.
+    pre_install: |
+      sudo dnf install -y fuse-libs
+      if ! "$HOME/.local/share/fnm/aliases/default/bin/node" --version >/dev/null 2>&1; then
+        echo "t3-code needs node ^22.16 || ^23.11 || >=24.10 from fnm, but" >&2
+        echo "\$HOME/.local/share/fnm/aliases/default/bin/node is missing." >&2
+        echo "Run: ./install.sh --package fnm --force" >&2
+        exit 1
+      fi
     script: |
       T3_CODE_VERSION="${T3_CODE_VERSION:-0.0.33}"
       case "$(uname -m)" in
@@ -27,3 +36,11 @@ install:
       Terminal=false
       Categories=Development;IDE;
       EOF
+    post_install:
+      # Headless server (systemd user unit, survives logout) so remote clients
+      # can connect without a desktop session running. node comes from fnm;
+      # prefer its default-alias path over the per-shell fnm_multishells
+      # symlink, which does not exist for a systemd user unit.
+      - |
+        export PATH="$HOME/.local/share/fnm/aliases/default/bin:$PATH"
+        npx -y t3@latest service install
