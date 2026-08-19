@@ -1,0 +1,4 @@
+id: orbstack
+description: OrbStack Docker and Linux VMs
+install:
+  macos: { casks: [orbstack] }

@@ -38,3 +38,4 @@ packages:
   - session-manager-plugin
   - fonts
   - otelcol-contrib
+  - orbstack
