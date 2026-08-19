@@ -1,0 +1,7 @@
+id: slack-cli
+description: Slack CLI
+check: command -v slack
+install:
+  default:
+    script: |
+      curl -fsSL https://downloads.slack-edge.com/slack-cli/install.sh | bash
