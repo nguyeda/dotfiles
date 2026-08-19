@@ -28,6 +28,7 @@ packages:
   - claude
   - opencode
   - codex
+  - t3-code
   - updatecli
   - 1password-cli
   - aerospace
