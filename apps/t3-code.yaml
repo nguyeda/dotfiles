@@ -5,10 +5,12 @@ install:
   fedora:
     check: command -v t3-code
     # Upstream ships no rpm or flatpak for Linux, only an x86_64 AppImage.
-    # The AppImage needs libfuse.so.2. The t3 server needs node, which the fnm
-    # manifest installs earlier in the run; fail early and loudly if it did not.
+    # fuse-libs: the AppImage needs libfuse.so.2. gcc-c++: the t3 server pulls
+    # node-pty, which ships no prebuilt binary and falls back to node-gyp.
+    # node itself comes from the fnm manifest earlier in the run; fail early
+    # and loudly if it did not.
     pre_install: |
-      sudo dnf install -y fuse-libs
+      sudo dnf install -y fuse-libs gcc-c++
       if ! "$HOME/.local/share/fnm/aliases/default/bin/node" --version >/dev/null 2>&1; then
         echo "t3-code needs node ^22.16 || ^23.11 || >=24.10 from fnm, but" >&2
         echo "\$HOME/.local/share/fnm/aliases/default/bin/node is missing." >&2
