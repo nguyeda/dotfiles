@@ -22,5 +22,7 @@ packages:
   - fnm
   - starship
   - claude
+  - codex
+  - t3-code-server
   - just
   - updatecli

@@ -10,13 +10,17 @@ points chezmoi at `home/`.
 - Package installation is explicit: `just install`, `just plan`, or
   `./install.sh`.
 - `recipe/<environment>.yaml` maps each environment to exact package manifest IDs.
-- Each package/tool group has one manifest: `apps/<id>.yaml`.
+- Each independently selectable package or tool component has one manifest:
+  `apps/<id>.yaml`.
 - The installer chooses `install.<distro>`, then `install.<os>`, then
   `install.default`.
 
 ## Package Manifests
 
-Use one YAML file per package/tool group:
+Use one YAML file per independently selectable package or tool component. Keep
+components in separate manifests when roles may select them independently, even
+if they come from the same upstream tool. For example, a desktop app and its
+persistent background service should have separate manifests.
 
 ```yaml
 id: jj
@@ -62,13 +66,15 @@ just install macos
 ./install.sh --package jj --dry-run
 ./install.sh --list-packages
 ./install.sh --init --role macos
+./tests/install-manifests.sh
 ```
 
 ## Adding A Package
 
 1. Add `apps/<id>.yaml`.
 2. Add `<id>` to the relevant `recipe/<environment>.yaml` package list.
-3. Run `just plan <role>` or `./install.sh --role <role> --dry-run`.
+3. Run `./tests/install-manifests.sh`, then `just plan <role>` or
+   `./install.sh --role <role> --dry-run`.
 
 ## Adding Config
 

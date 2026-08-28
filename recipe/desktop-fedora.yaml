@@ -30,6 +30,7 @@ packages:
   - opencode
   - codex
   - t3-code
+  - t3-code-server
   - slack-cli
   - updatecli
   - 1password-cli

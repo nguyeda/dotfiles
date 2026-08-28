@@ -45,7 +45,10 @@ packages:
   - opencode
 ```
 
-Each package or tool group has its own manifest at `apps/<id>.yaml`:
+Each independently selectable package or tool component has its own manifest at
+`apps/<id>.yaml`. Components use separate manifests when roles may select them
+independently, even if they come from the same upstream tool. This lets a role
+install a persistent background service without also installing its desktop app.
 
 ```yaml
 id: jj

@@ -1,0 +1,31 @@
+id: t3-code-server
+description: T3 Code background server
+check: systemctl --user is-enabled --quiet t3code.service
+install:
+  linux:
+    # The service installer pulls node-pty, which may fall back to node-gyp.
+    # Install the native build toolchain and use fnm's stable default path,
+    # since its per-shell multishell path is unavailable to systemd.
+    pre_install: |
+      NODE_BIN="$HOME/.local/share/fnm/aliases/default/bin/node"
+      if ! "$NODE_BIN" --version >/dev/null 2>&1; then
+        echo "t3-code-server needs node ^22.16 || ^23.11 || >=24.10 from fnm, but" >&2
+        echo "\$HOME/.local/share/fnm/aliases/default/bin/node is missing." >&2
+        echo "Run: ./install.sh --package fnm --force" >&2
+        exit 1
+      fi
+      if command -v dnf >/dev/null 2>&1; then
+        sudo dnf install -y gcc-c++
+      elif command -v apt-get >/dev/null 2>&1; then
+        sudo apt-get install -y build-essential
+      else
+        echo "Unsupported Linux package manager for t3-code-server" >&2
+        exit 1
+      fi
+    script: |
+      export PATH="$HOME/.local/share/fnm/aliases/default/bin:$PATH"
+      if systemctl --user is-enabled --quiet t3code.service; then
+        npx -y t3@latest service update
+      else
+        npx -y t3@latest service install
+      fi
