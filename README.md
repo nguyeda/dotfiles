@@ -69,8 +69,8 @@ systems can use `install.linux` or `default`.
 
 Install blocks run in this order: `pre_install`, package-manager entries,
 `script`, then `post_install`. Use `pre_install` for repo/key setup. Use
-`script` only for custom upstream installers, and do not combine it with
-`packages`.
+`script` for a custom upstream install when the selected OS or distro has no
+suitable package-manager package, and do not combine it with `packages`.
 
 Dry-run output is package-level and concrete:
 

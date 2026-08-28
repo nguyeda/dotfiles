@@ -41,3 +41,9 @@ recipe_has desktop-fedora t3-code-server ||
 yq -e '.install.linux.script | contains("t3@latest service install")' \
     "$ROOT_DIR/apps/t3-code-server.yaml" >/dev/null ||
     fail "t3-code-server must install the upstream background service"
+
+[ "$(yq -r '.install.debian.packages | length // 0' "$ROOT_DIR/apps/zellij.yaml")" -eq 0 ] ||
+    fail "zellij must not use an unavailable Debian package"
+yq -e '.install.debian.script | contains("unknown-linux-musl")' \
+    "$ROOT_DIR/apps/zellij.yaml" >/dev/null ||
+    fail "zellij must install the upstream Linux release binary on Debian"

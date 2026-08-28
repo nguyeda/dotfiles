@@ -7,4 +7,20 @@ install:
     packages: [zellij]
     pre_install: |
       sudo dnf copr enable -y varlad/zellij
+  debian:
+    # Raspberry Pi OS does not provide a zellij package. Use the upstream
+    # statically linked release binary instead.
+    script: |
+      ZELLIJ_VERSION="${ZELLIJ_VERSION:-0.45.1}"
+      case "$(uname -m)" in
+        x86_64) target="x86_64-unknown-linux-musl" ;;
+        aarch64|arm64) target="aarch64-unknown-linux-musl" ;;
+        *) echo "Unsupported arch for zellij: $(uname -m)" >&2; exit 1 ;;
+      esac
+      TMP="$(mktemp -d)"; trap 'rm -rf "$TMP"' EXIT
+      asset="zellij-${target}.tar.gz"
+      curl -fL --retry 3 -o "$TMP/$asset" \
+        "https://github.com/zellij-org/zellij/releases/download/v${ZELLIJ_VERSION}/${asset}"
+      tar -xzf "$TMP/$asset" -C "$TMP"
+      sudo install -m 0755 "$TMP/zellij" /usr/local/bin/zellij
   default: { packages: [zellij] }

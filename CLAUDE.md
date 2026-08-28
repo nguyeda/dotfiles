@@ -52,7 +52,8 @@ Supported install keys:
 Prefer descriptive package metadata (`packages`, `casks`, `flatpaks`) whenever
 possible so `just plan` can show exactly what would be installed. Use
 `pre_install` for repository/key setup before package-manager installs. Use
-`script` only for upstream installers that do not use the package manager.
+`script` for an upstream installer when the selected OS or distro has no
+suitable package-manager package.
 
 ## Commands
 
