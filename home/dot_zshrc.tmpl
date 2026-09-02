@@ -129,6 +129,14 @@ if (( $+functions[_otel_resource_attrs] )); then
 fi
 
 ##################################################################
+# context7 api key for the hosted MCP server (the context7 plugin substitutes
+# $CONTEXT7_API_KEY straight into its Authorization header). Read from the
+# context7 CLI's own credential store so no key lands in this repo.
+if [[ -z "$CONTEXT7_API_KEY" && -r "$HOME/.config/context7/credentials.json" ]] && command -v jq &> /dev/null; then
+  export CONTEXT7_API_KEY="Bearer $(jq -r '.access_token' "$HOME/.config/context7/credentials.json")"
+fi
+
+##################################################################
 # local overrides (untracked, gitignored)
 [ -f "$HOME/.zshrc.local" ] && source "$HOME/.zshrc.local"
 
