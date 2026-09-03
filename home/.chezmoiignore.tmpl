@@ -33,6 +33,12 @@ Library/LaunchAgents/io.opentelemetry.otelcol-contrib.plist
 run_onchange_after_85-otelcol-service.sh
 {{- end }}
 
+{{/* T3 Code background server: only the roles that install it */}}
+{{- if and (ne .role "desktop-fedora") (ne .role "pi") }}
+.config/systemd/user/t3code.service.d
+run_onchange_after_87-t3code-service.sh
+{{- end }}
+
 {{/* launchd is macOS-only; systemd units are not */}}
 {{- if ne .chezmoi.os "darwin" }}
 Library/LaunchAgents

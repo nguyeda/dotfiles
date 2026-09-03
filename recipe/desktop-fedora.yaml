@@ -42,6 +42,7 @@ packages:
   - gnome-remote-desktop
   - google-chrome
   - slack
+  - chatgpt
   - zen-browser
   - gitkraken
   - keybase

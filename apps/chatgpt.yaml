@@ -1,0 +1,14 @@
+id: chatgpt
+description: ChatGPT desktop app (Linux preview)
+check: rpm -q chatgpt
+install:
+  fedora:
+    script: |
+      case "$(uname -m)" in
+        x86_64)  RPM_ARCH="x86_64" ;;
+        aarch64) RPM_ARCH="aarch64" ;;
+        *) echo "Unsupported arch for chatgpt: $(uname -m)"; exit 1 ;;
+      esac
+      # The rpm registers OpenAI's signed repo, so later updates come from dnf.
+      sudo dnf install -y \
+        "https://persistent.oaistatic.com/codex-app-prod/linux/rpm/latest/chatgpt.${RPM_ARCH}.rpm"

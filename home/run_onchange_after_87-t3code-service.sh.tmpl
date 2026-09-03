@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+# Pick up changes to the t3code.service drop-in. The unit itself is installed by
+# `t3 service install` (see apps/t3-code-server.yaml), so this only reloads and
+# restarts; it never creates the service.
+#
+# drop-in hash: {{ include "dot_config/systemd/user/t3code.service.d/override.conf" | sha256sum }}
+set -euo pipefail
+
+{{ if or (eq .role "desktop-fedora") (eq .role "pi") -}}
+
+if ! systemctl --user cat t3code.service >/dev/null 2>&1; then
+    echo "[t3code] service not installed; skipping (run 'just install' first)"
+    exit 0
+fi
+
+systemctl --user daemon-reload
+systemctl --user restart t3code.service
+echo "[t3code] service restarted with drop-in applied"
+
+{{- else -}}
+echo "[t3code] role {{ .role }} does not run the T3 Code server; skipping"
+{{- end }}
