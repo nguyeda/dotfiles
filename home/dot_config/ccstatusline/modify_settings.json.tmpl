@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+# ccstatusline bumps "version" itself when it migrates its own schema, so a
+# plainly managed settings.json conflicts on every apply and gets reverted to
+# whatever schema this repo was pinned at. The rest of the file is ours, so
+# rewrite it from the canonical copy and carry the on-disk version forward.
+#
+# No jq: it is not installed on every role, and one anchored line is enough.
+set -euo pipefail
+
+current=$(cat)
+
+desired=$(cat <<'CHEZMOI_CANONICAL'
+{{ includeTemplate "ccstatusline-settings.json" . }}
+CHEZMOI_CANONICAL
+)
+
+version=$(printf '%s\n' "$current" |
+    sed -n 's/^[[:space:]]*"version"[[:space:]]*:[[:space:]]*\([0-9][0-9]*\).*/\1/p' |
+    head -1)
+
+if [ -n "$version" ]; then
+    printf '%s\n' "$desired" |
+        sed "s/^\([[:space:]]*\"version\"[[:space:]]*:[[:space:]]*\)[0-9][0-9]*/\1${version}/"
+else
+    printf '%s\n' "$desired"
+fi
