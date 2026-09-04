@@ -25,3 +25,4 @@ venv/
 # AI
 .claude/*.local.*
 .mcp.json
+.legit-dx
