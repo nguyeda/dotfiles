@@ -1,10 +1,8 @@
 #!/usr/bin/env bash
 # ccstatusline bumps "version" itself when it migrates its own schema, so a
-# plainly managed settings.json conflicts on every apply and gets reverted to
-# whatever schema this repo was pinned at. The rest of the file is ours, so
-# rewrite it from the canonical copy and carry the on-disk version forward.
-#
-# No jq: it is not installed on every role, and one anchored line is enough.
+# plainly managed settings.json conflicts on every apply and drags the schema
+# back to whatever this repo happens to carry. The rest of the file is ours:
+# render the canonical copy, but keep the version already on disk.
 set -euo pipefail
 
 current=$(cat)
@@ -14,13 +12,11 @@ desired=$(cat <<'CHEZMOI_CANONICAL'
 CHEZMOI_CANONICAL
 )
 
-version=$(printf '%s\n' "$current" |
-    sed -n 's/^[[:space:]]*"version"[[:space:]]*:[[:space:]]*\([0-9][0-9]*\).*/\1/p' |
-    head -1)
+# jq is in every role's manifest, but apply can run before `just install`.
+version=$(command -v jq >/dev/null && printf '%s' "$current" | jq -r '.version' 2>/dev/null || true)
 
-if [ -n "$version" ]; then
-    printf '%s\n' "$desired" |
-        sed "s/^\([[:space:]]*\"version\"[[:space:]]*:[[:space:]]*\)[0-9][0-9]*/\1${version}/"
+if [ -n "$version" ] && [ "$version" != "null" ]; then
+    printf '%s\n' "$desired" | jq --argjson v "$version" '.version = $v'
 else
     printf '%s\n' "$desired"
 fi

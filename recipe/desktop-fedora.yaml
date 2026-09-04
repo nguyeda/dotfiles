@@ -11,6 +11,7 @@ packages:
   - fd-find
   - postgresql-client
   - btop
+  - jq
   - gh
   - just
   - uv
