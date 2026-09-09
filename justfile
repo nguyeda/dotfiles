@@ -32,6 +32,11 @@ install-tool tool:
 install-plan role:
     {{ source }}/install.sh --role {{ role }} --plan
 
+# Enroll the Fedora root LUKS2 volume for TPM2 auto-unlock.
+[group('system')]
+luks-tpm:
+    sudo {{ source }}/scripts/configure-luks-tpm.sh
+
 # Render templates and write all managed files into $HOME.
 [group('chezmoi')]
 apply:

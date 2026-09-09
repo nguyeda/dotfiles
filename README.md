@@ -30,6 +30,7 @@ just install macos            # alias for desktop-mac
 just install fedora           # alias for desktop-fedora
 just install desktop-fedora   # install packages for an explicit role
 just install-tool opencode     # install one package manifest
+just luks-tpm                 # configure Fedora LUKS2 TPM auto-unlock
 just apply                    # config-only chezmoi apply
 just diff                     # show pending config changes
 ```
@@ -86,6 +87,7 @@ Dry-run output is package-level and concrete:
 home/                         # chezmoi source tree
 install.sh                    # package installer and bootstrap entrypoint
 install/lib/packages.sh       # package manifest runner
+scripts/configure-luks-tpm.sh # Fedora LUKS2 TPM auto-unlock setup
 recipe/<environment>.yaml     # environment -> package IDs
 apps/<id>.yaml                # one manifest per package/tool group
 extensions/                   # editor extension lists used by package manifests
