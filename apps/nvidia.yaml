@@ -9,10 +9,8 @@ install:
       sudo dnf config-manager addrepo --from-repofile=https://nvidia.github.io/libnvidia-container/stable/rpm/nvidia-container-toolkit.repo
     post_install:
       - |
-        sudo mkdir -p /etc/modprobe.d /etc/dracut.conf.d
+        sudo mkdir -p /etc/modprobe.d
         grep -qF 'options nvidia_drm modeset=1' /etc/modprobe.d/nvidia.conf 2>/dev/null \
           || echo 'options nvidia_drm modeset=1' | sudo tee -a /etc/modprobe.d/nvidia.conf >/dev/null
-        grep -qF 'force_drivers+=" nvidia' /etc/dracut.conf.d/nvidia.conf 2>/dev/null \
-          || echo 'force_drivers+=" nvidia nvidia_drm nvidia_modeset nvidia_uvm "' | sudo tee -a /etc/dracut.conf.d/nvidia.conf >/dev/null
-        sudo dracut --force
+        # RPM Fusion omits NVIDIA from initramfs so akmods and dracut do not race on updates.
       - if command -v docker >/dev/null 2>&1; then sudo nvidia-ctk runtime configure --runtime=docker && sudo systemctl restart docker || true; fi
