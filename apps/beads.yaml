@@ -1,0 +1,8 @@
+id: beads
+description: Beads issue tracker CLI
+check: command -v bd
+install:
+  macos: { packages: [beads] }
+  default:
+    script: |
+      curl -fsSL https://raw.githubusercontent.com/gastownhall/beads/main/scripts/install.sh | bash

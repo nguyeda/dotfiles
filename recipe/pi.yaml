@@ -13,6 +13,7 @@ packages:
   - git
   - neovim
   - btop
+  - beads
   - jq
   - gh
   - zellij
