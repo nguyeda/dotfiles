@@ -2,6 +2,8 @@ id: aws-cli
 description: AWS CLI v2
 check: command -v aws
 install:
+  macos:
+    packages: [awscli]
   default:
     script: |
       TMP="$(mktemp -d)"; trap 'rm -rf "$TMP"' EXIT

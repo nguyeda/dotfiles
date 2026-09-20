@@ -36,6 +36,7 @@ packages:
   - raycast
   - gcloud-cli
   - ngrok
+  - aws-cli
   - session-manager-plugin
   - fonts
   - otelcol-contrib
