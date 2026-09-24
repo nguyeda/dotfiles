@@ -12,6 +12,13 @@
   change, sized like the neighbouring test files. Scratch scripts and one-off checks stay scratch;
   don't promote them into permanent test files.
 
+## Writing
+
+- No em dashes. End the sentence or use a comma.
+- Plain words over AI vocabulary: additionally, crucial, delve, enhance, fostering, garner,
+  interplay, intricate, landscape, pivotal, showcase, tapestry, testament, underscore, vibrant.
+- No chatbot openers or closers, no sycophancy, no generic conclusions.
+
 ## Task management
 
 - Shell out to Codex when computer use helps complete or verify work.

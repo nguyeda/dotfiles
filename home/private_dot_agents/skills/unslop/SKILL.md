@@ -1,6 +1,7 @@
 ---
 name: unslop
-description: Cut AI tells from any writing. Must always apply.
+description: Use only when the user explicitly invokes unslop, or asks to edit a prose draft for publication (docs, blog, copy). Cuts AI tells from writing.
+disable-model-invocation: true
 ---
 
 # Unslop
