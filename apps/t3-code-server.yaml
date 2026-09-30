@@ -25,7 +25,7 @@ install:
     script: |
       export PATH="$HOME/.local/share/fnm/aliases/default/bin:$PATH"
       if systemctl --user is-enabled --quiet t3code.service; then
-        npx -y t3@latest service update
+        npx -y t3@latest update --yes
       else
         npx -y t3@latest service install
       fi
