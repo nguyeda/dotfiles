@@ -49,6 +49,7 @@ packages:
   - gitkraken
   - keybase
   - protonvpn
+  - tailscale
   - aws-cli
   - ngrok
   - docker

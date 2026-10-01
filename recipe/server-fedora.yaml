@@ -31,5 +31,6 @@ packages:
   - codex
   - updatecli
   - 1password-cli
+  - tailscale
   - aws-cli
   - docker

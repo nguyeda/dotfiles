@@ -1,0 +1,9 @@
+id: tailscale
+description: Tailscale VPN
+install:
+  fedora:
+    packages: [tailscale]
+    pre_install: |
+      sudo dnf config-manager addrepo --overwrite --from-repofile=https://pkgs.tailscale.com/stable/fedora/tailscale.repo
+    post_install:
+      - sudo systemctl enable --now tailscaled
