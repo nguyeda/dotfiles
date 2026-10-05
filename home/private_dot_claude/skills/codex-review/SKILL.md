@@ -1,7 +1,7 @@
 ---
 name: codex-review
 description:
-  Ask Codex CLI for an independent code review of uncommitted changes, a base branch diff, a commit, or a
+  Asks Codex CLI for an independent code review of uncommitted changes, a base branch diff, a commit, or a
   specific implementation. This is how Codex is invoked for review work. Use when the user asks Claude to have Codex
   review work, when CLAUDE.md calls for a Codex review, or when Codex should
   audit a diff, find bugs or regressions, or compare Claude's implementation against requirements. For a review by
@@ -25,7 +25,8 @@ yourself. Treat Codex's output as evidence, not authority.
 1. Identify the review target: uncommitted changes, base branch, commit SHA, PR checkout, or specific files.
 2. Create a temporary artifact directory for the Codex report.
 3. Run `codex review` with a focused review prompt, in the background.
-4. Read Codex's report and verify important claims against the code before presenting them.
+4. Capture the session id from stderr for follow-up rounds.
+5. Read Codex's report and verify important claims against the code before presenting them.
 
 Use one of these command shapes:
 
@@ -51,9 +52,8 @@ Codex runs take minutes. Run the command with the Bash tool's `run_in_background
 read `$REPORT` when it completes. If a foreground run is genuinely needed, set the timeout to at least 600000 ms —
 never leave the default.
 
-Codex joins this session's trace by itself: it reads `TRACEPARENT` from the environment, so the delegated run appears
-under the Bash span that launched it in Grafana. Run it with the environment it inherits — scrubbing that (`env -i`)
-drops both the trace link and the `project` attribute.
+Run Codex with the environment it inherits. It reads `TRACEPARENT` to join this session's trace, and scrubbing the
+environment (`env -i`) drops both the trace link and the `project` attribute.
 
 ## Review Prompt
 
@@ -93,8 +93,8 @@ Before relaying a Codex finding, inspect the named code or diff enough to decide
 user-facing response, keep Codex's numbering and severity ordering so the user can answer per item ("3 fix, ignore the
 rest"), and separate confirmed issues from Codex suggestions you did not verify.
 
-For follow-up rounds after fixes land, resume the same Codex session with the delta instead of re-running a full
-review: `codex exec resume <session-id> - < "$FOLLOWUP"` (global flags before `resume`; never `resume --last` —
+For follow-up rounds after fixes land, write the delta to `$FOLLOWUP` and resume the same Codex session instead of
+re-running a full review: `codex exec resume <session-id> - < "$FOLLOWUP"` (global flags before `resume`; never `resume --last` —
 parallel sessions and worktrees make it ambiguous).
 
 If Codex finds nothing, say that clearly and mention what review target it inspected.

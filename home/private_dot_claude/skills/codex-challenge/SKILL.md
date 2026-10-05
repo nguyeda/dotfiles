@@ -1,8 +1,8 @@
 ---
 name: codex-challenge
 description:
-  Ask Codex CLI for an independent second opinion on a plan, design, architecture decision, or analysis —
-  challenge assumptions, surface weaknesses, or reassess after new evidence. This is how Codex is invoked for
+  Asks Codex CLI for an independent second opinion on a plan, design, architecture decision, or analysis. Codex
+  challenges assumptions, surfaces weaknesses, or reassesses after new evidence. This is how Codex is invoked for
   advisory work. Use when the user asks to challenge a plan or idea, get a second opinion or independent take, ask
   Codex what it thinks, or run another pass after new findings or tests. For reviewing a code diff, use
   codex-review.
@@ -48,9 +48,8 @@ Codex runs take minutes. Run the command with the Bash tool's `run_in_background
 read `$REPORT` when it completes. If a foreground run is genuinely needed, set the timeout to at least 600000 ms —
 never leave the default.
 
-Codex joins this session's trace by itself: it reads `TRACEPARENT` from the environment, so the delegated run appears
-under the Bash span that launched it in Grafana. Run it with the environment it inherits — scrubbing that (`env -i`)
-drops both the trace link and the `project` attribute.
+Run Codex with the environment it inherits. It reads `TRACEPARENT` to join this session's trace, and scrubbing the
+environment (`env -i`) drops both the trace link and the `project` attribute.
 
 ## Challenge Prompt
 
@@ -71,8 +70,8 @@ Then append the plan, constraints, rejected options, and open questions.
 
 ## Follow-Up Rounds
 
-When the user asks for another pass, or the plan changed, resume the same session with only the delta — new decisions,
-new test results, rebuttals to specific points:
+When the user asks for another pass, or the plan changed, write only the delta to `$FOLLOWUP` (new decisions, new test
+results, rebuttals to specific points) and resume the same session:
 
 ```bash
 codex exec -s read-only resume <session-id> -o "$REPORT" - < "$FOLLOWUP" > /dev/null 2> "$STDERR"

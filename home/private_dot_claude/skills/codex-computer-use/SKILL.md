@@ -1,7 +1,7 @@
 ---
 name: codex-computer-use
 description:
-  Ask Codex CLI to run local app verification that needs computer use — browser automation, simulators,
+  Asks Codex CLI to run local app verification that needs computer use — browser automation, simulators,
   screenshots, app launching, or independent runtime inspection. This is how Codex is invoked for computer-use work.
   Use when the user asks Claude to test a flow, verify UI behavior, inspect a running app, capture screenshots, or
   report confirmation and feedback about implemented behavior that benefits from computer use functionality.
@@ -21,8 +21,9 @@ user's environment beyond that (closing their apps, changing system settings, ac
 1. Create a temporary artifact directory.
 2. Give Codex a self-contained prompt with the repo path, exact flow, constraints, artifact directory, and report
    format.
-3. Run `codex exec` non-interactively.
-4. Read Codex's report, inspect or reference screenshot paths, and summarize the result for the user.
+3. Run `codex exec` in the background.
+4. Capture the session id from stderr for follow-up checks.
+5. Read Codex's report, inspect or reference screenshot paths, and summarize the result for the user.
 
 Use this command shape:
 
@@ -47,7 +48,8 @@ Computer-use runs take minutes. Run the command with the Bash tool's `run_in_bac
 work; read `$REPORT` and the screenshots when it completes. If a foreground run is genuinely needed, set the timeout to
 at least 600000 ms — never leave the default.
 
-For follow-up checks in the same environment (retry a flow, verify after a fix), resume the same session:
+For follow-up checks in the same environment (retry a flow, verify after a fix), write the delta to `$FOLLOWUP` and
+resume the same session:
 `codex exec -s danger-full-access resume <session-id> -o "$REPORT" - < "$FOLLOWUP"`. Global flags go before `resume`;
 never use `resume --last` — parallel sessions and worktrees make it ambiguous.
 
@@ -55,9 +57,8 @@ Use `-s danger-full-access` for GUI automation, iOS simulators, desktop app laun
 the repo. For non-GUI checks that only need the repo and artifact directory, prefer `-s workspace-write`. Add
 `--skip-git-repo-check` when the working directory is not a git repository.
 
-Codex joins this session's trace by itself: it reads `TRACEPARENT` from the environment, so the delegated run appears
-under the Bash span that launched it in Grafana. Run it with the environment it inherits — scrubbing that (`env -i`)
-drops both the trace link and the `project` attribute.
+Run Codex with the environment it inherits. It reads `TRACEPARENT` to join this session's trace, and scrubbing the
+environment (`env -i`) drops both the trace link and the `project` attribute.
 
 ## Prompt Requirements
 
