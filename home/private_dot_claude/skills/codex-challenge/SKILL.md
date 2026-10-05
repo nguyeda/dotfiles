@@ -1,11 +1,11 @@
 ---
 name: codex-challenge
 description:
-  Ask Codex CLI (gpt-5.5) for an independent second opinion on a plan, design, architecture decision, or analysis —
-  challenge assumptions, surface weaknesses, or reassess after new evidence. This is how gpt-5.5 is invoked for
+  Ask Codex CLI for an independent second opinion on a plan, design, architecture decision, or analysis —
+  challenge assumptions, surface weaknesses, or reassess after new evidence. This is how Codex is invoked for
   advisory work. Use when the user asks to challenge a plan or idea, get a second opinion or independent take, ask
-  Codex or gpt-5.5 what it thinks, or run another pass after new findings or tests. For reviewing a code diff use
-  codex-review; for producing code changes use codex-implementation.
+  Codex what it thinks, or run another pass after new findings or tests. For reviewing a code diff, use
+  codex-review.
 ---
 
 # Codex Challenge
