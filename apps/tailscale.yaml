@@ -7,3 +7,12 @@ install:
       sudo dnf config-manager addrepo --overwrite --from-repofile=https://pkgs.tailscale.com/stable/fedora/tailscale.repo
     post_install:
       - sudo systemctl enable --now tailscaled
+  debian:
+    packages: [tailscale]
+    pre_install: |
+      codename="$(. /etc/os-release; echo $VERSION_CODENAME)"
+      sudo curl -fsSL "https://pkgs.tailscale.com/stable/debian/${codename}.noarmor.gpg" -o /usr/share/keyrings/tailscale-archive-keyring.gpg
+      sudo curl -fsSL "https://pkgs.tailscale.com/stable/debian/${codename}.tailscale-keyring.list" -o /etc/apt/sources.list.d/tailscale.list
+      sudo apt-get update
+    post_install:
+      - sudo systemctl enable --now tailscaled

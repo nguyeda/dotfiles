@@ -21,6 +21,7 @@ packages:
   - lazygit
   - lazydocker
   - docker
+  - tailscale
   - fnm
   - starship
   - claude
