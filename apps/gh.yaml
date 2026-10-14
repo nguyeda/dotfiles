@@ -1,4 +1,8 @@
 id: gh
 description: GitHub CLI
 install:
+  fedora:
+    packages: [gh]
+    pre_install: |
+      sudo dnf config-manager addrepo --overwrite --from-repofile=https://cli.github.com/packages/rpm/gh-cli.repo
   default: { packages: [gh] }
