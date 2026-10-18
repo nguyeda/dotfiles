@@ -120,6 +120,17 @@ if command -v gpg &> /dev/null; then
 fi
 
 ##################################################################
+# ssh: a dropped connection leaves the remote TUI's (zellij, tmux, nvim) mouse,
+# focus and kitty keyboard modes on, so mouse moves print as garbage. Reset
+# them whenever ssh returns.
+ssh() {
+  command ssh "$@"
+  local rc=$?
+  printf '\e[?1000l\e[?1002l\e[?1003l\e[?1006l\e[?1004l\e[<u'
+  return $rc
+}
+
+##################################################################
 # otel resource attributes for agent harnesses
 # _otel_resource_attrs and the opencode wrapper are defined in ~/.zshenv, so
 # that agent-spawned non-interactive shells get them too. All an interactive
