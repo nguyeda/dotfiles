@@ -5,7 +5,7 @@ install:
   fedora:
     packages: [docker-ce, docker-ce-cli, containerd.io, docker-buildx-plugin, docker-compose-plugin]
     pre_install: |
-      sudo dnf config-manager addrepo --from-repofile=https://download.docker.com/linux/fedora/docker-ce.repo
+      sudo dnf config-manager addrepo --overwrite --from-repofile=https://download.docker.com/linux/fedora/docker-ce.repo
     post_install:
       - sudo systemctl enable --now docker
       - sudo usermod -aG docker "$USER" || true
