@@ -12,6 +12,8 @@ packages:
   - fd-find
   - postgresql-client
   - btop
+  - beads
+  - jq
   - gh
   - just
   - uv
@@ -29,8 +31,13 @@ packages:
   - claude
   - opencode
   - codex
+  - t3-code-server
+  - slack-cli
   - updatecli
   - 1password-cli
+  - clamav
   - tailscale
   - aws-cli
+  - ngrok
   - docker
+  - otelcol-contrib
