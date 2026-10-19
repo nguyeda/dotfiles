@@ -25,7 +25,6 @@ packages:
   - lazydocker
   - ghostty
   - opentofu
-  - terraform
   - terragrunt
   - terraform-docs
   - claude
