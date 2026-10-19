@@ -25,6 +25,7 @@ packages:
   - fnm
   - starship
   - claude
+  - opencode
   - codex
   - t3-code-server
   - just
