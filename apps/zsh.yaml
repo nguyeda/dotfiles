@@ -1,4 +1,8 @@
 id: zsh
 description: Z shell
 install:
+  linux:
+    packages: [zsh]
+    post_install:
+      - '[ "$(getent passwd "$USER" | cut -d: -f7)" = "$(command -v zsh)" ] || sudo usermod -s "$(command -v zsh)" "$USER"'
   default: { packages: [zsh] }
