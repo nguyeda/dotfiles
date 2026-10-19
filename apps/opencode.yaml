@@ -1,10 +1,15 @@
 id: opencode
-description: opencode CLI
-check: command -v opencode
+description: opencode CLI (v2)
+check: opencode --version 2>/dev/null | grep -qE '^v?2\.'
 install:
   macos:
-    taps: [anomalyco/tap]
-    packages: [opencode]
+    # opencode-v2 conflicts with the v1 formula; both install `opencode`.
+    # Homebrew refuses untrusted tap formulae, so trust just this one.
+    pre_install: |
+      brew uninstall --formula opencode 2>/dev/null || true
+      brew tap anomalyco/tap
+      brew trust --formula anomalyco/tap/opencode-v2
+    packages: [opencode-v2]
   default:
     script: |
-      curl -fsSL https://opencode.ai/install | bash
+      curl -fsSL https://opencode.ai/v2/install | bash
