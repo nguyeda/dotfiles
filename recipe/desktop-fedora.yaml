@@ -41,6 +41,7 @@ packages:
   - timeshift
   - syncthing
   - gnome-remote-desktop
+  - gnome-shell-extension-appindicator
   - google-chrome
   - slack
   - chatgpt

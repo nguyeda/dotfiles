@@ -1,0 +1,16 @@
+id: gnome-shell-extension-appindicator
+description: GNOME Shell tray icons (AppIndicator/StatusNotifierItem)
+install:
+  fedora:
+    packages: [gnome-shell-extension-appindicator]
+    post_install:
+      # `gnome-extensions enable` fails until the shell reloads after install,
+      # so add the UUID to the enabled list directly. Takes effect on next login.
+      - |
+        uuid=appindicatorsupport@rgcjonas.gmail.com
+        current="$(gsettings get org.gnome.shell enabled-extensions)"
+        case "$current" in
+          *"'$uuid'"*) ;;
+          "@as []") gsettings set org.gnome.shell enabled-extensions "['$uuid']" ;;
+          *) gsettings set org.gnome.shell enabled-extensions "${current%]}, '$uuid']" ;;
+        esac
