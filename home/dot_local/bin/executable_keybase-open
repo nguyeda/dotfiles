@@ -1,0 +1,8 @@
+#!/bin/sh
+# Closing the Keybase window only hides it, and GNOME has no tray to bring it
+# back. run_keybase restarts the service, KBFS and GUI, which is slow. If the
+# GUI is already running, a second launch just shows and focuses its window.
+if pgrep -x Keybase >/dev/null; then
+  exec /opt/keybase/Keybase "$@"
+fi
+exec run_keybase "$@"

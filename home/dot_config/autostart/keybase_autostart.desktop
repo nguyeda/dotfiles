@@ -1,0 +1,9 @@
+# Replaces Keybase's generated entry, which sets KEYBASE_AUTOSTART=1 and starts
+# the GUI hidden in the system tray. GNOME has no tray, so start it visible.
+# Keybase leaves this file alone while ~/.config/keybase/autostart_created exists.
+
+[Desktop Entry]
+Name=Keybase
+Comment=Keybase Filesystem Service and GUI
+Type=Application
+Exec=run_keybase

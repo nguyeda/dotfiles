@@ -39,6 +39,13 @@ run_onchange_after_85-otelcol-service.sh
 run_onchange_after_87-t3code-service.sh
 {{- end }}
 
+{{/* Keybase on GNOME: start visible, reopen hidden window from the launcher */}}
+{{- if ne .role "desktop-fedora" }}
+.config/autostart/keybase_autostart.desktop
+.local/bin/keybase-open
+.local/share/applications/keybase.desktop
+{{- end }}
+
 {{/* launchd is macOS-only; systemd units are not */}}
 {{- if ne .chezmoi.os "darwin" }}
 Library/LaunchAgents
