@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Pick up changes to the t3code.service drop-in. The unit itself is installed by
-# `t3 service install` (see apps/t3-code-server.yaml), so this only reloads and
+# `t3 service install` (see apps/t3-cli.yaml), so this only reloads and
 # restarts; it never creates the service.
 #
 # drop-in hash: {{ include "dot_config/systemd/user/t3code.service.d/override.conf" | sha256sum }}

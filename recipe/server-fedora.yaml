@@ -31,7 +31,7 @@ packages:
   - claude
   - opencode
   - codex
-  - t3-code-server
+  - t3-cli
   - slack-cli
   - updatecli
   - 1password-cli

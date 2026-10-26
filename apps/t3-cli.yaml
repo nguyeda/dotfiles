@@ -1,0 +1,18 @@
+id: t3-cli
+description: T3 Code CLI and background server
+check: test -x "$HOME/.local/bin/t3" && systemctl --user is-enabled --quiet t3code.service
+install:
+  linux:
+    # Upstream ships one self-contained `t3` binary (server, CLI, service manager).
+    # It keeps its own versions under ~/.t3/runtime; data in ~/.t3/userdata is
+    # left alone by install, update and uninstall.
+    script: |
+      T3="$HOME/.local/bin/t3"
+      if [ ! -x "$T3" ]; then
+        curl -fsSL https://t3.codes/install.sh | sh
+      fi
+      if systemctl --user is-enabled --quiet t3code.service; then
+        "$T3" update --yes
+      else
+        "$T3" service install
+      fi

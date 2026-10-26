@@ -25,22 +25,20 @@ done
 
 recipe_has pi claude || fail "pi recipe must include claude"
 recipe_has pi codex || fail "pi recipe must include codex"
-recipe_has pi t3-code-server || fail "pi recipe must include t3-code-server"
+recipe_has pi t3-cli || fail "pi recipe must include t3-cli"
 if recipe_has pi t3-code; then
     fail "pi recipe must not include the unsupported T3 Code desktop app"
 fi
 
 recipe_has desktop-fedora t3-code || fail "desktop-fedora recipe must include the T3 Code app"
-recipe_has desktop-fedora t3-code-server ||
-    fail "desktop-fedora recipe must preserve the T3 Code background server"
+recipe_has desktop-fedora t3-cli ||
+    fail "desktop-fedora recipe must include the T3 Code CLI and background server"
 
-[ "$(yq -r '.install.fedora.post_install | length // 0' "$ROOT_DIR/apps/t3-code.yaml")" -eq 0 ] ||
-    fail "t3-code must install only the desktop app"
-[ "$(yq -r '.id' "$ROOT_DIR/apps/t3-code-server.yaml")" = "t3-code-server" ] ||
-    fail "t3-code-server manifest is missing or has the wrong id"
-yq -e '.install.linux.script | contains("t3@latest service install")' \
-    "$ROOT_DIR/apps/t3-code-server.yaml" >/dev/null ||
-    fail "t3-code-server must install the upstream background service"
+[ "$(yq -r '.id' "$ROOT_DIR/apps/t3-cli.yaml")" = "t3-cli" ] ||
+    fail "t3-cli manifest is missing or has the wrong id"
+yq -e '.install.linux.script | (contains("t3.codes/install.sh") and contains("service install"))' \
+    "$ROOT_DIR/apps/t3-cli.yaml" >/dev/null ||
+    fail "t3-cli must install the upstream binary and background service"
 
 [ "$(yq -r '.install.debian.packages | length // 0' "$ROOT_DIR/apps/zellij.yaml")" -eq 0 ] ||
     fail "zellij must not use an unavailable Debian package"
