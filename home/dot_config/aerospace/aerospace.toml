@@ -6,7 +6,16 @@ config-version = 2
 
 # You can use it to add commands that run after AeroSpace startup.
 # Available commands : https://nikitabobko.github.io/AeroSpace/commands
-after-startup-command = ['exec-and-forget ~/.config/aerospace/scripts/setup-workspaces.sh']
+# Named workspaces start on the secondary monitor (a no-op with one monitor) but stay movable.
+# Entries run in sequence, so a failing one doesn't stop the rest.
+after-startup-command = [
+    'move-workspace-to-monitor --workspace C secondary',
+    'move-workspace-to-monitor --workspace I secondary',
+    'move-workspace-to-monitor --workspace M secondary',
+    'move-workspace-to-monitor --workspace O secondary',
+    'move-workspace-to-monitor --workspace S secondary',
+    'move-workspace-to-monitor --workspace T secondary',
+]
 
 # Start AeroSpace at login
 start-at-login = true
@@ -48,10 +57,23 @@ persistent-workspaces = ["1", "2", "3", "4", "5", "6", "7", "8", "9",
 # A callback that runs every time binding mode changes
 on-mode-changed = []
 
-# Float all new windows by default
-#[[on-window-detected]]
-#    check-further-callbacks = true
-#    run = 'layout floating'
+# Route new windows to their home workspace. Runs once per window (including
+# windows already open when AeroSpace starts), so they can be moved freely after.
+on-window-detected = [
+    {
+        if = 'test %{app-bundle-id} = com.tinyspeck.slackmacgap || test %{app-bundle-id} = keybase.Electron || test %{app-bundle-id} = net.whatsapp.WhatsApp',
+        run = 'move-node-to-workspace S',
+    },
+    {
+        if = 'test %{app-bundle-id} = com.toggl.daneel || test %{app-bundle-id} = com.apple.iCal',
+        run = 'move-node-to-workspace C',
+    },
+    { if = 'test %{app-bundle-id} = app.zen-browser.zen', run = 'move-node-to-workspace W' },
+    { if = 'test %{app-bundle-id} = com.linear', run = 'move-node-to-workspace I' },
+    { if = 'test %{app-bundle-id} = com.apple.Music', run = 'move-node-to-workspace M' },
+    { if = 'test %{app-bundle-id} = notion.id', run = 'move-node-to-workspace O' },
+    { if = 'test %{app-bundle-id} = com.mitchellh.ghostty', run = 'move-node-to-workspace T' },
+]
 
 [workspace-to-monitor-force-assignment]
     1 = 'main'                       # Main monitor
@@ -203,7 +225,7 @@ on-mode-changed = []
     r = ['flatten-workspace-tree', 'mode main'] # reset layout
     f = ['layout floating tiling', 'mode main'] # Toggle between floating and tiling layout
     backspace = ['close-all-windows-but-current', 'mode main']
-    s = ['exec-and-forget ~/.config/aerospace/scripts/setup-workspaces.sh', 'mode main'] # Setup workspaces on secondary
+    s = ['run-callback --for-every-window on-window-detected', 'mode main'] # Send every window back to its home workspace
 
     # sticky is not yet supported https://github.com/nikitabobko/AeroSpace/issues/2
     #s = ['layout sticky tiling', 'mode main']
